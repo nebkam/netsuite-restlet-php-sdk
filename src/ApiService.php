@@ -12,10 +12,11 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
 use Infostud\NetSuiteSdk\Model\CustomerSearchResponse;
+use LogicException;
+use RuntimeException;
 
 class ApiService
 	{
-	const RESTLET_CUSTOMER_SEARCH = 363;
 	/**
 	 * @var string
 	 */
@@ -44,23 +45,59 @@ class ApiService
 	 * @var ApiSerializer
 	 */
 	private $serializer;
+	/**
+	 * @var int
+	 */
+	private $savedSearchCustomersId;
 
 	/**
-	 * @param string $account
-	 * @param string $consumerKey
-	 * @param string $consumerSecret
-	 * @param string $accessTokenKey
-	 * @param string $accessTokenSecret
+	 * @param string $configPath
 	 */
-	public function __construct($account, $consumerKey, $consumerSecret, $accessTokenKey, $accessTokenSecret)
+	public function __construct($configPath)
 		{
-		$this->account         = $account;
-		$this->restletHost     = $account . '.restlets.api.netsuite.com';
-		$this->client          = new Client();
-		$this->consumer        = new Consumer($consumerKey, $consumerSecret);
-		$this->accessToken     = new Token($accessTokenKey, $accessTokenSecret);
-		$this->signatureMethod = new HmacSha1();
-		$this->serializer      = new ApiSerializer();
+		$config = $this->readJsonConfig($configPath);
+
+		$this->account                = $config['account'];
+		$this->restletHost            = $config['account'] . '.restlets.api.netsuite.com';
+		$this->client                 = new Client();
+		$this->consumer               = new Consumer(
+			$config['consumerKey'], $config['consumerSecret']
+		);
+		$this->accessToken            = new Token(
+			$config['accessTokenKey'], $config['accessTokenSecret']
+		);
+		$this->signatureMethod        = new HmacSha1();
+		$this->serializer             = new ApiSerializer();
+		$this->savedSearchCustomersId = $config['restletIds']['savedSearchCustomers'];
+		}
+
+	/**
+	 * @param string $vatIdentifier
+	 * @return Model\Customer|null
+	 */
+	public function findCustomerByVatIdentifier($vatIdentifier)
+		{
+		$filters = [[
+			'name'     => 'custentity_pib',
+			'operator' => 'is',
+			'values'   => [$vatIdentifier]
+		]];
+		try
+			{
+			$results = $this->customerSearch($filters);
+			if (!empty($results->getCustomers()))
+				{
+				return $results->getCustomers()[0];
+				}
+			}
+		catch (OAuthException $exception)
+			{
+			}
+		catch (GuzzleException $e)
+			{
+			}
+
+		return null;
 		}
 
 	/**
@@ -68,24 +105,28 @@ class ApiService
 	 * @return CustomerSearchResponse
 	 * @throws OAuthException|GuzzleException
 	 */
-	public function customerSearch($filters)
+	private function customerSearch($filters)
 		{
 		$requestBody = [
 			'filters' => $filters
 		];
-		$url = $this->getUrl(self::RESTLET_CUSTOMER_SEARCH, 1);
+		$url         = $this->getUrl($this->savedSearchCustomersId, 1);
 
 		$response = $this->client->request('POST', $url, [
 			RequestOptions::HEADERS => $this->buildHeaders('POST', $url),
 			RequestOptions::JSON    => $requestBody
 		]);
+
 		if ($response->getStatusCode() === 200)
 			{
 			$contents = (string)$response->getBody()->getContents();
 
 			return $this->serializer->deserialize($contents, CustomerSearchResponse::class);
 			}
-		// TODO error
+
+		throw new LogicException(
+			sprintf('Unexpected response status code: %d', $response->getStatusCode())
+		);
 		}
 
 	/**
@@ -128,5 +169,31 @@ class ApiService
 			'Authorization' => substr($request->to_header($this->account), 15),
 			'Host'          => $this->restletHost
 		];
+		}
+
+	/**
+	 * @param string $path
+	 * @throws RuntimeException
+	 * @return array
+	 */
+	private function readJsonConfig($path)
+		{
+		if (!file_exists($path)
+			|| !is_readable($path))
+			{
+			throw new RuntimeException(
+				sprintf('File at `%s` doesn\'t exist or isn\'t readable', $path)
+			);
+			}
+
+		$config = json_decode(file_get_contents($path), true);
+		if (!$config)
+			{
+			throw new RuntimeException(
+				sprintf('Malformed JSON, see sample.config.json for reference')
+			);
+			}
+
+		return $config;
 		}
 	}

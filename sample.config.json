@@ -1,0 +1,10 @@
+{
+  "account": "",
+  "consumerKey": "",
+  "consumerSecret": "",
+  "accessTokenKey": "",
+  "accessTokenSecret": "",
+  "restletIds": {
+    "savedSearchCustomers": 0
+  }
+}
