@@ -1,0 +1,141 @@
+{
+  "myPagedData": {
+    "count": 1,
+    "pageRanges": [
+      {
+        "index": 0,
+        "compoundLabel": "0000000150505 0000000000031dh Real Estate Pr Dino Hatibović"
+      }
+    ],
+    "pageSize": 500,
+    "searchDefinition": {
+      "type": "customer",
+      "id": 135,
+      "filters": [
+        {
+          "name": "custentity_pib",
+          "operator": "is",
+          "values": [
+            "109121175"
+          ],
+          "formula": null,
+          "summarytype": null,
+          "isor": false,
+          "isnot": false,
+          "leftparens": 0,
+          "rightparens": 0
+        }
+      ],
+      "columns": [
+        {
+          "name": "entityid",
+          "label": "ID",
+          "type": "text",
+          "sortdir": "ASC"
+        },
+        {
+          "name": "altname",
+          "label": "Name",
+          "type": "text",
+          "sortdir": "NONE"
+        },
+        {
+          "name": "email",
+          "label": "Email",
+          "type": "email",
+          "sortdir": "NONE"
+        },
+        {
+          "name": "phone",
+          "label": "Phone",
+          "type": "phone",
+          "sortdir": "NONE"
+        },
+        {
+          "name": "altphone",
+          "label": "Office Phone",
+          "type": "phone",
+          "sortdir": "NONE"
+        },
+        {
+          "name": "fax",
+          "label": "Fax",
+          "type": "text",
+          "sortdir": "NONE"
+        },
+        {
+          "name": "contact",
+          "label": "Primary Contact",
+          "type": "select",
+          "sortdir": "NONE"
+        },
+        {
+          "name": "altemail",
+          "label": "Alt. Email",
+          "type": "email",
+          "sortdir": "NONE"
+        },
+        {
+          "name": "lastmodifieddate",
+          "label": "Last Modified",
+          "type": "datetime",
+          "sortdir": "NONE"
+        },
+        {
+          "name": "datecreated",
+          "label": "Date Created",
+          "type": "datetime",
+          "sortdir": "NONE"
+        },
+        {
+          "name": "internalid",
+          "label": "Internal ID",
+          "type": "select",
+          "sortdir": "NONE"
+        },
+        {
+          "name": "custentity_pib",
+          "label": "PIB",
+          "type": "text",
+          "sortdir": "NONE"
+        },
+        {
+          "name": "custentity_matbrpred",
+          "label": "Matični broj preduzeća",
+          "type": "text",
+          "sortdir": "NONE"
+        }
+      ],
+      "settings": [],
+      "title": null,
+      "scriptId": "customsearch_snt_customer_crm_export",
+      "isPublic": true
+    }
+  },
+  "customers": [
+    {
+      "recordType": "customer",
+      "id": "16099",
+      "values": {
+        "entityid": "15050",
+        "altname": "3DH Real Estate PR Dino Hatibović",
+        "email": "3dhoglasavanje@gmail.com",
+        "phone": "+381611501194",
+        "altphone": "",
+        "fax": "",
+        "contact": [],
+        "altemail": "",
+        "lastmodifieddate": "20.11.2020 11:55",
+        "datecreated": "07.08.2020 11:36",
+        "internalid": [
+          {
+            "value": "16099",
+            "text": "16099"
+          }
+        ],
+        "custentity_pib": "109121175",
+        "custentity_matbrpred": "63944017"
+      }
+    }
+  ]
+}
