@@ -189,9 +189,10 @@ class ApiService
 		$config = json_decode(file_get_contents($path), true);
 		if (!$config)
 			{
-			throw new RuntimeException(
-				sprintf('Malformed JSON, see sample.config.json for reference')
-			);
+			throw new RuntimeException(sprintf(
+				'Malformed JSON, see %s for reference',
+				dirname(__DIR__) . '/sample.config.json'
+			));
 			}
 
 		return $config;

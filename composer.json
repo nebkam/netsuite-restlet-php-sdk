@@ -11,6 +11,7 @@
   ],
   "require": {
     "php": ">=5.6",
+    "ext-json": "*",
     "eher/oauth": "^1.0",
     "guzzlehttp/guzzle": "^6.0",
     "doctrine/annotations": "^1.4",
