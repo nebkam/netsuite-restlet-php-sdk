@@ -2,6 +2,7 @@
 
 use Infostud\NetSuiteSdk\ApiService;
 use Infostud\NetSuiteSdk\Model\Customer;
+use Infostud\NetSuiteSdk\Model\Department;
 use PHPUnit\Framework\TestCase;
 
 class ApiServiceTest extends TestCase
@@ -28,5 +29,21 @@ class ApiServiceTest extends TestCase
 		self::assertEquals('109121175', $customer->getAttributes()->getVatIdentifier());
 		self::assertInstanceOf(DateTime::class, $customer->getAttributes()->getCreatedAt());
 		self::assertInstanceOf(DateTime::class, $customer->getAttributes()->getLastModifiedAt());
+		}
+
+	/**
+	 * @depends testParseConfig
+	 * @param ApiService $apiService
+	 */
+	public function testGetDepartments($apiService)
+		{
+		$departments = $apiService->getDepartments();
+		self::assertNotEmpty($departments);
+		foreach ($departments as $department)
+			{
+			self::assertInstanceOf(Department::class, $department);
+			self::assertNotEmpty($department->getId());
+			self::assertNotEmpty($department->getName());
+			}
 		}
 	}

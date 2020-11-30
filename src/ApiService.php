@@ -12,11 +12,14 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
 use Infostud\NetSuiteSdk\Model\CustomerSearchResponse;
+use Infostud\NetSuiteSdk\Model\Department;
+use Infostud\NetSuiteSdk\Model\GetDepartmentsResponse;
 use LogicException;
 use RuntimeException;
 
 class ApiService
 	{
+	const REQUEST_METHOD = 'POST';
 	/**
 	 * @var string
 	 */
@@ -49,6 +52,10 @@ class ApiService
 	 * @var int
 	 */
 	private $savedSearchCustomersId;
+	/**
+	 * @var int
+	 */
+	private $suiteQLId;
 
 	/**
 	 * @param string $configPath
@@ -69,6 +76,7 @@ class ApiService
 		$this->signatureMethod        = new HmacSha1();
 		$this->serializer             = new ApiSerializer();
 		$this->savedSearchCustomersId = $config['restletIds']['savedSearchCustomers'];
+		$this->suiteQLId              = $config['restletIds']['suiteQL'];
 		}
 
 	/**
@@ -84,7 +92,7 @@ class ApiService
 		]];
 		try
 			{
-			$results = $this->customerSearch($filters);
+			$results = $this->executeSavedSearchCustomers($filters);
 			if (!empty($results->getCustomers()))
 				{
 				return $results->getCustomers()[0];
@@ -101,19 +109,44 @@ class ApiService
 		}
 
 	/**
+	 * @return Department[]
+	 */
+	public function getDepartments()
+		{
+		try
+			{
+			$results = $this->executeSuiteQuery(
+				'select parent, id , name from department'
+			);
+			if (!empty($results->getDepartments()))
+				{
+				return $results->getDepartments();
+				}
+			}
+		catch (OAuthException $exception)
+			{
+			}
+		catch (GuzzleException $exception)
+			{
+			}
+
+		return [];
+		}
+
+	/**
 	 * @param array $filters
 	 * @return CustomerSearchResponse
 	 * @throws OAuthException|GuzzleException
 	 */
-	private function customerSearch($filters)
+	private function executeSavedSearchCustomers($filters)
 		{
 		$requestBody = [
 			'filters' => $filters
 		];
 		$url         = $this->getUrl($this->savedSearchCustomersId, 1);
 
-		$response = $this->client->request('POST', $url, [
-			RequestOptions::HEADERS => $this->buildHeaders('POST', $url),
+		$response = $this->client->request(self::REQUEST_METHOD, $url, [
+			RequestOptions::HEADERS => $this->buildHeaders($url),
 			RequestOptions::JSON    => $requestBody
 		]);
 
@@ -122,6 +155,39 @@ class ApiService
 			$contents = (string)$response->getBody()->getContents();
 
 			return $this->serializer->deserialize($contents, CustomerSearchResponse::class);
+			}
+
+		throw new LogicException(
+			sprintf('Unexpected response status code: %d', $response->getStatusCode())
+		);
+		}
+
+	/**
+	 * @param string $from
+	 * @param string $where
+	 * @param array $params
+	 * @return GetDepartmentsResponse
+	 * @throws GuzzleException
+	 * @throws OAuthException
+	 */
+	private function executeSuiteQuery($from, $where = ' ', $params = [])
+		{
+		$requestBody = [
+			'sql_from'  => $from,
+			'sql_where' => $where,
+			'params'    => $params
+		];
+		$url         = $this->getUrl($this->suiteQLId, 1);
+		$response = $this->client->request(self::REQUEST_METHOD, $url, [
+			RequestOptions::HEADERS => $this->buildHeaders($url),
+			RequestOptions::JSON    => $requestBody
+		]);
+
+		if ($response->getStatusCode() === 200)
+			{
+			$contents = (string)$response->getBody()->getContents();
+
+			return $this->serializer->deserialize($contents, GetDepartmentsResponse::class);
 			}
 
 		throw new LogicException(
@@ -146,14 +212,13 @@ class ApiService
 		}
 
 	/**
-	 * @param string $method
 	 * @param string $url
 	 * @return array
 	 * @throws OAuthException
 	 */
-	private function buildHeaders($method, $url)
+	private function buildHeaders($url)
 		{
-		$request   = new Request($method, $url, [
+		$request   = new Request(self::REQUEST_METHOD, $url, [
 			'oauth_nonce'            => md5(mt_rand()),
 			'oauth_timestamp'        => idate('U'),
 			'oauth_version'          => '1.0',
@@ -173,8 +238,8 @@ class ApiService
 
 	/**
 	 * @param string $path
-	 * @throws RuntimeException
 	 * @return array
+	 * @throws RuntimeException
 	 */
 	private function readJsonConfig($path)
 		{

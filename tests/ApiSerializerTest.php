@@ -4,6 +4,7 @@ use Infostud\NetSuiteSdk\Model\ColumnDefinition;
 use Infostud\NetSuiteSdk\Model\Customer;
 use Infostud\NetSuiteSdk\Model\CustomerSearchResponse;
 use Infostud\NetSuiteSdk\ApiSerializer;
+use Infostud\NetSuiteSdk\Model\GetDepartmentsResponse;
 use Infostud\NetSuiteSdk\Model\SearchDefinition;
 use Infostud\NetSuiteSdk\Model\SearchMetadata;
 use PHPUnit\Framework\TestCase;
@@ -49,5 +50,29 @@ class ApiSerializerTest extends TestCase
 			'2020-11-20T11:55:00+01:00',
 			$customer->getAttributes()->getLastModifiedAt()->format(DateTimeInterface::ATOM)
 		);
+		}
+
+	public function testGetDepartmentsResult()
+		{
+		$serializer = new ApiSerializer();
+		$json = file_get_contents(__DIR__.'/departments_suiteql_response.json');
+		$response = $serializer->deserialize($json, GetDepartmentsResponse::class);
+		self::assertInstanceOf(GetDepartmentsResponse::class, $response);
+		self::assertNotEmpty($response->getDepartments());
+		$departmentIds = [];
+		foreach ($response->getDepartments() as $department)
+			{
+			self::assertNotEmpty($department->getId());
+			self::assertNotEmpty($department->getName());
+			$departmentIds[] = $department->getId();
+			}
+		// Parent consistency
+		foreach ($response->getDepartments() as $department)
+			{
+			if ($department->getParentId())
+				{
+				self::assertContains($department->getParentId(), $departmentIds);
+				}
+			}
 		}
 	}

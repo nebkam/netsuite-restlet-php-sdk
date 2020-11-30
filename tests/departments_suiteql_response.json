@@ -1,0 +1,164 @@
+{
+  "rows": [
+    {
+      "parent": null,
+      "id": 31,
+      "name": "ALTP - adm. log. i teh. podrška"
+    },
+    {
+      "parent": null,
+      "id": 29,
+      "name": "DIGITALNO OGLAŠAVANJE"
+    },
+    {
+      "parent": null,
+      "id": 6,
+      "name": "FINANSIJE"
+    },
+    {
+      "parent": null,
+      "id": 5,
+      "name": "HR"
+    },
+    {
+      "parent": null,
+      "id": 34,
+      "name": "Izvršni odbor grupe"
+    },
+    {
+      "parent": null,
+      "id": 28,
+      "name": "KORPORATIVNE KOMUNIKACIJE"
+    },
+    {
+      "parent": null,
+      "id": 27,
+      "name": "KORPORATIVNI RAZVOJ"
+    },
+    {
+      "parent": null,
+      "id": 8,
+      "name": "MARKETING I PR"
+    },
+    {
+      "parent": 8,
+      "id": 9,
+      "name": "MARKETING"
+    },
+    {
+      "parent": 8,
+      "id": 20,
+      "name": "PR"
+    },
+    {
+      "parent": 8,
+      "id": 21,
+      "name": "REDAKCIJA"
+    },
+    {
+      "parent": null,
+      "id": 23,
+      "name": "NAJSTUDENT"
+    },
+    {
+      "parent": null,
+      "id": 24,
+      "name": "OGLASNO I NIF"
+    },
+    {
+      "parent": null,
+      "id": 26,
+      "name": "OPŠTE POSLOVNE OPERACIJE"
+    },
+    {
+      "parent": null,
+      "id": 3,
+      "name": "PRODAJA I KORISNICKA"
+    },
+    {
+      "parent": 3,
+      "id": 14,
+      "name": "ALFA"
+    },
+    {
+      "parent": 3,
+      "id": 15,
+      "name": "BETA"
+    },
+    {
+      "parent": 3,
+      "id": 16,
+      "name": "GAMA"
+    },
+    {
+      "parent": 3,
+      "id": 13,
+      "name": "KANCELARIJSKA PRODAJA"
+    },
+    {
+      "parent": 3,
+      "id": 12,
+      "name": "KORISNIČKA"
+    },
+    {
+      "parent": 3,
+      "id": 17,
+      "name": "LOGISTIKA"
+    },
+    {
+      "parent": 3,
+      "id": 4,
+      "name": "TERENSKA PRODAJA"
+    },
+    {
+      "parent": 3,
+      "id": 19,
+      "name": "TIM ZA NEŽIVOTNO OS."
+    },
+    {
+      "parent": 3,
+      "id": 18,
+      "name": "TIM ZA ŽIVOTNO OS."
+    },
+    {
+      "parent": null,
+      "id": 25,
+      "name": "PROJEKTNO ODELJENJE"
+    },
+    {
+      "parent": null,
+      "id": 1,
+      "name": "RAZVOJ BIZNISA"
+    },
+    {
+      "parent": 1,
+      "id": 2,
+      "name": "PROGRAMERI"
+    },
+    {
+      "parent": 1,
+      "id": 10,
+      "name": "RAZVOJ"
+    },
+    {
+      "parent": 1,
+      "id": 11,
+      "name": "WEB"
+    },
+    {
+      "parent": null,
+      "id": 30,
+      "name": "RAČUNOVODSTVO"
+    },
+    {
+      "parent": null,
+      "id": 7,
+      "name": "SISTEM ADMINISTRACIJA"
+    },
+    {
+      "parent": null,
+      "id": 36,
+      "name": "ZIK"
+    }
+  ]
+}

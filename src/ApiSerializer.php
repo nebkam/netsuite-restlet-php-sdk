@@ -5,6 +5,7 @@ namespace Infostud\NetSuiteSdk;
 use DateTimeZone;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Infostud\NetSuiteSdk\Model\CustomerSearchResponse;
+use Infostud\NetSuiteSdk\Model\GetDepartmentsResponse;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
@@ -50,7 +51,7 @@ class ApiSerializer
 	 *
 	 * @param string $json
 	 * @param string $className
-	 * @return CustomerSearchResponse
+	 * @return CustomerSearchResponse|GetDepartmentsResponse
 	 */
 	public function deserialize($json, $className)
 		{

@@ -5,6 +5,7 @@
   "accessTokenKey": "",
   "accessTokenSecret": "",
   "restletIds": {
-    "savedSearchCustomers": 0
+    "savedSearchCustomers": 0,
+    "suiteQL": 0
   }
 }
