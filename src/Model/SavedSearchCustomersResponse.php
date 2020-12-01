@@ -4,7 +4,7 @@ namespace Infostud\NetSuiteSdk\Model;
 
 use Symfony\Component\Serializer\Annotation\SerializedName;
 
-class CustomerSearchResponse
+class SavedSearchCustomersResponse
 	{
 	/**
 	 * @SerializedName("myPagedData")
@@ -26,9 +26,9 @@ class CustomerSearchResponse
 
 	/**
 	 * @param SearchMetadata $searchMetadata
-	 * @return CustomerSearchResponse
+	 * @return SavedSearchCustomersResponse
 	 */
-	public function setSearchMetadata(SearchMetadata $searchMetadata): CustomerSearchResponse
+	public function setSearchMetadata(SearchMetadata $searchMetadata): SavedSearchCustomersResponse
 		{
 		$this->searchMetadata = $searchMetadata;
 

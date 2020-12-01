@@ -11,7 +11,7 @@ use Eher\OAuth\Token;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
-use Infostud\NetSuiteSdk\Model\CustomerSearchResponse;
+use Infostud\NetSuiteSdk\Model\SavedSearchCustomersResponse;
 use Infostud\NetSuiteSdk\Model\Department;
 use Infostud\NetSuiteSdk\Model\GetDepartmentsResponse;
 use LogicException;
@@ -135,10 +135,11 @@ class ApiService
 
 	/**
 	 * @param array $filters
-	 * @return CustomerSearchResponse
-	 * @throws OAuthException|GuzzleException
+	 * @return SavedSearchCustomersResponse
+	 * @throws OAuthException
+	 * @throws GuzzleException
 	 */
-	private function executeSavedSearchCustomers($filters)
+	private function executeSavedSearchCustomers(array $filters): SavedSearchCustomersResponse
 		{
 		$requestBody = [
 			'filters' => $filters
@@ -154,7 +155,7 @@ class ApiService
 			{
 			$contents = (string)$response->getBody()->getContents();
 
-			return $this->serializer->deserialize($contents, CustomerSearchResponse::class);
+			return $this->serializer->deserialize($contents, SavedSearchCustomersResponse::class);
 			}
 
 		throw new LogicException(

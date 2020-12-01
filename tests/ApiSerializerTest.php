@@ -2,7 +2,7 @@
 
 use Infostud\NetSuiteSdk\Model\ColumnDefinition;
 use Infostud\NetSuiteSdk\Model\Customer;
-use Infostud\NetSuiteSdk\Model\CustomerSearchResponse;
+use Infostud\NetSuiteSdk\Model\SavedSearchCustomersResponse;
 use Infostud\NetSuiteSdk\ApiSerializer;
 use Infostud\NetSuiteSdk\Model\GetDepartmentsResponse;
 use Infostud\NetSuiteSdk\Model\SearchDefinition;
@@ -15,8 +15,8 @@ class ApiSerializerTest extends TestCase
 		{
 		$serializer = new ApiSerializer();
 		$json = file_get_contents(__DIR__.'/single_customer_search_response.json');
-		$response = $serializer->deserialize($json, CustomerSearchResponse::class);
-		self::assertInstanceOf(CustomerSearchResponse::class, $response);
+		$response = $serializer->deserialize($json, SavedSearchCustomersResponse::class);
+		self::assertInstanceOf(SavedSearchCustomersResponse::class, $response);
 		$searchMetadata = $response->getSearchMetadata();
 		self::assertInstanceOf(SearchMetadata::class, $searchMetadata);
 		self::assertEquals(1, $searchMetadata->getCount());
