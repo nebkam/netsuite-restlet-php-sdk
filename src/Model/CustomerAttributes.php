@@ -3,57 +3,61 @@
 namespace Infostud\NetSuiteSdk\Model;
 
 use DateTime;
-use Symfony\Component\Serializer\Annotation\SerializedName;
 
 class CustomerAttributes
 	{
 	/**
-	 * @SerializedName("altname")
 	 * @var string
 	 */
-	private $name;
+	private $altname;
 	/**
 	 * @var string
 	 */
 	private $email;
 	/**
 	 * PIB
-	 * @SerializedName("custentity_pib")
 	 * @var string
 	 */
-	private $vatIdentifier;
+	private $custentity_pib;
 	/**
 	 * Matični broj u APR / JMBG
-	 * @SerializedName("custentity_matbrpred")
 	 * @var string
 	 */
-	private $registryIdentifier;
+	private $custentity_matbrpred;
 	/**
-	 * @SerializedName("datecreated")
 	 * @var DateTime
 	 */
-	private $createdAt;
+	private $datecreated;
 	/**
-	 * @SerializedName("lastmodifieddate")
 	 * @var DateTime
 	 */
-	private $lastModifiedAt;
+	private $lastmodifieddate;
 
 	/**
 	 * @return string
 	 */
 	public function getName()
 		{
-		return $this->name;
+		return $this->altname;
 		}
 
 	/**
-	 * @param string $name
+	 * @deprecated
+	 * @see getName
+	 * @return string
+	 */
+	public function getAltname()
+		{
+		return $this->altname;
+		}
+
+	/**
+	 * @param string $altname
 	 * @return self
 	 */
-	public function setName($name)
+	public function setAltname($altname)
 		{
-		$this->name = $name;
+		$this->altname = $altname;
 
 		return $this;
 		}
@@ -82,16 +86,26 @@ class CustomerAttributes
 	 */
 	public function getVatIdentifier()
 		{
-		return $this->vatIdentifier;
+		return $this->custentity_pib;
 		}
 
 	/**
-	 * @param string $vatIdentifier
+	 * @deprecated
+	 * @see getVatIdentifier
+	 * @return string
+	 */
+	public function getCustentitypib()
+		{
+		return $this->custentity_pib;
+		}
+
+	/**
+	 * @param string $custentity_pib
 	 * @return self
 	 */
-	public function setVatIdentifier($vatIdentifier)
+	public function setCustentitypib($custentity_pib)
 		{
-		$this->vatIdentifier = $vatIdentifier;
+		$this->custentity_pib = $custentity_pib;
 
 		return $this;
 		}
@@ -101,16 +115,26 @@ class CustomerAttributes
 	 */
 	public function getRegistryIdentifier()
 		{
-		return $this->registryIdentifier;
+		return $this->custentity_matbrpred;
 		}
 
 	/**
-	 * @param string $registryIdentifier
+	 * @deprecated
+	 * @see getRegistryIdentifier
+	 * @return string
+	 */
+	public function getCustentitymatbrpred()
+		{
+		return $this->custentity_matbrpred;
+		}
+
+	/**
+	 * @param string $custentity_matbrpred
 	 * @return self
 	 */
-	public function setRegistryIdentifier($registryIdentifier)
+	public function setCustentitymatbrpred($custentity_matbrpred)
 		{
-		$this->registryIdentifier = $registryIdentifier;
+		$this->custentity_matbrpred = $custentity_matbrpred;
 
 		return $this;
 		}
@@ -120,16 +144,26 @@ class CustomerAttributes
 	 */
 	public function getCreatedAt()
 		{
-		return $this->createdAt;
+		return $this->datecreated;
 		}
 
 	/**
-	 * @param DateTime $createdAt
+	 * @deprecated
+	 * @see getCreatedAt
+	 * @return DateTime
+	 */
+	public function getDatecreated()
+		{
+		return $this->datecreated;
+		}
+
+	/**
+	 * @param DateTime $datecreated
 	 * @return self
 	 */
-	public function setCreatedAt($createdAt)
+	public function setDatecreated($datecreated)
 		{
-		$this->createdAt = $createdAt;
+		$this->datecreated = $datecreated;
 
 		return $this;
 		}
@@ -139,16 +173,26 @@ class CustomerAttributes
 	 */
 	public function getLastModifiedAt()
 		{
-		return $this->lastModifiedAt;
+		return $this->lastmodifieddate;
 		}
 
 	/**
-	 * @param DateTime $lastModifiedAt
+	 * @deprecated
+	 * @see getLastModifiedAt
+	 * @return DateTime
+	 */
+	public function getLastmodifieddate()
+		{
+		return $this->lastmodifieddate;
+		}
+
+	/**
+	 * @param DateTime $lastmodifieddate
 	 * @return self
 	 */
-	public function setLastModifiedAt($lastModifiedAt)
+	public function setLastmodifieddate($lastmodifieddate)
 		{
-		$this->lastModifiedAt = $lastModifiedAt;
+		$this->lastmodifieddate = $lastmodifieddate;
 
 		return $this;
 		}

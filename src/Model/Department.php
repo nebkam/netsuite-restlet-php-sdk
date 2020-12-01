@@ -2,8 +2,6 @@
 
 namespace Infostud\NetSuiteSdk\Model;
 
-use Symfony\Component\Serializer\Annotation\SerializedName;
-
 class Department
 	{
 	/**
@@ -15,10 +13,9 @@ class Department
 	 */
 	private $name;
 	/**
-	 * @SerializedName("parent")
 	 * @var int|null
 	 */
-	private $parentId;
+	private $parent;
 
 	/**
 	 * @return int
@@ -63,16 +60,26 @@ class Department
 	 */
 	public function getParentId()
 		{
-		return $this->parentId;
+		return $this->parent;
 		}
 
 	/**
-	 * @param int|null $parentId
+	 * @deprecated
+	 * @see getParentId
+	 * @return int|null
+	 */
+	public function getParent()
+		{
+		return $this->parent;
+		}
+
+	/**
+	 * @param int|null $parent
 	 * @return self
 	 */
-	public function setParentId($parentId)
+	public function setParent($parent)
 		{
-		$this->parentId = $parentId;
+		$this->parent = $parent;
 
 		return $this;
 		}

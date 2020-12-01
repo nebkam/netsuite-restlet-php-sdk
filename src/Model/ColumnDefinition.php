@@ -3,7 +3,6 @@
 namespace Infostud\NetSuiteSdk\Model;
 
 use Doctrine\Common\Annotations\Annotation\Enum;
-use Symfony\Component\Serializer\Annotation\SerializedName;
 
 class ColumnDefinition
 	{
@@ -22,12 +21,11 @@ class ColumnDefinition
 	 */
 	private $type;
 	/**
-	 * @SerializedName("sortdir")
 	 * TODO Check for other available values
 	 * @Enum({"NONE"})
 	 * @var string
 	 */
-	private $sortDirection;
+	private $sortdir;
 
 	/**
 	 * @return string
@@ -87,20 +85,31 @@ class ColumnDefinition
 		}
 
 	/**
+	 * @deprecated
+	 * @see getSortDirection
+	 * @return string
+	 */
+	public function getSortdir()
+		{
+		return $this->sortdir;
+		}
+
+	/**
+	 * Readable alias
 	 * @return string
 	 */
 	public function getSortDirection()
 		{
-		return $this->sortDirection;
+		return $this->sortdir;
 		}
 
 	/**
-	 * @param string $sortDirection
+	 * @param string $sortdir
 	 * @return self
 	 */
-	public function setSortDirection($sortDirection)
+	public function setSortdir($sortdir)
 		{
-		$this->sortDirection = $sortDirection;
+		$this->sortdir = $sortdir;
 
 		return $this;
 		}

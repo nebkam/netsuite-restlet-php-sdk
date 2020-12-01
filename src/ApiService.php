@@ -118,9 +118,9 @@ class ApiService
 			$results = $this->executeSuiteQuery(
 				'select parent, id , name from department'
 			);
-			if (!empty($results->getDepartments()))
+			if (!empty($results->getRows()))
 				{
-				return $results->getDepartments();
+				return $results->getRows();
 				}
 			}
 		catch (OAuthException $exception)

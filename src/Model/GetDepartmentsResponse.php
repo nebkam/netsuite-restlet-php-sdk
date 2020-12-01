@@ -2,31 +2,38 @@
 
 namespace Infostud\NetSuiteSdk\Model;
 
-use Symfony\Component\Serializer\Annotation\SerializedName;
-
 class GetDepartmentsResponse
 	{
 	/**
-	 * @SerializedName("rows")
 	 * @var Department[]
 	 */
-	private $departments;
+	private $rows;
 
 	/**
 	 * @return Department[]
 	 */
 	public function getDepartments()
 		{
-		return $this->departments;
+		return $this->rows;
 		}
 
 	/**
-	 * @param Department[] $departments
+	 * @deprecated
+	 * @see getDepartments
+	 * @return Department[]
+	 */
+	public function getRows()
+		{
+		return $this->rows;
+		}
+
+	/**
+	 * @param Department[] $rows
 	 * @return self
 	 */
-	public function setDepartments($departments)
+	public function setRows($rows)
 		{
-		$this->departments = $departments;
+		$this->rows = $rows;
 
 		return $this;
 		}

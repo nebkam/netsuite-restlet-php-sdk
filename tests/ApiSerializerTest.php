@@ -42,12 +42,12 @@ class ApiSerializerTest extends TestCase
 		self::assertEquals('63944017', $customer->getAttributes()->getRegistryIdentifier());
 		self::assertInstanceOf(DateTime::class, $customer->getAttributes()->getCreatedAt());
 		self::assertEquals(
-			'2020-08-07T11:36:00+02:00',
+			'2020-08-07T11:36:00+00:00',
 			$customer->getAttributes()->getCreatedAt()->format(DateTimeInterface::ATOM)
 		);
 		self::assertInstanceOf(DateTime::class, $customer->getAttributes()->getLastModifiedAt());
 		self::assertEquals(
-			'2020-11-20T11:55:00+01:00',
+			'2020-11-20T11:55:00+00:00',
 			$customer->getAttributes()->getLastModifiedAt()->format(DateTimeInterface::ATOM)
 		);
 		}

@@ -15,7 +15,7 @@
     "eher/oauth": "^1.0",
     "guzzlehttp/guzzle": "^6.0",
     "doctrine/annotations": "^1.4",
-    "phpdocumentor/reflection-docblock": ">=4.3",
+    "phpdocumentor/reflection-docblock": ">=3.3",
     "symfony/property-info": "^3.4 || ^4.2",
     "symfony/property-access": "^3.4 || ^4.2",
     "symfony/serializer": "^3.4 || ^4.2"

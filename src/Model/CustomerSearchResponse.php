@@ -2,15 +2,12 @@
 
 namespace Infostud\NetSuiteSdk\Model;
 
-use Symfony\Component\Serializer\Annotation\SerializedName;
-
 class CustomerSearchResponse
 	{
 	/**
-	 * @SerializedName("myPagedData")
 	 * @var SearchMetadata
 	 */
-	private $searchMetadata;
+	private $myPagedData;
 	/**
 	 * @var Customer[]
 	 */
@@ -21,16 +18,26 @@ class CustomerSearchResponse
 	 */
 	public function getSearchMetadata()
 		{
-		return $this->searchMetadata;
+		return $this->myPagedData;
 		}
 
 	/**
-	 * @param SearchMetadata $searchMetadata
+	 * @deprecated
+	 * @see getSearchMetadata
+	 * @return SearchMetadata
+	 */
+	public function getMyPagedData()
+		{
+		return $this->myPagedData;
+		}
+
+	/**
+	 * @param SearchMetadata $myPagedData
 	 * @return CustomerSearchResponse
 	 */
-	public function setSearchMetadata($searchMetadata)
+	public function setMyPagedData($myPagedData)
 		{
-		$this->searchMetadata = $searchMetadata;
+		$this->myPagedData = $myPagedData;
 
 		return $this;
 		}

@@ -2,8 +2,6 @@
 
 namespace Infostud\NetSuiteSdk\Model;
 
-use Symfony\Component\Serializer\Annotation\SerializedName;
-
 class Customer
 	{
 	/**
@@ -11,10 +9,9 @@ class Customer
 	 */
 	private $id;
 	/**
-	 * @SerializedName("values")
 	 * @var CustomerAttributes
 	 */
-	private $attributes;
+	private $values;
 
 	/**
 	 * @return string
@@ -36,20 +33,31 @@ class Customer
 		}
 
 	/**
+	 * @deprecated
+	 * @see getAttributes
+	 * @return CustomerAttributes
+	 */
+	public function getValues()
+		{
+		return $this->values;
+		}
+
+	/**
 	 * @return CustomerAttributes
 	 */
 	public function getAttributes()
 		{
-		return $this->attributes;
+		return $this->values;
 		}
 
+
 	/**
-	 * @param CustomerAttributes $attributes
+	 * @param CustomerAttributes $values
 	 * @return self
 	 */
-	public function setAttributes($attributes)
+	public function setValues($values)
 		{
-		$this->attributes = $attributes;
+		$this->values = $values;
 
 		return $this;
 		}

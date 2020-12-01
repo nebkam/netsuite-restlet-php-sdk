@@ -10,7 +10,6 @@ use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
-use Symfony\Component\Serializer\NameConverter\MetadataAwareNameConverter;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -27,10 +26,9 @@ class ApiSerializer
 	public function __construct()
 		{
 		$classMetadataFactory       = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-		$metadataAwareNameConverter = new MetadataAwareNameConverter($classMetadataFactory);
 		$objectNormalizer           = new ObjectNormalizer(
 			$classMetadataFactory,
-			$metadataAwareNameConverter,
+			null,
 			null,
 			new PhpDocExtractor()
 		);
