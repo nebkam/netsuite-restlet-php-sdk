@@ -3,6 +3,7 @@
 use Infostud\NetSuiteSdk\ApiService;
 use Infostud\NetSuiteSdk\Model\Customer;
 use Infostud\NetSuiteSdk\Model\Department;
+use Infostud\NetSuiteSdk\Model\Subsidiary;
 use PHPUnit\Framework\TestCase;
 
 class ApiServiceTest extends TestCase
@@ -11,7 +12,7 @@ class ApiServiceTest extends TestCase
 	 * Test that it doesn't throw exceptions
 	 * @return ApiService
 	 */
-	public function testParseConfig()
+	public function testParseConfig(): ApiService
 		{
 		$configPath = getenv('CONFIG_PATH');
 
@@ -22,20 +23,34 @@ class ApiServiceTest extends TestCase
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
 	 */
-	public function testSearchByVatIdentifier($apiService)
+	public function testSearchByVatIdentifier(ApiService $apiService): void
 		{
 		$customer = $apiService->findCustomerByVatIdentifier('109121175');
 		self::assertInstanceOf(Customer::class, $customer);
 		self::assertEquals('109121175', $customer->getAttributes()->getVatIdentifier());
-		self::assertInstanceOf(DateTime::class, $customer->getAttributes()->getCreatedAt());
-		self::assertInstanceOf(DateTime::class, $customer->getAttributes()->getLastModifiedAt());
 		}
 
 	/**
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
 	 */
-	public function testGetDepartments($apiService)
+	public function testGetSubsidiaries(ApiService $apiService): void
+		{
+		$subsidiaries = $apiService->getSubsidiaries();
+		self::assertNotEmpty($subsidiaries);
+		foreach ($subsidiaries as $subsidiary)
+			{
+			self::assertInstanceOf(Subsidiary::class, $subsidiary);
+			self::assertNotEmpty($subsidiary->getId());
+			self::assertNotEmpty($subsidiary->getName());
+			}
+		}
+
+	/**
+	 * @depends testParseConfig
+	 * @param ApiService $apiService
+	 */
+	public function testGetDepartments(ApiService $apiService): void
 		{
 		$departments = $apiService->getDepartments();
 		self::assertNotEmpty($departments);

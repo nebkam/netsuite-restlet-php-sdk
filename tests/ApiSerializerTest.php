@@ -2,26 +2,23 @@
 
 use Infostud\NetSuiteSdk\Model\ColumnDefinition;
 use Infostud\NetSuiteSdk\Model\Customer;
+use Infostud\NetSuiteSdk\Model\GetSubsidiariesResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearchCustomersResponse;
 use Infostud\NetSuiteSdk\ApiSerializer;
 use Infostud\NetSuiteSdk\Model\GetDepartmentsResponse;
-use Infostud\NetSuiteSdk\Model\SearchDefinition;
-use Infostud\NetSuiteSdk\Model\SearchMetadata;
 use PHPUnit\Framework\TestCase;
 
 class ApiSerializerTest extends TestCase
 	{
-	public function testSingleCustomerSearchResult()
+	public function testSingleCustomerSearchResult(): void
 		{
 		$serializer = new ApiSerializer();
 		$json = file_get_contents(__DIR__.'/single_customer_search_response.json');
 		$response = $serializer->deserialize($json, SavedSearchCustomersResponse::class);
 		self::assertInstanceOf(SavedSearchCustomersResponse::class, $response);
 		$searchMetadata = $response->getSearchMetadata();
-		self::assertInstanceOf(SearchMetadata::class, $searchMetadata);
 		self::assertEquals(1, $searchMetadata->getCount());
 		$searchDefinition = $searchMetadata->getSearchDefinition();
-		self::assertInstanceOf(SearchDefinition::class, $searchDefinition);
 		self::assertCount(13, $searchDefinition->getColumns());
 		self::assertContainsOnlyInstancesOf(ColumnDefinition::class, $searchDefinition->getColumns());
 		foreach ($searchDefinition->getColumns() as $columnDefinition)
@@ -40,19 +37,41 @@ class ApiSerializerTest extends TestCase
 		self::assertEquals('3dhoglasavanje@gmail.com', $customer->getAttributes()->getEmail());
 		self::assertEquals('109121175', $customer->getAttributes()->getVatIdentifier());
 		self::assertEquals('63944017', $customer->getAttributes()->getRegistryIdentifier());
-		self::assertInstanceOf(DateTime::class, $customer->getAttributes()->getCreatedAt());
 		self::assertEquals(
 			'2020-08-07T11:36:00+02:00',
 			$customer->getAttributes()->getCreatedAt()->format(DateTimeInterface::ATOM)
 		);
-		self::assertInstanceOf(DateTime::class, $customer->getAttributes()->getLastModifiedAt());
 		self::assertEquals(
 			'2020-11-20T11:55:00+01:00',
 			$customer->getAttributes()->getLastModifiedAt()->format(DateTimeInterface::ATOM)
 		);
 		}
 
-	public function testGetDepartmentsResult()
+	public function testGetSubsidiariesResult(): void
+		{
+		$serializer = new ApiSerializer();
+		$json = file_get_contents(__DIR__.'/subsidiaries_suiteql_response.json');
+		$response = $serializer->deserialize($json, GetSubsidiariesResponse::class);
+		self::assertInstanceOf(GetSubsidiariesResponse::class, $response);
+		self::assertNotEmpty($response->getSubsidiaries());
+		$subsidiaryIds = [];
+		foreach ($response->getSubsidiaries() as $subsidiary)
+			{
+			self::assertNotEmpty($subsidiary->getId());
+			self::assertNotEmpty($subsidiary->getName());
+			$subsidiaryIds[] = $subsidiary->getId();
+			}
+		// Parent consistency
+		foreach ($response->getSubsidiaries() as $subsidiary)
+			{
+			if ($subsidiary->getParentId())
+				{
+				self::assertContains($subsidiary->getParentId(), $subsidiaryIds);
+				}
+			}
+		}
+
+	public function testGetDepartmentsResult(): void
 		{
 		$serializer = new ApiSerializer();
 		$json = file_get_contents(__DIR__.'/departments_suiteql_response.json');

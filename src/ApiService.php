@@ -11,9 +11,11 @@ use Eher\OAuth\Token;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
+use Infostud\NetSuiteSdk\Model\GetSubsidiariesResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearchCustomersResponse;
 use Infostud\NetSuiteSdk\Model\Department;
 use Infostud\NetSuiteSdk\Model\GetDepartmentsResponse;
+use Infostud\NetSuiteSdk\Model\Subsidiary;
 use LogicException;
 use RuntimeException;
 
@@ -109,6 +111,32 @@ class ApiService
 		}
 
 	/**
+	 * @return Subsidiary[]
+	 */
+	public function getSubsidiaries(): array
+		{
+		try
+			{
+			$results = $this->executeSuiteQuery(
+				GetSubsidiariesResponse::class,
+				'select parent, id , name from subsidiary'
+			);
+			if (!empty($results->getSubsidiaries()))
+				{
+				return $results->getSubsidiaries();
+				}
+			}
+		catch (OAuthException $exception)
+			{
+			}
+		catch (GuzzleException $exception)
+			{
+			}
+
+		return [];
+		}
+
+	/**
 	 * @return Department[]
 	 */
 	public function getDepartments(): array
@@ -116,6 +144,7 @@ class ApiService
 		try
 			{
 			$results = $this->executeSuiteQuery(
+				GetDepartmentsResponse::class,
 				'select parent, id , name from department'
 			);
 			if (!empty($results->getDepartments()))
@@ -164,14 +193,20 @@ class ApiService
 		}
 
 	/**
+	 * @param string $resultClass
 	 * @param string $from
 	 * @param string $where
 	 * @param array $params
-	 * @return GetDepartmentsResponse
+	 * @return GetDepartmentsResponse|GetSubsidiariesResponse
 	 * @throws GuzzleException
 	 * @throws OAuthException
 	 */
-	private function executeSuiteQuery(string $from, $where = ' ', $params = []): GetDepartmentsResponse
+	private function executeSuiteQuery(
+		string $resultClass,
+		string $from,
+		$where = ' ',
+		$params = []
+		)
 		{
 		$requestBody = [
 			'sql_from'  => $from,
@@ -188,7 +223,7 @@ class ApiService
 			{
 			$contents = (string)$response->getBody()->getContents();
 
-			return $this->serializer->deserialize($contents, GetDepartmentsResponse::class);
+			return $this->serializer->deserialize($contents, $resultClass);
 			}
 
 		throw new LogicException(
