@@ -12,7 +12,7 @@ class SearchDefinition
 	/**
 	 * @return ColumnDefinition[]
 	 */
-	public function getColumns()
+	public function getColumns(): array
 		{
 		return $this->columns;
 		}
@@ -21,7 +21,7 @@ class SearchDefinition
 	 * @param ColumnDefinition[] $columns
 	 * @return self
 	 */
-	public function setColumns($columns)
+	public function setColumns(array $columns): self
 		{
 		$this->columns = $columns;
 

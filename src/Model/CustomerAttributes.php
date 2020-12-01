@@ -42,7 +42,7 @@ class CustomerAttributes
 	/**
 	 * @return string
 	 */
-	public function getName()
+	public function getName(): string
 		{
 		return $this->name;
 		}
@@ -51,7 +51,7 @@ class CustomerAttributes
 	 * @param string $name
 	 * @return self
 	 */
-	public function setName($name)
+	public function setName(string $name): self
 		{
 		$this->name = $name;
 
@@ -61,7 +61,7 @@ class CustomerAttributes
 	/**
 	 * @return string
 	 */
-	public function getEmail()
+	public function getEmail(): string
 		{
 		return $this->email;
 		}
@@ -70,7 +70,7 @@ class CustomerAttributes
 	 * @param string $email
 	 * @return self
 	 */
-	public function setEmail($email)
+	public function setEmail(string $email): self
 		{
 		$this->email = $email;
 
@@ -80,7 +80,7 @@ class CustomerAttributes
 	/**
 	 * @return string
 	 */
-	public function getVatIdentifier()
+	public function getVatIdentifier(): string
 		{
 		return $this->vatIdentifier;
 		}
@@ -89,7 +89,7 @@ class CustomerAttributes
 	 * @param string $vatIdentifier
 	 * @return self
 	 */
-	public function setVatIdentifier($vatIdentifier)
+	public function setVatIdentifier(string $vatIdentifier): self
 		{
 		$this->vatIdentifier = $vatIdentifier;
 
@@ -99,7 +99,7 @@ class CustomerAttributes
 	/**
 	 * @return string
 	 */
-	public function getRegistryIdentifier()
+	public function getRegistryIdentifier(): string
 		{
 		return $this->registryIdentifier;
 		}
@@ -108,7 +108,7 @@ class CustomerAttributes
 	 * @param string $registryIdentifier
 	 * @return self
 	 */
-	public function setRegistryIdentifier($registryIdentifier)
+	public function setRegistryIdentifier(string $registryIdentifier): self
 		{
 		$this->registryIdentifier = $registryIdentifier;
 
@@ -118,7 +118,7 @@ class CustomerAttributes
 	/**
 	 * @return DateTime
 	 */
-	public function getCreatedAt()
+	public function getCreatedAt(): DateTime
 		{
 		return $this->createdAt;
 		}
@@ -127,7 +127,7 @@ class CustomerAttributes
 	 * @param DateTime $createdAt
 	 * @return self
 	 */
-	public function setCreatedAt($createdAt)
+	public function setCreatedAt(DateTime $createdAt): self
 		{
 		$this->createdAt = $createdAt;
 
@@ -137,7 +137,7 @@ class CustomerAttributes
 	/**
 	 * @return DateTime
 	 */
-	public function getLastModifiedAt()
+	public function getLastModifiedAt(): DateTime
 		{
 		return $this->lastModifiedAt;
 		}
@@ -146,7 +146,7 @@ class CustomerAttributes
 	 * @param DateTime $lastModifiedAt
 	 * @return self
 	 */
-	public function setLastModifiedAt($lastModifiedAt)
+	public function setLastModifiedAt(DateTime $lastModifiedAt): self
 		{
 		$this->lastModifiedAt = $lastModifiedAt;
 

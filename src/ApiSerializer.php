@@ -53,7 +53,7 @@ class ApiSerializer
 	 * @param string $className
 	 * @return CustomerSearchResponse|GetDepartmentsResponse
 	 */
-	public function deserialize($json, $className)
+	public function deserialize(string $json, string $className)
 		{
 		/** @noinspection PhpIncompatibleReturnTypeInspection */
 		return $this->serializer->deserialize($json, $className, 'json');

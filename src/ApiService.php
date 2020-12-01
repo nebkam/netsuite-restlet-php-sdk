@@ -19,7 +19,7 @@ use RuntimeException;
 
 class ApiService
 	{
-	const REQUEST_METHOD = 'POST';
+	private const REQUEST_METHOD = 'POST';
 	/**
 	 * @var string
 	 */
@@ -60,7 +60,7 @@ class ApiService
 	/**
 	 * @param string $configPath
 	 */
-	public function __construct($configPath)
+	public function __construct(string $configPath)
 		{
 		$config = $this->readJsonConfig($configPath);
 
@@ -83,7 +83,7 @@ class ApiService
 	 * @param string $vatIdentifier
 	 * @return Model\Customer|null
 	 */
-	public function findCustomerByVatIdentifier($vatIdentifier)
+	public function findCustomerByVatIdentifier(string $vatIdentifier): ?Model\Customer
 		{
 		$filters = [[
 			'name'     => 'custentity_pib',
@@ -111,7 +111,7 @@ class ApiService
 	/**
 	 * @return Department[]
 	 */
-	public function getDepartments()
+	public function getDepartments(): array
 		{
 		try
 			{
@@ -170,7 +170,7 @@ class ApiService
 	 * @throws GuzzleException
 	 * @throws OAuthException
 	 */
-	private function executeSuiteQuery($from, $where = ' ', $params = [])
+	private function executeSuiteQuery(string $from, $where = ' ', $params = []): GetDepartmentsResponse
 		{
 		$requestBody = [
 			'sql_from'  => $from,
@@ -200,7 +200,7 @@ class ApiService
 	 * @param int $deploymentId
 	 * @return string
 	 */
-	private function getUrl($scriptId, $deploymentId)
+	private function getUrl(int $scriptId, int $deploymentId): string
 		{
 		$query_data = [
 			'script' => $scriptId,
@@ -216,7 +216,7 @@ class ApiService
 	 * @return array
 	 * @throws OAuthException
 	 */
-	private function buildHeaders($url)
+	private function buildHeaders(string $url): array
 		{
 		$request   = new Request(self::REQUEST_METHOD, $url, [
 			'oauth_nonce'            => md5(mt_rand()),
@@ -241,7 +241,7 @@ class ApiService
 	 * @return array
 	 * @throws RuntimeException
 	 */
-	private function readJsonConfig($path)
+	private function readJsonConfig(string $path): array
 		{
 		if (!file_exists($path)
 			|| !is_readable($path))

@@ -32,7 +32,7 @@ class ColumnDefinition
 	/**
 	 * @return string
 	 */
-	public function getName()
+	public function getName(): string
 		{
 		return $this->name;
 		}
@@ -41,7 +41,7 @@ class ColumnDefinition
 	 * @param string $name
 	 * @return self
 	 */
-	public function setName($name)
+	public function setName(string $name): self
 		{
 		$this->name = $name;
 
@@ -51,7 +51,7 @@ class ColumnDefinition
 	/**
 	 * @return string
 	 */
-	public function getLabel()
+	public function getLabel(): string
 		{
 		return $this->label;
 		}
@@ -60,7 +60,7 @@ class ColumnDefinition
 	 * @param string $label
 	 * @return self
 	 */
-	public function setLabel($label)
+	public function setLabel(string $label): self
 		{
 		$this->label = $label;
 
@@ -70,7 +70,7 @@ class ColumnDefinition
 	/**
 	 * @return string
 	 */
-	public function getType()
+	public function getType(): string
 		{
 		return $this->type;
 		}
@@ -79,7 +79,7 @@ class ColumnDefinition
 	 * @param string $type
 	 * @return self
 	 */
-	public function setType($type)
+	public function setType(string $type): self
 		{
 		$this->type = $type;
 
@@ -89,7 +89,7 @@ class ColumnDefinition
 	/**
 	 * @return string
 	 */
-	public function getSortDirection()
+	public function getSortDirection(): string
 		{
 		return $this->sortDirection;
 		}
@@ -98,7 +98,7 @@ class ColumnDefinition
 	 * @param string $sortDirection
 	 * @return self
 	 */
-	public function setSortDirection($sortDirection)
+	public function setSortDirection(string $sortDirection): self
 		{
 		$this->sortDirection = $sortDirection;
 

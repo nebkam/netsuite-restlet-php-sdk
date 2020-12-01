@@ -23,7 +23,7 @@ class Department
 	/**
 	 * @return int
 	 */
-	public function getId()
+	public function getId(): int
 		{
 		return $this->id;
 		}
@@ -32,7 +32,7 @@ class Department
 	 * @param int $id
 	 * @return self
 	 */
-	public function setId($id)
+	public function setId(int $id): self
 		{
 		$this->id = $id;
 
@@ -42,7 +42,7 @@ class Department
 	/**
 	 * @return string
 	 */
-	public function getName()
+	public function getName(): string
 		{
 		return $this->name;
 		}
@@ -51,7 +51,7 @@ class Department
 	 * @param string $name
 	 * @return self
 	 */
-	public function setName($name)
+	public function setName(string $name): self
 		{
 		$this->name = $name;
 
@@ -61,7 +61,7 @@ class Department
 	/**
 	 * @return int|null
 	 */
-	public function getParentId()
+	public function getParentId(): ?int
 		{
 		return $this->parentId;
 		}
@@ -70,7 +70,7 @@ class Department
 	 * @param int|null $parentId
 	 * @return self
 	 */
-	public function setParentId($parentId)
+	public function setParentId(?int $parentId): self
 		{
 		$this->parentId = $parentId;
 

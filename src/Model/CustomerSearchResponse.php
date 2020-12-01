@@ -19,7 +19,7 @@ class CustomerSearchResponse
 	/**
 	 * @return SearchMetadata
 	 */
-	public function getSearchMetadata()
+	public function getSearchMetadata(): SearchMetadata
 		{
 		return $this->searchMetadata;
 		}
@@ -28,7 +28,7 @@ class CustomerSearchResponse
 	 * @param SearchMetadata $searchMetadata
 	 * @return CustomerSearchResponse
 	 */
-	public function setSearchMetadata($searchMetadata)
+	public function setSearchMetadata(SearchMetadata $searchMetadata): CustomerSearchResponse
 		{
 		$this->searchMetadata = $searchMetadata;
 
@@ -38,7 +38,7 @@ class CustomerSearchResponse
 	/**
 	 * @return Customer[]
 	 */
-	public function getCustomers()
+	public function getCustomers(): array
 		{
 		return $this->customers;
 		}
@@ -47,7 +47,7 @@ class CustomerSearchResponse
 	 * @param Customer[] $customers
 	 * @return self
 	 */
-	public function setCustomers($customers)
+	public function setCustomers(array $customers): self
 		{
 		$this->customers = $customers;
 

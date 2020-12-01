@@ -15,7 +15,7 @@ class GetDepartmentsResponse
 	/**
 	 * @return Department[]
 	 */
-	public function getDepartments()
+	public function getDepartments(): array
 		{
 		return $this->departments;
 		}
@@ -24,7 +24,7 @@ class GetDepartmentsResponse
 	 * @param Department[] $departments
 	 * @return self
 	 */
-	public function setDepartments($departments)
+	public function setDepartments(array $departments): self
 		{
 		$this->departments = $departments;
 

@@ -19,7 +19,7 @@ class Customer
 	/**
 	 * @return string
 	 */
-	public function getId()
+	public function getId(): string
 		{
 		return $this->id;
 		}
@@ -28,7 +28,7 @@ class Customer
 	 * @param string $id
 	 * @return self
 	 */
-	public function setId($id)
+	public function setId(string $id): self
 		{
 		$this->id = $id;
 
@@ -38,7 +38,7 @@ class Customer
 	/**
 	 * @return CustomerAttributes
 	 */
-	public function getAttributes()
+	public function getAttributes(): CustomerAttributes
 		{
 		return $this->attributes;
 		}
@@ -47,7 +47,7 @@ class Customer
 	 * @param CustomerAttributes $attributes
 	 * @return self
 	 */
-	public function setAttributes($attributes)
+	public function setAttributes(CustomerAttributes $attributes): self
 		{
 		$this->attributes = $attributes;
 

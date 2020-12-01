@@ -16,7 +16,7 @@ class SearchMetadata
 	/**
 	 * @return int
 	 */
-	public function getCount()
+	public function getCount(): int
 		{
 		return $this->count;
 		}
@@ -25,7 +25,7 @@ class SearchMetadata
 	 * @param int $count
 	 * @return self
 	 */
-	public function setCount($count)
+	public function setCount(int $count): self
 		{
 		$this->count = $count;
 
@@ -35,7 +35,7 @@ class SearchMetadata
 	/**
 	 * @return SearchDefinition
 	 */
-	public function getSearchDefinition()
+	public function getSearchDefinition(): SearchDefinition
 		{
 		return $this->searchDefinition;
 		}
@@ -44,7 +44,7 @@ class SearchMetadata
 	 * @param SearchDefinition $searchDefinition
 	 * @return self
 	 */
-	public function setSearchDefinition($searchDefinition)
+	public function setSearchDefinition(SearchDefinition $searchDefinition): self
 		{
 		$this->searchDefinition = $searchDefinition;
 
