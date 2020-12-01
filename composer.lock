@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c0c6751e4722eb9914759a120c2aa0b6",
+    "content-hash": "9828c2dc476e19ea0cd952c0a518402d",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -677,7 +677,7 @@
         },
         {
             "name": "symfony/inflector",
-            "version": "v5.1.8",
+            "version": "v5.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/inflector.git",
@@ -1294,16 +1294,16 @@
         },
         {
             "name": "symfony/property-access",
-            "version": "v4.4.16",
+            "version": "v4.4.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-access.git",
-                "reference": "3d97341e820c248f8dc0b6b5bf991964bda5a3ac"
+                "reference": "ab8184f093095b40c3e7688bc4eb1d0484da327c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-access/zipball/3d97341e820c248f8dc0b6b5bf991964bda5a3ac",
-                "reference": "3d97341e820c248f8dc0b6b5bf991964bda5a3ac",
+                "url": "https://api.github.com/repos/symfony/property-access/zipball/ab8184f093095b40c3e7688bc4eb1d0484da327c",
+                "reference": "ab8184f093095b40c3e7688bc4eb1d0484da327c",
                 "shasum": ""
             },
             "require": {
@@ -1366,20 +1366,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-24T11:50:19+00:00"
+            "time": "2020-10-31T22:44:29+00:00"
         },
         {
             "name": "symfony/property-info",
-            "version": "v4.4.16",
+            "version": "v4.4.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-info.git",
-                "reference": "f2063afce47039653b4c6754d35aeb647f837926"
+                "reference": "b355ee4a241094f72b8f96709a83619b8be064b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-info/zipball/f2063afce47039653b4c6754d35aeb647f837926",
-                "reference": "f2063afce47039653b4c6754d35aeb647f837926",
+                "url": "https://api.github.com/repos/symfony/property-info/zipball/b355ee4a241094f72b8f96709a83619b8be064b2",
+                "reference": "b355ee4a241094f72b8f96709a83619b8be064b2",
                 "shasum": ""
             },
             "require": {
@@ -1451,20 +1451,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-24T11:50:19+00:00"
+            "time": "2020-10-28T20:42:29+00:00"
         },
         {
             "name": "symfony/serializer",
-            "version": "v4.4.16",
+            "version": "v4.4.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/serializer.git",
-                "reference": "2af7e86db04ee65fdf1991b17ee0b3e955c93de9"
+                "reference": "5719c6d5913375e453efb51d168510cc848471ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/serializer/zipball/2af7e86db04ee65fdf1991b17ee0b3e955c93de9",
-                "reference": "2af7e86db04ee65fdf1991b17ee0b3e955c93de9",
+                "url": "https://api.github.com/repos/symfony/serializer/zipball/5719c6d5913375e453efb51d168510cc848471ff",
+                "reference": "5719c6d5913375e453efb51d168510cc848471ff",
                 "shasum": ""
             },
             "require": {
@@ -1542,20 +1542,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-24T11:50:19+00:00"
+            "time": "2020-11-25T11:55:08+00:00"
         },
         {
             "name": "symfony/string",
-            "version": "v5.1.8",
+            "version": "v5.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
-                "reference": "a97573e960303db71be0dd8fda9be3bca5e0feea"
+                "reference": "40e975edadd4e32cd16f3753b3bad65d9ac48242"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/a97573e960303db71be0dd8fda9be3bca5e0feea",
-                "reference": "a97573e960303db71be0dd8fda9be3bca5e0feea",
+                "url": "https://api.github.com/repos/symfony/string/zipball/40e975edadd4e32cd16f3753b3bad65d9ac48242",
+                "reference": "40e975edadd4e32cd16f3753b3bad65d9ac48242",
                 "shasum": ""
             },
             "require": {
@@ -1622,7 +1622,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-24T12:01:57+00:00"
+            "time": "2020-10-24T12:08:07+00:00"
         },
         {
             "name": "webmozart/assert",
@@ -2251,23 +2251,23 @@
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/code-unit-reverse-lookup.git",
-                "reference": "4419fcdb5eabb9caa61a27c7a1db532a6b55dd18"
+                "reference": "1de8cd5c010cb153fcd68b8d0f64606f523f7619"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/code-unit-reverse-lookup/zipball/4419fcdb5eabb9caa61a27c7a1db532a6b55dd18",
-                "reference": "4419fcdb5eabb9caa61a27c7a1db532a6b55dd18",
+                "url": "https://api.github.com/repos/sebastianbergmann/code-unit-reverse-lookup/zipball/1de8cd5c010cb153fcd68b8d0f64606f523f7619",
+                "reference": "1de8cd5c010cb153fcd68b8d0f64606f523f7619",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.6 || ^7.0"
+                "php": ">=5.6"
             },
             "require-dev": {
-                "phpunit/phpunit": "^5.7 || ^6.0"
+                "phpunit/phpunit": "^8.5"
             },
             "type": "library",
             "extra": {
@@ -2292,7 +2292,13 @@
             ],
             "description": "Looks up which function or method a line of code belongs to",
             "homepage": "https://github.com/sebastianbergmann/code-unit-reverse-lookup/",
-            "time": "2017-03-04T06:30:41+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/sebastianbergmann",
+                    "type": "github"
+                }
+            ],
+            "time": "2020-11-30T08:15:22+00:00"
         },
         {
             "name": "sebastian/comparator",
@@ -2764,16 +2770,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v4.4.16",
+            "version": "v4.4.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "543cb4dbd45ed803f08a9a65f27fb149b5dd20c2"
+                "reference": "7531361cf38e4816821b4a12a42542b3c6143ad1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/543cb4dbd45ed803f08a9a65f27fb149b5dd20c2",
-                "reference": "543cb4dbd45ed803f08a9a65f27fb149b5dd20c2",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/7531361cf38e4816821b4a12a42542b3c6143ad1",
+                "reference": "7531361cf38e4816821b4a12a42542b3c6143ad1",
                 "shasum": ""
             },
             "require": {
@@ -2828,7 +2834,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-24T11:50:19+00:00"
+            "time": "2020-11-24T12:28:30+00:00"
         }
     ],
     "aliases": [],
@@ -2837,7 +2843,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.6",
+        "php": "^7.2",
         "ext-json": "*"
     },
     "platform-dev": [],
