@@ -2,31 +2,28 @@
 
 namespace Infostud\NetSuiteSdk\Model;
 
-use Symfony\Component\Serializer\Annotation\SerializedName;
-
-class GetSubsidiariesResponse
+class GetSubsidiariesResponse implements SuiteQLResponse
 	{
 	/**
-	 * @SerializedName("rows")
 	 * @var Subsidiary[]
 	 */
-	private $subsidiaries;
+	private $rows;
 
 	/**
 	 * @return Subsidiary[]
 	 */
-	public function getSubsidiaries(): array
+	public function getRows(): array
 		{
-		return $this->subsidiaries;
+		return $this->rows;
 		}
 
 	/**
-	 * @param Subsidiary[] $subsidiaries
+	 * @param Subsidiary[] $rows
 	 * @return self
 	 */
-	public function setSubsidiaries(array $subsidiaries): self
+	public function setRows(array $rows): self
 		{
-		$this->subsidiaries = $subsidiaries;
+		$this->rows = $rows;
 
 		return $this;
 		}

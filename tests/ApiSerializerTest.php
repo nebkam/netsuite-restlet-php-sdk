@@ -53,16 +53,16 @@ class ApiSerializerTest extends TestCase
 		$json = file_get_contents(__DIR__.'/subsidiaries_suiteql_response.json');
 		$response = $serializer->deserialize($json, GetSubsidiariesResponse::class);
 		self::assertInstanceOf(GetSubsidiariesResponse::class, $response);
-		self::assertNotEmpty($response->getSubsidiaries());
+		self::assertNotEmpty($response->getRows());
 		$subsidiaryIds = [];
-		foreach ($response->getSubsidiaries() as $subsidiary)
+		foreach ($response->getRows() as $subsidiary)
 			{
 			self::assertNotEmpty($subsidiary->getId());
 			self::assertNotEmpty($subsidiary->getName());
 			$subsidiaryIds[] = $subsidiary->getId();
 			}
 		// Parent consistency
-		foreach ($response->getSubsidiaries() as $subsidiary)
+		foreach ($response->getRows() as $subsidiary)
 			{
 			if ($subsidiary->getParentId())
 				{
@@ -77,16 +77,16 @@ class ApiSerializerTest extends TestCase
 		$json = file_get_contents(__DIR__.'/departments_suiteql_response.json');
 		$response = $serializer->deserialize($json, GetDepartmentsResponse::class);
 		self::assertInstanceOf(GetDepartmentsResponse::class, $response);
-		self::assertNotEmpty($response->getDepartments());
+		self::assertNotEmpty($response->getRows());
 		$departmentIds = [];
-		foreach ($response->getDepartments() as $department)
+		foreach ($response->getRows() as $department)
 			{
 			self::assertNotEmpty($department->getId());
 			self::assertNotEmpty($department->getName());
 			$departmentIds[] = $department->getId();
 			}
 		// Parent consistency
-		foreach ($response->getDepartments() as $department)
+		foreach ($response->getRows() as $department)
 			{
 			if ($department->getParentId())
 				{

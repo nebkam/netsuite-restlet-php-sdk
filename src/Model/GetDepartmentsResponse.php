@@ -2,31 +2,28 @@
 
 namespace Infostud\NetSuiteSdk\Model;
 
-use Symfony\Component\Serializer\Annotation\SerializedName;
-
-class GetDepartmentsResponse
+class GetDepartmentsResponse implements SuiteQLResponse
 	{
 	/**
-	 * @SerializedName("rows")
 	 * @var Department[]
 	 */
-	private $departments;
+	private $rows;
 
 	/**
 	 * @return Department[]
 	 */
-	public function getDepartments(): array
+	public function getRows(): array
 		{
-		return $this->departments;
+		return $this->rows;
 		}
 
 	/**
-	 * @param Department[] $departments
+	 * @param Department[] $rows
 	 * @return self
 	 */
-	public function setDepartments(array $departments): self
+	public function setRows(array $rows): self
 		{
-		$this->departments = $departments;
+		$this->rows = $rows;
 
 		return $this;
 		}

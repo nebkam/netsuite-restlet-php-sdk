@@ -117,21 +117,13 @@ class ApiService
 		{
 		try
 			{
-			$results = $this->executeSuiteQuery(
+			return $this->executeSuiteQuery(
 				GetSubsidiariesResponse::class,
 				'select parent, id , name from subsidiary'
 			);
-			if (!empty($results->getSubsidiaries()))
-				{
-				return $results->getSubsidiaries();
-				}
 			}
-		catch (OAuthException $exception)
-			{
-			}
-		catch (GuzzleException $exception)
-			{
-			}
+		catch (OAuthException $exception) {}
+		catch (GuzzleException $exception) {}
 
 		return [];
 		}
@@ -143,21 +135,13 @@ class ApiService
 		{
 		try
 			{
-			$results = $this->executeSuiteQuery(
+			return $this->executeSuiteQuery(
 				GetDepartmentsResponse::class,
 				'select parent, id , name from department'
 			);
-			if (!empty($results->getDepartments()))
-				{
-				return $results->getDepartments();
-				}
 			}
-		catch (OAuthException $exception)
-			{
-			}
-		catch (GuzzleException $exception)
-			{
-			}
+		catch (OAuthException $exception) {}
+		catch (GuzzleException $exception) {}
 
 		return [];
 		}
@@ -197,7 +181,7 @@ class ApiService
 	 * @param string $from
 	 * @param string $where
 	 * @param array $params
-	 * @return GetDepartmentsResponse|GetSubsidiariesResponse
+	 * @return array
 	 * @throws GuzzleException
 	 * @throws OAuthException
 	 */
@@ -206,7 +190,7 @@ class ApiService
 		string $from,
 		$where = ' ',
 		$params = []
-		)
+		): array
 		{
 		$requestBody = [
 			'sql_from'  => $from,
@@ -223,7 +207,13 @@ class ApiService
 			{
 			$contents = (string)$response->getBody()->getContents();
 
-			return $this->serializer->deserialize($contents, $resultClass);
+			$results = $this->serializer->deserialize($contents, $resultClass);
+			if (!empty($results->getRows()))
+				{
+				return $results->getRows();
+				}
+
+			return [];
 			}
 
 		throw new LogicException(
