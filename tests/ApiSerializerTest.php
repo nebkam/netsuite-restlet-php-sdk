@@ -2,14 +2,54 @@
 
 use Infostud\NetSuiteSdk\Model\ColumnDefinition;
 use Infostud\NetSuiteSdk\Model\Customer;
+use Infostud\NetSuiteSdk\Model\CustomerForm;
+use Infostud\NetSuiteSdk\Model\CustomerFormAddress;
 use Infostud\NetSuiteSdk\Model\GetSubsidiariesResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearchCustomersResponse;
 use Infostud\NetSuiteSdk\ApiSerializer;
 use Infostud\NetSuiteSdk\Model\GetDepartmentsResponse;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 class ApiSerializerTest extends TestCase
 	{
+	/**
+	 * @throws ExceptionInterface
+	 */
+	public function testCustomerFormRequest(): void
+		{
+		$serializer = new ApiSerializer();
+		$customerForm = (new CustomerForm())
+			->setExternalId('PIB-123456')
+			->setCompanyName('Test item')
+			->setSubsidiary(9)
+			->setVatIdentifier('101696893')
+			->setRegistryIdentifier('01234567')
+			->addAddress(
+				(new CustomerFormAddress())
+					->setLabel('Nazor')
+					->setCity('Subotica')
+					->setAddressLine1('Vladimira Nazora 7')
+					->setAddressLine2('(u pasažu)')
+					->setPostalCode('24000')
+					->setCountry(CustomerFormAddress::COUNTRY_SERBIA)
+			);
+		$normalized = $serializer->normalize($customerForm);
+		self::assertEquals('PIB-123456', $normalized['externalId']);
+		self::assertEquals('Test item', $normalized['companyname']);
+		self::assertEquals(9, $normalized['subsidiary']);
+		self::assertEquals('101696893', $normalized['custentity_pib']);
+		self::assertEquals('01234567', $normalized['custentity_matbrpred']);
+		self::assertCount(1, $normalized['address']);
+		$address = $normalized['address'][0];
+		self::assertEquals('Nazor', $address['label']);
+		self::assertEquals('Subotica', $address['city']);
+		self::assertEquals('Vladimira Nazora 7', $address['addr1']);
+		self::assertEquals('(u pasažu)', $address['addr2']);
+		self::assertEquals('24000', $address['zip']);
+		self::assertEquals(CustomerFormAddress::COUNTRY_SERBIA, $address['country']);
+		}
+
 	public function testSingleCustomerSearchResult(): void
 		{
 		$serializer = new ApiSerializer();

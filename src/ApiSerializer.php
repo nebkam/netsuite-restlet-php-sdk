@@ -2,13 +2,17 @@
 
 namespace Infostud\NetSuiteSdk;
 
+use ArrayObject;
+use Countable;
 use DateTimeZone;
 use Doctrine\Common\Annotations\AnnotationReader;
+use Infostud\NetSuiteSdk\Model\CustomerForm;
 use Infostud\NetSuiteSdk\Model\GetSubsidiariesResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearchCustomersResponse;
 use Infostud\NetSuiteSdk\Model\GetDepartmentsResponse;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
 use Symfony\Component\Serializer\NameConverter\MetadataAwareNameConverter;
@@ -17,6 +21,7 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
+use Traversable;
 
 class ApiSerializer
 	{
@@ -58,5 +63,18 @@ class ApiSerializer
 		{
 		/** @noinspection PhpIncompatibleReturnTypeInspection */
 		return $this->serializer->deserialize($json, $className, 'json');
+		}
+
+	/**
+	 * Add other classes as arguments
+	 * (explicit, to aid type-hinting)
+	 *
+	 * @param CustomerForm $data
+	 * @return array|ArrayObject|bool|Countable|float|int|string|Traversable|null
+	 * @throws ExceptionInterface
+	 */
+	public function normalize($data)
+		{
+		return $this->serializer->normalize($data, 'json');
 		}
 	}
