@@ -2,7 +2,7 @@
 
 namespace Infostud\NetSuiteSdk\Model\SuiteQL;
 
-class GetDepartmentsResponse
+class GetDepartmentsResponse implements SuiteQLResponse
 	{
 	/**
 	 * @var Department[]

@@ -2,7 +2,7 @@
 
 namespace Infostud\NetSuiteSdk\Model\SuiteQL;
 
-class Department
+class Department implements SuiteQLItem
 	{
 	/**
 	 * @var int
