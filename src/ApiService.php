@@ -109,6 +109,64 @@ class ApiService
 		}
 
 	/**
+	 * @param string $vatIdentifier
+	 * @return Model\Customer|null
+	 */
+	public function findCustomerByForeignVatIdentifier($vatIdentifier)
+		{
+		$filters = [[
+			'name'     => 'custentity_pib',
+			'operator' => 'contains',
+			'values'   => [$vatIdentifier]
+		]];
+		try
+			{
+			$results = $this->executeSavedSearchCustomers($filters);
+			if (!empty($results->getCustomers()))
+				{
+				return $results->getCustomers()[0];
+				}
+			}
+		catch (OAuthException $exception)
+			{
+			}
+		catch (GuzzleException $e)
+			{
+			}
+
+		return null;
+		}
+
+	/**
+	 * @param string $JMBG
+	 * @return Model\Customer|null
+	 */
+	public function findCustomerByJMBG($JMBG)
+		{
+		$filters = [[
+			'name'     => 'custentity_matbrpred',
+			'operator' => 'is',
+			'values'   => [$JMBG]
+		]];
+		try
+			{
+			$results = $this->executeSavedSearchCustomers($filters);
+			if (!empty($results->getCustomers()))
+				{
+				return $results->getCustomers()[0];
+				}
+			}
+		catch (OAuthException $exception)
+			{
+			}
+		catch (GuzzleException $e)
+			{
+			}
+
+		return null;
+		}
+	
+	/**
 	 * @return Department[]
 	 */
 	public function getDepartments()
