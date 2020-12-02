@@ -38,23 +38,20 @@ class ApiServiceTest extends TestCase
 	 */
 	public function testSearchByPibFragment(ApiService $apiService): void
 		{
-		self::markTestSkipped();
-		$customer = $apiService->findCustomerByPibFragment('TODO');
+		$customer = $apiService->findCustomerByPibFragment('10912117');
 		self::assertInstanceOf(Customer::class, $customer);
-		self::assertEquals('TODO', $customer->getAttributes()->getPib());
+		self::assertEquals('109121175', $customer->getAttributes()->getPib());
 		}
 
 	/**
-	 * TODO Add real JMBG
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
 	 */
 	public function testSearchByRegistryIdentifier(ApiService $apiService): void
 		{
-		self::markTestSkipped();
-		$customer = $apiService->findCustomerByRegistryIdentifier('TODO');
+		$customer = $apiService->findCustomerByRegistryIdentifier('63944017');
 		self::assertInstanceOf(Customer::class, $customer);
-		self::assertEquals('TODO', $customer->getAttributes()->getRegistryIdentifier());
+		self::assertEquals('63944017', $customer->getAttributes()->getRegistryIdentifier());
 		}
 
 	/**
