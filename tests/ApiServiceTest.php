@@ -22,13 +22,37 @@ class ApiServiceTest extends TestCase
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
 	 */
-	public function testSearchByVatIdentifier($apiService)
+	public function testSearchByPib($apiService)
 		{
-		$customer = $apiService->findCustomerByVatIdentifier('109121175');
+		$customer = $apiService->findCustomerByPib('109121175');
 		self::assertInstanceOf(Customer::class, $customer);
-		self::assertEquals('109121175', $customer->getAttributes()->getVatIdentifier());
-		self::assertInstanceOf(DateTime::class, $customer->getAttributes()->getCreatedAt());
-		self::assertInstanceOf(DateTime::class, $customer->getAttributes()->getLastModifiedAt());
+		self::assertEquals('109121175', $customer->getAttributes()->getPib());
+		}
+
+	/**
+	 * TODO Add real foreign PIB
+	 * @depends testParseConfig
+	 * @param ApiService $apiService
+	 */
+	public function testSearchByPibFragment($apiService)
+		{
+		self::markTestSkipped();
+		$customer = $apiService->findCustomerByPibFragment('si49380290');
+		self::assertInstanceOf(Customer::class, $customer);
+		self::assertEquals('si49380290', $customer->getAttributes()->getPib());
+		}
+
+	/**
+	 * TODO Add real JMBG
+	 * @depends testParseConfig
+	 * @param ApiService $apiService
+	 */
+	public function testSearchByRegistryIdentifier($apiService)
+		{
+		self::markTestSkipped();
+		$customer = $apiService->findCustomerByRegistryIdentifier('209970780048');
+		self::assertInstanceOf(Customer::class, $customer);
+		self::assertEquals('209970780048', $customer->getAttributes()->getRegistryIdentifier());
 		}
 
 	/**

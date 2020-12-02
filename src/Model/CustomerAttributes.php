@@ -84,15 +84,15 @@ class CustomerAttributes
 	/**
 	 * @return string
 	 */
-	public function getVatIdentifier()
+	public function getPib()
 		{
 		return $this->custentity_pib;
 		}
 
 	/**
-	 * @deprecated
-	 * @see getVatIdentifier
 	 * @return string
+	 * @see getPib
+	 * @deprecated
 	 */
 	public function getCustentitypib()
 		{

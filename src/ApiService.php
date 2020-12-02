@@ -80,15 +80,75 @@ class ApiService
 		}
 
 	/**
-	 * @param string $vatIdentifier
+	 * @param string $pib
 	 * @return Model\Customer|null
 	 */
-	public function findCustomerByVatIdentifier($vatIdentifier)
+	public function findCustomerByPib($pib)
 		{
 		$filters = [[
 			'name'     => 'custentity_pib',
 			'operator' => 'is',
-			'values'   => [$vatIdentifier]
+			'values'   => [$pib]
+		]];
+		try
+			{
+			$results = $this->executeSavedSearchCustomers($filters);
+			if (!empty($results->getCustomers()))
+				{
+				return $results->getCustomers()[0];
+				}
+			}
+		catch (OAuthException $exception)
+			{
+			}
+		catch (GuzzleException $e)
+			{
+			}
+
+		return null;
+		}
+
+	/**
+	 * @param string $pib
+	 * @return Model\Customer|null
+	 */
+	public function findCustomerByPibFragment($pib)
+		{
+		$filters = [[
+			'name'     => 'custentity_pib',
+			'operator' => 'contains',
+			'values'   => [$pib]
+		]];
+		try
+			{
+			$results = $this->executeSavedSearchCustomers($filters);
+			if (!empty($results->getCustomers()))
+				{
+				return $results->getCustomers()[0];
+				}
+			}
+		catch (OAuthException $exception)
+			{
+			}
+		catch (GuzzleException $exception)
+			{
+			}
+
+		return null;
+		}
+
+	/**
+	 * Find a company by MBR or an individual by JMBG
+	 *
+	 * @param string $registryIdentifier
+	 * @return Model\Customer|null
+	 */
+	public function findCustomerByRegistryIdentifier($registryIdentifier)
+		{
+		$filters = [[
+			'name'     => 'custentity_matbrpred',
+			'operator' => 'is',
+			'values'   => [$registryIdentifier]
 		]];
 		try
 			{
