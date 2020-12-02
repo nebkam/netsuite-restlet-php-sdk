@@ -1,12 +1,12 @@
 <?php
 
-use Infostud\NetSuiteSdk\Model\ColumnDefinition;
-use Infostud\NetSuiteSdk\Model\Customer;
-use Infostud\NetSuiteSdk\Model\CustomerSearchResponse;
+use Infostud\NetSuiteSdk\Model\SavedSearch\ColumnDefinition;
+use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
+use Infostud\NetSuiteSdk\Model\SavedSearch\CustomerSearchResponse;
 use Infostud\NetSuiteSdk\ApiSerializer;
-use Infostud\NetSuiteSdk\Model\GetDepartmentsResponse;
-use Infostud\NetSuiteSdk\Model\SearchDefinition;
-use Infostud\NetSuiteSdk\Model\SearchMetadata;
+use Infostud\NetSuiteSdk\Model\SuiteQL\GetDepartmentsResponse;
+use Infostud\NetSuiteSdk\Model\SavedSearch\SearchDefinition;
+use Infostud\NetSuiteSdk\Model\SavedSearch\SearchMetadata;
 use PHPUnit\Framework\TestCase;
 
 class ApiSerializerTest extends TestCase

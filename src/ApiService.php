@@ -11,9 +11,10 @@ use Eher\OAuth\Token;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
-use Infostud\NetSuiteSdk\Model\CustomerSearchResponse;
-use Infostud\NetSuiteSdk\Model\Department;
-use Infostud\NetSuiteSdk\Model\GetDepartmentsResponse;
+use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
+use Infostud\NetSuiteSdk\Model\SavedSearch\CustomerSearchResponse;
+use Infostud\NetSuiteSdk\Model\SuiteQL\Department;
+use Infostud\NetSuiteSdk\Model\SuiteQL\GetDepartmentsResponse;
 use LogicException;
 use RuntimeException;
 
@@ -81,7 +82,7 @@ class ApiService
 
 	/**
 	 * @param string $pib
-	 * @return Model\Customer|null
+	 * @return Customer|null
 	 */
 	public function findCustomerByPib($pib)
 		{
@@ -110,7 +111,7 @@ class ApiService
 
 	/**
 	 * @param string $pib
-	 * @return Model\Customer|null
+	 * @return Customer|null
 	 */
 	public function findCustomerByPibFragment($pib)
 		{
@@ -141,7 +142,7 @@ class ApiService
 	 * Find a company by MBR or an individual by JMBG
 	 *
 	 * @param string $registryIdentifier
-	 * @return Model\Customer|null
+	 * @return Customer|null
 	 */
 	public function findCustomerByRegistryIdentifier($registryIdentifier)
 		{

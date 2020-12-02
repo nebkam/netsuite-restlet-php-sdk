@@ -4,8 +4,8 @@ namespace Infostud\NetSuiteSdk;
 
 use DateTimeZone;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Infostud\NetSuiteSdk\Model\CustomerSearchResponse;
-use Infostud\NetSuiteSdk\Model\GetDepartmentsResponse;
+use Infostud\NetSuiteSdk\Model\SavedSearch\CustomerSearchResponse;
+use Infostud\NetSuiteSdk\Model\SuiteQL\GetDepartmentsResponse;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
