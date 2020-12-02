@@ -17,11 +17,10 @@ class CustomerAttributes
 	 */
 	private $email;
 	/**
-	 * PIB
 	 * @SerializedName("custentity_pib")
 	 * @var string
 	 */
-	private $vatIdentifier;
+	private $pib;
 	/**
 	 * Matični broj u APR / JMBG
 	 * @SerializedName("custentity_matbrpred")
@@ -80,18 +79,18 @@ class CustomerAttributes
 	/**
 	 * @return string
 	 */
-	public function getVatIdentifier(): string
+	public function getPib(): string
 		{
-		return $this->vatIdentifier;
+		return $this->pib;
 		}
 
 	/**
-	 * @param string $vatIdentifier
+	 * @param string $pib
 	 * @return self
 	 */
-	public function setVatIdentifier(string $vatIdentifier): self
+	public function setPib(string $pib): self
 		{
-		$this->vatIdentifier = $vatIdentifier;
+		$this->pib = $pib;
 
 		return $this;
 		}

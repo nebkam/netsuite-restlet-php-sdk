@@ -85,15 +85,73 @@ class ApiService
 		}
 
 	/**
-	 * @param string $vatIdentifier
+	 * @param string $pib
 	 * @return Customer|null
 	 */
-	public function findCustomerByVatIdentifier(string $vatIdentifier): ?Customer
+	public function findCustomerByPib(string $pib): ?Customer
 		{
 		$filters = [[
 			'name'     => 'custentity_pib',
 			'operator' => 'is',
-			'values'   => [$vatIdentifier]
+			'values'   => [$pib]
+		]];
+		try
+			{
+			$results = $this->executeSavedSearchCustomers($filters);
+			if (!empty($results->getCustomers()))
+				{
+				return $results->getCustomers()[0];
+				}
+			}
+		catch (OAuthException $exception)
+			{
+			}
+		catch (GuzzleException $e)
+			{
+			}
+
+		return null;
+		}
+
+	/**
+	 * @param string $pib
+	 * @return Customer|null
+	 */
+	public function findCustomerByPibFragment(string $pib): ?Customer
+		{
+		$filters = [[
+			'name'     => 'custentity_pib',
+			'operator' => 'contains',
+			'values'   => [$pib]
+		]];
+		try
+			{
+			$results = $this->executeSavedSearchCustomers($filters);
+			if (!empty($results->getCustomers()))
+				{
+				return $results->getCustomers()[0];
+				}
+			}
+		catch (OAuthException $exception)
+			{
+			}
+		catch (GuzzleException $e)
+			{
+			}
+
+		return null;
+		}
+
+	/**
+	 * @param string $registryIdentifier
+	 * @return Customer|null
+	 */
+	public function findCustomerByRegistryIdentifier(string $registryIdentifier): ?Customer
+		{
+		$filters = [[
+			'name'     => 'custentity_matbrpred',
+			'operator' => 'is',
+			'values'   => [$registryIdentifier]
 		]];
 		try
 			{

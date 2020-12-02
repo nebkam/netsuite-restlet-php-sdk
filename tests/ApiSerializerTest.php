@@ -77,7 +77,7 @@ class ApiSerializerTest extends TestCase
 		self::assertEquals('16099', $customer->getId());
 		self::assertEquals('3DH Real Estate PR Dino Hatibović', $customer->getAttributes()->getName());
 		self::assertEquals('3dhoglasavanje@gmail.com', $customer->getAttributes()->getEmail());
-		self::assertEquals('109121175', $customer->getAttributes()->getVatIdentifier());
+		self::assertEquals('109121175', $customer->getAttributes()->getPib());
 		self::assertEquals('63944017', $customer->getAttributes()->getRegistryIdentifier());
 		self::assertEquals(
 			'2020-08-07T11:36:00+02:00',
