@@ -1,0 +1,184 @@
+{
+  "rows": [
+    {
+      "id": 1,
+      "name": "4 ZIDA",
+      "parent": null
+    },
+    {
+      "id": 6,
+      "name": "4 ZIDA SUBVENCIONISANO",
+      "parent": null
+    },
+    {
+      "id": 28,
+      "name": "DIGITALNO OGLAŠAVANJE",
+      "parent": null
+    },
+    {
+      "id": 8,
+      "name": "HELLOWORLD",
+      "parent": null
+    },
+    {
+      "id": 35,
+      "name": "test okacija",
+      "parent": 8
+    },
+    {
+      "id": 29,
+      "name": "INFOSTUD HUB",
+      "parent": null
+    },
+    {
+      "id": 22,
+      "name": "INZUOS",
+      "parent": null
+    },
+    {
+      "id": 23,
+      "name": "INZUOS SUBVENCIONISANO",
+      "parent": null
+    },
+    {
+      "id": 38,
+      "name": "IPAD",
+      "parent": null
+    },
+    {
+      "id": 20,
+      "name": "IPG",
+      "parent": null
+    },
+    {
+      "id": 21,
+      "name": "IPG SUBVENCIONISANO",
+      "parent": null
+    },
+    {
+      "id": 5,
+      "name": "IS GRUPA - OSTALI BIZNISI",
+      "parent": null
+    },
+    {
+      "id": 7,
+      "name": "IS GRUPA - 4ZIDA",
+      "parent": 5
+    },
+    {
+      "id": 15,
+      "name": "IS GRUPA - AUTO HUB",
+      "parent": 5
+    },
+    {
+      "id": 41,
+      "name": "IS GRUPA - IPAD",
+      "parent": 5
+    },
+    {
+      "id": 11,
+      "name": "IS GRUPA - IPG",
+      "parent": 5
+    },
+    {
+      "id": 14,
+      "name": "IS GRUPA - IT HUB",
+      "parent": 5
+    },
+    {
+      "id": 10,
+      "name": "IS GRUPA - OSIGURANIK",
+      "parent": 5
+    },
+    {
+      "id": 13,
+      "name": "IS GRUPA - PUTOVANJA INFO",
+      "parent": 5
+    },
+    {
+      "id": 12,
+      "name": "IS GRUPA - VIBE",
+      "parent": 5
+    },
+    {
+      "id": 37,
+      "name": "IS GRUPA - Troškovi",
+      "parent": null
+    },
+    {
+      "id": 16,
+      "name": "IS GRUPA-POKRIVANJE TROŠKOVA PO",
+      "parent": null
+    },
+    {
+      "id": 26,
+      "name": "IZRAZ",
+      "parent": null
+    },
+    {
+      "id": 19,
+      "name": "IZVRŠNI ODBOR GRUPE",
+      "parent": null
+    },
+    {
+      "id": 25,
+      "name": "LAPITOPI",
+      "parent": null
+    },
+    {
+      "id": 3,
+      "name": "POLOVNI AUTOMOBILI",
+      "parent": null
+    },
+    {
+      "id": 2,
+      "name": "POSLOVI",
+      "parent": null
+    },
+    {
+      "id": 4,
+      "name": "POSLOVNE OPERACIJE",
+      "parent": null
+    },
+    {
+      "id": 9,
+      "name": "POSLOVNI PROSTORI",
+      "parent": null
+    },
+    {
+      "id": 27,
+      "name": "SOFTINVEST",
+      "parent": null
+    },
+    {
+      "id": 24,
+      "name": "VIBE NETWORK",
+      "parent": null
+    },
+    {
+      "id": 18,
+      "name": "ZAJEDNIČKI AUTOMOBILI",
+      "parent": null
+    },
+    {
+      "id": 17,
+      "name": "ZIK - ZAKUP I KOMUNALIJE",
+      "parent": null
+    },
+    {
+      "id": 39,
+      "name": "e-trgovina",
+      "parent": null
+    },
+    {
+      "id": 42,
+      "name": "lokacija za Polovne",
+      "parent": null
+    },
+    {
+      "id": 30,
+      "name": "test lokacija",
+      "parent": null
+    }
+  ]
+}

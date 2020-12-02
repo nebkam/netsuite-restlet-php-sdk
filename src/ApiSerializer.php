@@ -7,6 +7,7 @@ use Countable;
 use DateTimeZone;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Infostud\NetSuiteSdk\Model\CustomerForm;
+use Infostud\NetSuiteSdk\Model\SuiteQL\GetLocationsResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetSubsidiariesResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\SavedSearchCustomersResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetDepartmentsResponse;
@@ -40,8 +41,8 @@ class ApiSerializer
 			null,
 			new PhpDocExtractor()
 		);
-		$dateTimeNormalizer = new DateTimeNormalizer([
-			DateTimeNormalizer::FORMAT_KEY => 'd.m.Y. H:i',
+		$dateTimeNormalizer         = new DateTimeNormalizer([
+			DateTimeNormalizer::FORMAT_KEY   => 'd.m.Y. H:i',
 			DateTimeNormalizer::TIMEZONE_KEY => new DateTimeZone('Europe/Belgrade')
 		]);
 
@@ -57,7 +58,7 @@ class ApiSerializer
 	 *
 	 * @param string $json
 	 * @param string $className
-	 * @return SavedSearchCustomersResponse|GetDepartmentsResponse|GetSubsidiariesResponse
+	 * @return SavedSearchCustomersResponse|GetDepartmentsResponse|GetSubsidiariesResponse|GetLocationsResponse
 	 */
 	public function deserialize(string $json, string $className)
 		{

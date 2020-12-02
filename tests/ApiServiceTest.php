@@ -3,6 +3,7 @@
 use Infostud\NetSuiteSdk\ApiService;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Department;
+use Infostud\NetSuiteSdk\Model\SuiteQL\Location;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Subsidiary;
 use PHPUnit\Framework\TestCase;
 
@@ -59,6 +60,22 @@ class ApiServiceTest extends TestCase
 			self::assertInstanceOf(Department::class, $department);
 			self::assertNotEmpty($department->getId());
 			self::assertNotEmpty($department->getName());
+			}
+		}
+
+	/**
+	 * @depends testParseConfig
+	 * @param ApiService $apiService
+	 */
+	public function testGetLocations(ApiService $apiService): void
+		{
+		$locations = $apiService->getLocations();
+		self::assertNotEmpty($locations);
+		foreach ($locations as $location)
+			{
+			self::assertInstanceOf(Location::class, $location);
+			self::assertNotEmpty($location->getId());
+			self::assertNotEmpty($location->getName());
 			}
 		}
 	}

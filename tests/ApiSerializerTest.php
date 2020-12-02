@@ -4,10 +4,12 @@ use Infostud\NetSuiteSdk\Model\SavedSearch\ColumnDefinition;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\CustomerForm;
 use Infostud\NetSuiteSdk\Model\CustomerFormAddress;
+use Infostud\NetSuiteSdk\Model\SuiteQL\GetLocationsResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetSubsidiariesResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\SavedSearchCustomersResponse;
 use Infostud\NetSuiteSdk\ApiSerializer;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetDepartmentsResponse;
+use Infostud\NetSuiteSdk\Model\SuiteQL\SuiteQLResponse;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
@@ -18,7 +20,7 @@ class ApiSerializerTest extends TestCase
 	 */
 	public function testCustomerFormRequest(): void
 		{
-		$serializer = new ApiSerializer();
+		$serializer   = new ApiSerializer();
 		$customerForm = (new CustomerForm())
 			->setExternalId('PIB-123456')
 			->setCompanyName('Test item')
@@ -34,7 +36,7 @@ class ApiSerializerTest extends TestCase
 					->setPostalCode('24000')
 					->setCountry(CustomerFormAddress::COUNTRY_SERBIA)
 			);
-		$normalized = $serializer->normalize($customerForm);
+		$normalized   = $serializer->normalize($customerForm);
 		self::assertEquals('PIB-123456', $normalized['externalId']);
 		self::assertEquals('Test item', $normalized['companyname']);
 		self::assertEquals(9, $normalized['subsidiary']);
@@ -53,8 +55,8 @@ class ApiSerializerTest extends TestCase
 	public function testSingleCustomerSearchResult(): void
 		{
 		$serializer = new ApiSerializer();
-		$json = file_get_contents(__DIR__.'/single_customer_search_response.json');
-		$response = $serializer->deserialize($json, SavedSearchCustomersResponse::class);
+		$json       = file_get_contents(__DIR__ . '/single_customer_search_response.json');
+		$response   = $serializer->deserialize($json, SavedSearchCustomersResponse::class);
 		self::assertInstanceOf(SavedSearchCustomersResponse::class, $response);
 		$searchMetadata = $response->getSearchMetadata();
 		self::assertEquals(1, $searchMetadata->getCount());
@@ -90,47 +92,46 @@ class ApiSerializerTest extends TestCase
 	public function testGetSubsidiariesResult(): void
 		{
 		$serializer = new ApiSerializer();
-		$json = file_get_contents(__DIR__.'/subsidiaries_suiteql_response.json');
-		$response = $serializer->deserialize($json, GetSubsidiariesResponse::class);
+		$json       = file_get_contents(__DIR__ . '/subsidiaries_suiteql_response.json');
+		$response   = $serializer->deserialize($json, GetSubsidiariesResponse::class);
 		self::assertInstanceOf(GetSubsidiariesResponse::class, $response);
-		self::assertNotEmpty($response->getRows());
-		$subsidiaryIds = [];
-		foreach ($response->getRows() as $subsidiary)
-			{
-			self::assertNotEmpty($subsidiary->getId());
-			self::assertNotEmpty($subsidiary->getName());
-			$subsidiaryIds[] = $subsidiary->getId();
-			}
-		// Parent consistency
-		foreach ($response->getRows() as $subsidiary)
-			{
-			if ($subsidiary->getParentId())
-				{
-				self::assertContains($subsidiary->getParentId(), $subsidiaryIds);
-				}
-			}
+		self::assertSuiteQLResponse($response);
 		}
 
 	public function testGetDepartmentsResult(): void
 		{
 		$serializer = new ApiSerializer();
-		$json = file_get_contents(__DIR__.'/departments_suiteql_response.json');
-		$response = $serializer->deserialize($json, GetDepartmentsResponse::class);
+		$json       = file_get_contents(__DIR__ . '/departments_suiteql_response.json');
+		$response   = $serializer->deserialize($json, GetDepartmentsResponse::class);
 		self::assertInstanceOf(GetDepartmentsResponse::class, $response);
+		self::assertSuiteQLResponse($response);
+		}
+
+	public function testGetLocationsResult(): void
+		{
+		$serializer = new ApiSerializer();
+		$json       = file_get_contents(__DIR__ . '/locations_suiteql_response.json');
+		$response   = $serializer->deserialize($json, GetLocationsResponse::class);
+		self::assertInstanceOf(GetLocationsResponse::class, $response);
+		self::assertSuiteQLResponse($response);
+		}
+
+	private static function assertSuiteQLResponse(SuiteQLResponse $response): void
+		{
 		self::assertNotEmpty($response->getRows());
-		$departmentIds = [];
-		foreach ($response->getRows() as $department)
+		$ids = [];
+		foreach ($response->getRows() as $item)
 			{
-			self::assertNotEmpty($department->getId());
-			self::assertNotEmpty($department->getName());
-			$departmentIds[] = $department->getId();
+			self::assertNotEmpty($item->getId());
+			self::assertNotEmpty($item->getName());
+			$ids[] = $item->getId();
 			}
 		// Parent consistency
-		foreach ($response->getRows() as $department)
+		foreach ($response->getRows() as $item)
 			{
-			if ($department->getParentId())
+			if ($item->getParentId())
 				{
-				self::assertContains($department->getParentId(), $departmentIds);
+				self::assertContains($item->getParentId(), $ids);
 				}
 			}
 		}

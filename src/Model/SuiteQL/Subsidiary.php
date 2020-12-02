@@ -4,7 +4,7 @@ namespace Infostud\NetSuiteSdk\Model\SuiteQL;
 
 use Symfony\Component\Serializer\Annotation\SerializedName;
 
-class Subsidiary
+class Subsidiary implements SuiteQLItem
 	{
 	/**
 	 * @var int
