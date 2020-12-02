@@ -1,0 +1,94 @@
+{
+  "rows": [
+    {
+      "parent": 4,
+      "id": 10,
+      "name": "4ZIDA"
+    },
+    {
+      "parent": 4,
+      "id": 16,
+      "name": "DEVION"
+    },
+    {
+      "parent": 4,
+      "id": 15,
+      "name": "E-TRGOVINA"
+    },
+    {
+      "parent": null,
+      "id": 1,
+      "name": "Grupacija"
+    },
+    {
+      "parent": 4,
+      "id": 13,
+      "name": "HELLOWORLD"
+    },
+    {
+      "parent": 4,
+      "id": 17,
+      "name": "INFOSTUD 3 DOO"
+    },
+    {
+      "parent": 1,
+      "id": 4,
+      "name": "INFOSTUD GRUPA"
+    },
+    {
+      "parent": 1,
+      "id": 3,
+      "name": "INFOSTUD HUB"
+    },
+    {
+      "parent": 1,
+      "id": 7,
+      "name": "INTERNET PRODAJA AUTO DELOVA"
+    },
+    {
+      "parent": 4,
+      "id": 9,
+      "name": "INTERNET PRODAJA GUMA"
+    },
+    {
+      "parent": 4,
+      "id": 11,
+      "name": "INZUOS"
+    },
+    {
+      "parent": 1,
+      "id": 2,
+      "name": "IZRAZ 373"
+    },
+    {
+      "parent": 1,
+      "id": 5,
+      "name": "LAPITOPI"
+    },
+    {
+      "parent": 4,
+      "id": 14,
+      "name": "POLOVNI AUTOMOBILI"
+    },
+    {
+      "parent": 1,
+      "id": 8,
+      "name": "SOFTINVEST"
+    },
+    {
+      "parent": 1,
+      "id": 6,
+      "name": "VIBE NETWORK"
+    },
+    {
+      "parent": 1,
+      "id": 25,
+      "name": "_Elimination Tier 1"
+    },
+    {
+      "parent": 4,
+      "id": 26,
+      "name": "_Elimination Tier 2"
+    }
+  ]
+}

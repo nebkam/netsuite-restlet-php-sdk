@@ -3,6 +3,7 @@
 use Infostud\NetSuiteSdk\ApiService;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Department;
+use Infostud\NetSuiteSdk\Model\SuiteQL\Subsidiary;
 use PHPUnit\Framework\TestCase;
 
 class ApiServiceTest extends TestCase
@@ -53,6 +54,22 @@ class ApiServiceTest extends TestCase
 		$customer = $apiService->findCustomerByRegistryIdentifier('209970780048');
 		self::assertInstanceOf(Customer::class, $customer);
 		self::assertEquals('209970780048', $customer->getAttributes()->getRegistryIdentifier());
+		}
+
+	/**
+	 * @depends testParseConfig
+	 * @param ApiService $apiService
+	 */
+	public function testGetSubsidiaries($apiService)
+		{
+		$subsidiaries = $apiService->getSubsidiaries();
+		self::assertNotEmpty($subsidiaries);
+		foreach ($subsidiaries as $subsidiary)
+			{
+			self::assertInstanceOf(Subsidiary::class, $subsidiary);
+			self::assertNotEmpty($subsidiary->getId());
+			self::assertNotEmpty($subsidiary->getName());
+			}
 		}
 
 	/**

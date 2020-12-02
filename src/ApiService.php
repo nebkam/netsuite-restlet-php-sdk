@@ -15,6 +15,8 @@ use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\SavedSearch\CustomerSearchResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Department;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetDepartmentsResponse;
+use Infostud\NetSuiteSdk\Model\SuiteQL\GetSubsidiariesResponse;
+use Infostud\NetSuiteSdk\Model\SuiteQL\Subsidiary;
 use LogicException;
 use RuntimeException;
 
@@ -170,6 +172,32 @@ class ApiService
 		}
 
 	/**
+	 * @return Subsidiary[]
+	 */
+	public function getSubsidiaries()
+		{
+		try
+			{
+			$results = $this->executeSuiteQuery(
+				GetSubsidiariesResponse::class,
+				'select parent, id , name from subsidiary'
+			);
+			if (!empty($results->getRows()))
+				{
+				return $results->getRows();
+				}
+			}
+		catch (OAuthException $exception)
+			{
+			}
+		catch (GuzzleException $exception)
+			{
+			}
+
+		return [];
+		}
+
+	/**
 	 * @return Department[]
 	 */
 	public function getDepartments()
@@ -177,6 +205,7 @@ class ApiService
 		try
 			{
 			$results = $this->executeSuiteQuery(
+				GetDepartmentsResponse::class,
 				'select parent, id , name from department'
 			);
 			if (!empty($results->getRows()))
@@ -224,14 +253,15 @@ class ApiService
 		}
 
 	/**
+	 * @param string $responseClass
 	 * @param string $from
 	 * @param string $where
 	 * @param array $params
-	 * @return GetDepartmentsResponse
+	 * @return GetSubsidiariesResponse|GetDepartmentsResponse
 	 * @throws GuzzleException
 	 * @throws OAuthException
 	 */
-	private function executeSuiteQuery($from, $where = ' ', $params = [])
+	private function executeSuiteQuery($responseClass, $from, $where = ' ', $params = [])
 		{
 		$requestBody = [
 			'sql_from'  => $from,
@@ -248,7 +278,7 @@ class ApiService
 			{
 			$contents = (string)$response->getBody()->getContents();
 
-			return $this->serializer->deserialize($contents, GetDepartmentsResponse::class);
+			return $this->serializer->deserialize($contents, $responseClass);
 			}
 
 		throw new LogicException(
