@@ -15,7 +15,9 @@ use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\SavedSearch\CustomerSearchResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Department;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetDepartmentsResponse;
+use Infostud\NetSuiteSdk\Model\SuiteQL\GetLocationsResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetSubsidiariesResponse;
+use Infostud\NetSuiteSdk\Model\SuiteQL\Location;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Subsidiary;
 use LogicException;
 use RuntimeException;
@@ -180,7 +182,7 @@ class ApiService
 			{
 			$results = $this->executeSuiteQuery(
 				GetSubsidiariesResponse::class,
-				'select parent, id , name from subsidiary'
+				'select id, name, parent from subsidiary'
 			);
 			if (!empty($results->getRows()))
 				{
@@ -206,7 +208,33 @@ class ApiService
 			{
 			$results = $this->executeSuiteQuery(
 				GetDepartmentsResponse::class,
-				'select parent, id , name from department'
+				'select id, name, parent from department'
+			);
+			if (!empty($results->getRows()))
+				{
+				return $results->getRows();
+				}
+			}
+		catch (OAuthException $exception)
+			{
+			}
+		catch (GuzzleException $exception)
+			{
+			}
+
+		return [];
+		}
+
+	/**
+	 * @return Location[]
+	 */
+	public function getLocations()
+		{
+		try
+			{
+			$results = $this->executeSuiteQuery(
+				GetLocationsResponse::class,
+				'select id, name, parent from location'
 			);
 			if (!empty($results->getRows()))
 				{
@@ -257,7 +285,7 @@ class ApiService
 	 * @param string $from
 	 * @param string $where
 	 * @param array $params
-	 * @return GetSubsidiariesResponse|GetDepartmentsResponse
+	 * @return GetSubsidiariesResponse|GetDepartmentsResponse|GetLocationsResponse
 	 * @throws GuzzleException
 	 * @throws OAuthException
 	 */

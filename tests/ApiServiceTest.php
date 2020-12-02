@@ -3,6 +3,7 @@
 use Infostud\NetSuiteSdk\ApiService;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Department;
+use Infostud\NetSuiteSdk\Model\SuiteQL\Location;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Subsidiary;
 use PHPUnit\Framework\TestCase;
 
@@ -37,23 +38,20 @@ class ApiServiceTest extends TestCase
 	 */
 	public function testSearchByPibFragment($apiService)
 		{
-		self::markTestSkipped();
-		$customer = $apiService->findCustomerByPibFragment('si49380290');
+		$customer = $apiService->findCustomerByPibFragment('10912117');
 		self::assertInstanceOf(Customer::class, $customer);
-		self::assertEquals('si49380290', $customer->getAttributes()->getPib());
+		self::assertEquals('109121175', $customer->getAttributes()->getPib());
 		}
 
 	/**
-	 * TODO Add real JMBG
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
 	 */
 	public function testSearchByRegistryIdentifier($apiService)
 		{
-		self::markTestSkipped();
-		$customer = $apiService->findCustomerByRegistryIdentifier('209970780048');
+		$customer = $apiService->findCustomerByRegistryIdentifier('63944017');
 		self::assertInstanceOf(Customer::class, $customer);
-		self::assertEquals('209970780048', $customer->getAttributes()->getRegistryIdentifier());
+		self::assertEquals('63944017', $customer->getAttributes()->getRegistryIdentifier());
 		}
 
 	/**
@@ -85,6 +83,22 @@ class ApiServiceTest extends TestCase
 			self::assertInstanceOf(Department::class, $department);
 			self::assertNotEmpty($department->getId());
 			self::assertNotEmpty($department->getName());
+			}
+		}
+
+	/**
+	 * @depends testParseConfig
+	 * @param ApiService $apiService
+	 */
+	public function testGetLocations($apiService)
+		{
+		$locations = $apiService->getLocations();
+		self::assertNotEmpty($locations);
+		foreach ($locations as $location)
+			{
+			self::assertInstanceOf(Location::class, $location);
+			self::assertNotEmpty($location->getId());
+			self::assertNotEmpty($location->getName());
 			}
 		}
 	}

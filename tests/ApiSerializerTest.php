@@ -7,6 +7,7 @@ use Infostud\NetSuiteSdk\ApiSerializer;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetDepartmentsResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\SearchDefinition;
 use Infostud\NetSuiteSdk\Model\SavedSearch\SearchMetadata;
+use Infostud\NetSuiteSdk\Model\SuiteQL\GetLocationsResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetSubsidiariesResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\SuiteQLResponse;
 use PHPUnit\Framework\TestCase;
@@ -69,6 +70,15 @@ class ApiSerializerTest extends TestCase
 		$json = file_get_contents(__DIR__.'/departments_suiteql_response.json');
 		$response = $serializer->deserialize($json, GetDepartmentsResponse::class);
 		self::assertInstanceOf(GetDepartmentsResponse::class, $response);
+		self::assertSuiteQLResponse($response);
+		}
+
+	public function testGetLocationsResult()
+		{
+		$serializer = new ApiSerializer();
+		$json = file_get_contents(__DIR__.'/locations_suiteql_response.json');
+		$response = $serializer->deserialize($json, GetLocationsResponse::class);
+		self::assertInstanceOf(GetLocationsResponse::class, $response);
 		self::assertSuiteQLResponse($response);
 		}
 
