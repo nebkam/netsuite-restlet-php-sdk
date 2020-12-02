@@ -1,13 +1,13 @@
 <?php
 
-use Infostud\NetSuiteSdk\Model\ColumnDefinition;
-use Infostud\NetSuiteSdk\Model\Customer;
+use Infostud\NetSuiteSdk\Model\SavedSearch\ColumnDefinition;
+use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\CustomerForm;
 use Infostud\NetSuiteSdk\Model\CustomerFormAddress;
-use Infostud\NetSuiteSdk\Model\GetSubsidiariesResponse;
-use Infostud\NetSuiteSdk\Model\SavedSearchCustomersResponse;
+use Infostud\NetSuiteSdk\Model\SuiteQL\GetSubsidiariesResponse;
+use Infostud\NetSuiteSdk\Model\SavedSearch\SavedSearchCustomersResponse;
 use Infostud\NetSuiteSdk\ApiSerializer;
-use Infostud\NetSuiteSdk\Model\GetDepartmentsResponse;
+use Infostud\NetSuiteSdk\Model\SuiteQL\GetDepartmentsResponse;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 

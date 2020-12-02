@@ -1,6 +1,6 @@
 <?php
 
-namespace Infostud\NetSuiteSdk\Model;
+namespace Infostud\NetSuiteSdk\Model\SuiteQL;
 
 class GetDepartmentsResponse implements SuiteQLResponse
 	{

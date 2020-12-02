@@ -1,6 +1,6 @@
 <?php
 
-namespace Infostud\NetSuiteSdk\Model;
+namespace Infostud\NetSuiteSdk\Model\SuiteQL;
 
 use Symfony\Component\Serializer\Annotation\SerializedName;
 

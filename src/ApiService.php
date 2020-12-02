@@ -11,11 +11,12 @@ use Eher\OAuth\Token;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
-use Infostud\NetSuiteSdk\Model\GetSubsidiariesResponse;
-use Infostud\NetSuiteSdk\Model\SavedSearchCustomersResponse;
-use Infostud\NetSuiteSdk\Model\Department;
-use Infostud\NetSuiteSdk\Model\GetDepartmentsResponse;
-use Infostud\NetSuiteSdk\Model\Subsidiary;
+use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
+use Infostud\NetSuiteSdk\Model\SuiteQL\GetSubsidiariesResponse;
+use Infostud\NetSuiteSdk\Model\SavedSearch\SavedSearchCustomersResponse;
+use Infostud\NetSuiteSdk\Model\SuiteQL\Department;
+use Infostud\NetSuiteSdk\Model\SuiteQL\GetDepartmentsResponse;
+use Infostud\NetSuiteSdk\Model\SuiteQL\Subsidiary;
 use LogicException;
 use RuntimeException;
 
@@ -83,9 +84,9 @@ class ApiService
 
 	/**
 	 * @param string $vatIdentifier
-	 * @return Model\Customer|null
+	 * @return Customer|null
 	 */
-	public function findCustomerByVatIdentifier(string $vatIdentifier): ?Model\Customer
+	public function findCustomerByVatIdentifier(string $vatIdentifier): ?Customer
 		{
 		$filters = [[
 			'name'     => 'custentity_pib',

@@ -1,9 +1,9 @@
 <?php
 
 use Infostud\NetSuiteSdk\ApiService;
-use Infostud\NetSuiteSdk\Model\Customer;
-use Infostud\NetSuiteSdk\Model\Department;
-use Infostud\NetSuiteSdk\Model\Subsidiary;
+use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
+use Infostud\NetSuiteSdk\Model\SuiteQL\Department;
+use Infostud\NetSuiteSdk\Model\SuiteQL\Subsidiary;
 use PHPUnit\Framework\TestCase;
 
 class ApiServiceTest extends TestCase
