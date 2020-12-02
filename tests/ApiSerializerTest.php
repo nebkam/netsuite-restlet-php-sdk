@@ -7,6 +7,7 @@ use Infostud\NetSuiteSdk\ApiSerializer;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetDepartmentsResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\SearchDefinition;
 use Infostud\NetSuiteSdk\Model\SavedSearch\SearchMetadata;
+use Infostud\NetSuiteSdk\Model\SuiteQL\SuiteQLResponse;
 use PHPUnit\Framework\TestCase;
 
 class ApiSerializerTest extends TestCase
@@ -58,20 +59,28 @@ class ApiSerializerTest extends TestCase
 		$json = file_get_contents(__DIR__.'/departments_suiteql_response.json');
 		$response = $serializer->deserialize($json, GetDepartmentsResponse::class);
 		self::assertInstanceOf(GetDepartmentsResponse::class, $response);
-		self::assertNotEmpty($response->getDepartments());
-		$departmentIds = [];
-		foreach ($response->getDepartments() as $department)
+
+		}
+
+	/**
+	 * @param SuiteQLResponse $response
+	 */
+	private static function assertSuiteQLResponse($response)
+		{
+		self::assertNotEmpty($response->getRows());
+		$ids = [];
+		foreach ($response->getRows() as $item)
 			{
-			self::assertNotEmpty($department->getId());
-			self::assertNotEmpty($department->getName());
-			$departmentIds[] = $department->getId();
+			self::assertNotEmpty($item->getId());
+			self::assertNotEmpty($item->getName());
+			$ids[] = $item->getId();
 			}
 		// Parent consistency
-		foreach ($response->getDepartments() as $department)
+		foreach ($response->getRows() as $item)
 			{
-			if ($department->getParentId())
+			if ($item->getParentId())
 				{
-				self::assertContains($department->getParentId(), $departmentIds);
+				self::assertContains($item->getParentId(), $ids);
 				}
 			}
 		}

@@ -12,16 +12,6 @@ class GetDepartmentsResponse implements SuiteQLResponse
 	/**
 	 * @return Department[]
 	 */
-	public function getDepartments()
-		{
-		return $this->rows;
-		}
-
-	/**
-	 * @deprecated
-	 * @see getDepartments
-	 * @return Department[]
-	 */
 	public function getRows()
 		{
 		return $this->rows;
