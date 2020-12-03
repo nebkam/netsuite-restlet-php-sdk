@@ -6,12 +6,6 @@ use ArrayObject;
 use Countable;
 use DateTimeZone;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Infostud\NetSuiteSdk\Model\CreateCustomerResponse;
-use Infostud\NetSuiteSdk\Model\CustomerForm;
-use Infostud\NetSuiteSdk\Model\SuiteQL\GetLocationsResponse;
-use Infostud\NetSuiteSdk\Model\SuiteQL\GetSubsidiariesResponse;
-use Infostud\NetSuiteSdk\Model\SavedSearch\SavedSearchCustomersResponse;
-use Infostud\NetSuiteSdk\Model\SuiteQL\GetDepartmentsResponse;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
@@ -59,19 +53,15 @@ class ApiSerializer
 	 *
 	 * @param string $json
 	 * @param string $className
-	 * @return SavedSearchCustomersResponse|GetDepartmentsResponse|GetSubsidiariesResponse|GetLocationsResponse|CreateCustomerResponse
+	 * @return object|array
 	 */
 	public function deserialize(string $json, string $className)
 		{
-		/** @noinspection PhpIncompatibleReturnTypeInspection */
 		return $this->serializer->deserialize($json, $className, 'json');
 		}
 
 	/**
-	 * Add other classes as arguments
-	 * (explicit, to aid type-hinting)
-	 *
-	 * @param CustomerForm $data
+	 * @param mixed $data
 	 * @return array|ArrayObject|bool|Countable|float|int|string|Traversable|null
 	 * @throws ExceptionInterface
 	 */

@@ -21,13 +21,13 @@ use Infostud\NetSuiteSdk\Model\SuiteQL\Department;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetDepartmentsResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Location;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Subsidiary;
+use Infostud\NetSuiteSdk\Model\SuiteQL\SuiteQLResponse;
 use LogicException;
 use RuntimeException;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 class ApiService
 	{
-	private const REQUEST_METHOD = 'POST';
 	/**
 	 * @var string
 	 */
@@ -100,7 +100,7 @@ class ApiService
 	public function createCustomer(CustomerForm $customerForm): ?int
 		{
 		$requestBody = $this->serializer->normalize($customerForm);
-		$url = $this->getRestletUrl($this->createDeleteCustomerId, 3);
+		$url         = $this->getRestletUrl($this->createDeleteCustomerId, 3);
 		try
 			{
 			$guzzleResponse = $this->client->request('POST', $url, [
@@ -122,7 +122,7 @@ class ApiService
 		catch (OAuthException $exception)
 			{
 			}
-		catch (GuzzleException $e)
+		catch (GuzzleException $exception)
 			{
 			}
 
@@ -143,16 +143,12 @@ class ApiService
 			$guzzleResponse = $this->client->request('DELETE', $url, [
 				RequestOptions::HEADERS => $this->buildHeaders('DELETE', $url)
 			]);
-			echo $guzzleResponse->getBody()->getContents();
+			//TODO deserialize response
 			}
 		catch (OAuthException $exception)
-			{
-			echo $exception->getMessage();
-			}
+			{}
 		catch (GuzzleException $exception)
-			{
-			echo $exception->getMessage();
-			}
+			{}
 		}
 
 	/**
@@ -254,8 +250,12 @@ class ApiService
 				'select parent, id , name from subsidiary'
 			);
 			}
-		catch (OAuthException $exception) {}
-		catch (GuzzleException $exception) {}
+		catch (OAuthException $exception)
+			{
+			}
+		catch (GuzzleException $exception)
+			{
+			}
 
 		return [];
 		}
@@ -272,8 +272,12 @@ class ApiService
 				'select parent, id , name from department'
 			);
 			}
-		catch (OAuthException $exception) {}
-		catch (GuzzleException $exception) {}
+		catch (OAuthException $exception)
+			{
+			}
+		catch (GuzzleException $exception)
+			{
+			}
 
 		return [];
 		}
@@ -290,8 +294,12 @@ class ApiService
 				'select id, name, parent from location'
 			);
 			}
-		catch (OAuthException $exception) {}
-		catch (GuzzleException $exception) {}
+		catch (OAuthException $exception)
+			{
+			}
+		catch (GuzzleException $exception)
+			{
+			}
 
 		return [];
 		}
@@ -304,30 +312,31 @@ class ApiService
 	 */
 	private function executeSavedSearchCustomers(array $filters): SavedSearchCustomersResponse
 		{
-		$requestBody = [
+		$requestBody    = [
 			'filters' => $filters
 		];
-		$url         = $this->getRestletUrl($this->savedSearchCustomersId, 1);
-
-		$response = $this->client->request('POST', $url, [
+		$url            = $this->getRestletUrl($this->savedSearchCustomersId, 1);
+		$clientResponse = $this->client->request('POST', $url, [
 			RequestOptions::HEADERS => $this->buildHeaders('POST', $url),
 			RequestOptions::JSON    => $requestBody
 		]);
 
-		if ($response->getStatusCode() === 200)
+		if ($clientResponse->getStatusCode() === 200)
 			{
-			$contents = (string)$response->getBody()->getContents();
+			$contents = $clientResponse->getBody()->getContents();
+			/** @var SavedSearchCustomersResponse $response */
+			$response = $this->serializer->deserialize($contents, SavedSearchCustomersResponse::class);
 
-			return $this->serializer->deserialize($contents, SavedSearchCustomersResponse::class);
+			return $response;
 			}
 
 		throw new LogicException(
-			sprintf('Unexpected response status code: %d', $response->getStatusCode())
+			sprintf('Unexpected response status code: %d', $clientResponse->getStatusCode())
 		);
 		}
 
 	/**
-	 * @param string $resultClass
+	 * @param string|null $responseClass
 	 * @param string $from
 	 * @param string $where
 	 * @param array $params
@@ -335,39 +344,40 @@ class ApiService
 	 * @throws GuzzleException
 	 * @throws OAuthException
 	 */
-	private function executeSuiteQuery(
-		string $resultClass,
+	public function executeSuiteQuery(
+		?string $responseClass,
 		string $from,
 		$where = ' ',
 		$params = []
-		): array
+	): array
 		{
-		$requestBody = [
+		$requestBody    = [
 			'sql_from'  => $from,
 			'sql_where' => $where,
 			'params'    => $params
 		];
-		$url         = $this->getRestletUrl($this->suiteQLId, 1);
-		$response = $this->client->request('POST', $url, [
+		$url            = $this->getRestletUrl($this->suiteQLId, 1);
+		$clientResponse = $this->client->request('POST', $url, [
 			RequestOptions::HEADERS => $this->buildHeaders('POST', $url),
 			RequestOptions::JSON    => $requestBody
 		]);
 
-		if ($response->getStatusCode() === 200)
+		if ($clientResponse->getStatusCode() === 200)
 			{
-			$contents = (string)$response->getBody()->getContents();
-
-			$results = $this->serializer->deserialize($contents, $resultClass);
-			if (!empty($results->getRows()))
+			$contents = $clientResponse->getBody()->getContents();
+			if ($responseClass)
 				{
-				return $results->getRows();
+				/** @var SuiteQLResponse $response */
+				$response = $this->serializer->deserialize($contents, $responseClass);
+
+				return !empty($response->getRows()) ? $response->getRows() : [];
 				}
 
-			return [];
+			return json_decode($contents, true);
 			}
 
 		throw new LogicException(
-			sprintf('Unexpected response status code: %d', $response->getStatusCode())
+			sprintf('Unexpected response status code: %d', $clientResponse->getStatusCode())
 		);
 		}
 
