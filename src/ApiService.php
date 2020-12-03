@@ -100,11 +100,11 @@ class ApiService
 	public function createCustomer(CustomerForm $customerForm): ?int
 		{
 		$requestBody = $this->serializer->normalize($customerForm);
-		$url = $this->getUrl($this->createDeleteCustomerId, 3);
+		$url = $this->getRestletUrl($this->createDeleteCustomerId, 3);
 		try
 			{
-			$guzzleResponse = $this->client->request(self::REQUEST_METHOD, $url, [
-				RequestOptions::HEADERS => $this->buildHeaders($url),
+			$guzzleResponse = $this->client->request('POST', $url, [
+				RequestOptions::HEADERS => $this->buildHeaders('POST', $url),
 				RequestOptions::JSON    => $requestBody
 			]);
 			if ($guzzleResponse->getStatusCode() === 200)
@@ -127,6 +127,32 @@ class ApiService
 			}
 
 		return null;
+		}
+
+	/**
+	 * TODO return isSuccessful
+	 * @param int $id
+	 */
+	public function deleteCustomer(int $id): void
+		{
+		$url = $this->getRestletUrl($this->createDeleteCustomerId, 3, [
+			'customerid' => $id
+		]);
+		try
+			{
+			$guzzleResponse = $this->client->request('DELETE', $url, [
+				RequestOptions::HEADERS => $this->buildHeaders('DELETE', $url)
+			]);
+			echo $guzzleResponse->getBody()->getContents();
+			}
+		catch (OAuthException $exception)
+			{
+			echo $exception->getMessage();
+			}
+		catch (GuzzleException $exception)
+			{
+			echo $exception->getMessage();
+			}
 		}
 
 	/**
@@ -281,10 +307,10 @@ class ApiService
 		$requestBody = [
 			'filters' => $filters
 		];
-		$url         = $this->getUrl($this->savedSearchCustomersId, 1);
+		$url         = $this->getRestletUrl($this->savedSearchCustomersId, 1);
 
-		$response = $this->client->request(self::REQUEST_METHOD, $url, [
-			RequestOptions::HEADERS => $this->buildHeaders($url),
+		$response = $this->client->request('POST', $url, [
+			RequestOptions::HEADERS => $this->buildHeaders('POST', $url),
 			RequestOptions::JSON    => $requestBody
 		]);
 
@@ -321,9 +347,9 @@ class ApiService
 			'sql_where' => $where,
 			'params'    => $params
 		];
-		$url         = $this->getUrl($this->suiteQLId, 1);
-		$response = $this->client->request(self::REQUEST_METHOD, $url, [
-			RequestOptions::HEADERS => $this->buildHeaders($url),
+		$url         = $this->getRestletUrl($this->suiteQLId, 1);
+		$response = $this->client->request('POST', $url, [
+			RequestOptions::HEADERS => $this->buildHeaders('POST', $url),
 			RequestOptions::JSON    => $requestBody
 		]);
 
@@ -348,27 +374,29 @@ class ApiService
 	/**
 	 * @param int $scriptId
 	 * @param int $deploymentId
+	 * @param array $additionalQueryParams
 	 * @return string
 	 */
-	private function getUrl(int $scriptId, int $deploymentId): string
+	private function getRestletUrl(int $scriptId, int $deploymentId, $additionalQueryParams = []): string
 		{
-		$query_data = [
+		$queryParams = array_merge([
 			'script' => $scriptId,
 			'deploy' => $deploymentId
-		];
+		], $additionalQueryParams);
 
 		return sprintf('https://%s.restlets.api.netsuite.com/app/site/hosting/restlet.nl?', $this->account)
-			. http_build_query($query_data);
+			. http_build_query($queryParams);
 		}
 
 	/**
+	 * @param string $method
 	 * @param string $url
 	 * @return array
 	 * @throws OAuthException
 	 */
-	private function buildHeaders(string $url): array
+	private function buildHeaders(string $method, string $url): array
 		{
-		$request   = new Request(self::REQUEST_METHOD, $url, [
+		$request   = new Request($method, $url, [
 			'oauth_nonce'            => md5(mt_rand()),
 			'oauth_timestamp'        => idate('U'),
 			'oauth_version'          => '1.0',
@@ -382,7 +410,8 @@ class ApiService
 
 		return [
 			'Authorization' => substr($request->to_header($this->account), 15),
-			'Host'          => $this->restletHost
+			'Host'          => $this->restletHost,
+			'Content-Type'  => 'application/json'
 		];
 		}
 

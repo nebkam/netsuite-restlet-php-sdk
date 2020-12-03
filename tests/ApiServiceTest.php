@@ -47,6 +47,7 @@ class ApiServiceTest extends TestCase
 					->setCountry(CustomerFormAddress::COUNTRY_SERBIA)
 			);
 		$customerId   = $apiService->createCustomer($customerForm);
+		self::assertNotNull($customerId);
 
 		return [
 			$apiService,
@@ -142,6 +143,12 @@ class ApiServiceTest extends TestCase
 	 */
 	public function testDeleteCustomer(array $param): void
 		{
+		/**
+		 * @var ApiService $apiService
+		 * @var int $customerId
+		 */
 		[$apiService, $customerId] = $param;
+		// TODO assert
+		$apiService->deleteCustomer($customerId);
 		}
 	}
