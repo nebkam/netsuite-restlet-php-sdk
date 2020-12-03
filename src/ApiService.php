@@ -19,12 +19,12 @@ use Infostud\NetSuiteSdk\Model\SuiteQL\GetLocationsResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetSubsidiariesResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Location;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Subsidiary;
+use Infostud\NetSuiteSdk\Model\SuiteQL\SuiteQLResponse;
 use LogicException;
 use RuntimeException;
 
 class ApiService
 	{
-	const REQUEST_METHOD = 'POST';
 	/**
 	 * @var string
 	 */
@@ -261,83 +261,93 @@ class ApiService
 		$requestBody = [
 			'filters' => $filters
 		];
-		$url         = $this->getUrl($this->savedSearchCustomersId, 1);
-
-		$response = $this->client->request(self::REQUEST_METHOD, $url, [
-			RequestOptions::HEADERS => $this->buildHeaders($url),
+		$url         = $this->getRestletUrl($this->savedSearchCustomersId, 1);
+		$clientResponse = $this->client->request('POST', $url, [
+			RequestOptions::HEADERS => $this->buildHeaders('POST', $url),
 			RequestOptions::JSON    => $requestBody
 		]);
 
-		if ($response->getStatusCode() === 200)
+		if ($clientResponse->getStatusCode() === 200)
 			{
-			$contents = (string)$response->getBody()->getContents();
+			$contents = $clientResponse->getBody()->getContents();
+			/** @var CustomerSearchResponse $response */
+			$response = $this->serializer->deserialize($contents, CustomerSearchResponse::class);
 
-			return $this->serializer->deserialize($contents, CustomerSearchResponse::class);
+			return $response;
 			}
 
 		throw new LogicException(
-			sprintf('Unexpected response status code: %d', $response->getStatusCode())
+			sprintf('Unexpected response status code: %d', $clientResponse->getStatusCode())
 		);
 		}
 
 	/**
-	 * @param string $responseClass
+	 * @param string|null $responseClass
 	 * @param string $from
 	 * @param string $where
 	 * @param array $params
-	 * @return GetSubsidiariesResponse|GetDepartmentsResponse|GetLocationsResponse
+	 * @return SuiteQLResponse|mixed
 	 * @throws GuzzleException
 	 * @throws OAuthException
 	 */
-	private function executeSuiteQuery($responseClass, $from, $where = ' ', $params = [])
+	public function executeSuiteQuery($responseClass, $from, $where = ' ', $params = [])
 		{
 		$requestBody = [
 			'sql_from'  => $from,
 			'sql_where' => $where,
 			'params'    => $params
 		];
-		$url         = $this->getUrl($this->suiteQLId, 1);
-		$response = $this->client->request(self::REQUEST_METHOD, $url, [
-			RequestOptions::HEADERS => $this->buildHeaders($url),
+		$url         = $this->getRestletUrl($this->suiteQLId, 1);
+		$clientResponse = $this->client->request('POST', $url, [
+			RequestOptions::HEADERS => $this->buildHeaders('POST', $url),
 			RequestOptions::JSON    => $requestBody
 		]);
 
-		if ($response->getStatusCode() === 200)
+		if ($clientResponse->getStatusCode() === 200)
 			{
-			$contents = (string)$response->getBody()->getContents();
+			$contents = $clientResponse->getBody()->getContents();
+			if ($responseClass)
+				{
+				/** @var SuiteQLResponse $response */
+				$response = $this->serializer->deserialize($contents, $responseClass);
 
-			return $this->serializer->deserialize($contents, $responseClass);
+				return $response;
+				}
+
+			return json_decode($contents, true);
 			}
 
 		throw new LogicException(
-			sprintf('Unexpected response status code: %d', $response->getStatusCode())
+			sprintf('Unexpected response status code: %d', $clientResponse->getStatusCode())
 		);
 		}
 
 	/**
 	 * @param int $scriptId
 	 * @param int $deploymentId
+	 * @param array $additionalQueryData
 	 * @return string
 	 */
-	private function getUrl($scriptId, $deploymentId)
+	private function getRestletUrl($scriptId, $deploymentId, $additionalQueryData = [])
 		{
-		$query_data = [
+		$queryData = array_merge([
 			'script' => $scriptId,
 			'deploy' => $deploymentId
-		];
+		], $additionalQueryData);
 
 		return sprintf('https://%s.restlets.api.netsuite.com/app/site/hosting/restlet.nl?', $this->account)
-			. http_build_query($query_data);
+			. http_build_query($queryData);
 		}
 
 	/**
+	 * @param $method
 	 * @param string $url
 	 * @return array
 	 * @throws OAuthException
 	 */
-	private function buildHeaders($url)
+	private function buildHeaders($method, $url)
 		{
-		$request   = new Request(self::REQUEST_METHOD, $url, [
+		$request   = new Request($method, $url, [
 			'oauth_nonce'            => md5(mt_rand()),
 			'oauth_timestamp'        => idate('U'),
 			'oauth_version'          => '1.0',
