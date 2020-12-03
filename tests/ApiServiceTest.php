@@ -31,6 +31,7 @@ class ApiServiceTest extends TestCase
 	 */
 	public function testCreateCustomer(ApiService $apiService): array
 		{
+		self::markTestSkipped('Until createCustomer API is stable');
 		$customerForm = (new CustomerForm())
 			->setExternalId('PIB-123456')
 			->setCompanyName('Foo test customer')
@@ -143,6 +144,7 @@ class ApiServiceTest extends TestCase
 	 */
 	public function testDeleteCustomer(array $param): void
 		{
+		self::markTestSkipped('Until createCustomer API is stable');
 		/**
 		 * @var ApiService $apiService
 		 * @var int $customerId
