@@ -13,6 +13,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
 use Infostud\NetSuiteSdk\Model\CreateCustomerResponse;
 use Infostud\NetSuiteSdk\Model\CustomerForm;
+use Infostud\NetSuiteSdk\Model\DeleteCustomerResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetLocationsResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetSubsidiariesResponse;
@@ -130,10 +131,10 @@ class ApiService
 		}
 
 	/**
-	 * TODO return isSuccessful
 	 * @param int $id
+	 * @return bool
 	 */
-	public function deleteCustomer(int $id): void
+	public function deleteCustomer(int $id): bool
 		{
 		$url = $this->getRestletUrl($this->createDeleteCustomerId, 3, [
 			'customerid' => $id
@@ -143,12 +144,20 @@ class ApiService
 			$guzzleResponse = $this->client->request('DELETE', $url, [
 				RequestOptions::HEADERS => $this->buildHeaders('DELETE', $url)
 			]);
-			//TODO deserialize response
+			if ($guzzleResponse->getStatusCode() === 200)
+				{
+				$contents = $guzzleResponse->getBody()->getContents();
+				/** @var DeleteCustomerResponse $apiResponse */
+				$apiResponse = $this->serializer->deserialize($contents, DeleteCustomerResponse::class);
+				return $apiResponse->isSuccessful();
+				}
 			}
 		catch (OAuthException $exception)
 			{}
 		catch (GuzzleException $exception)
 			{}
+
+		return false;
 		}
 
 	/**

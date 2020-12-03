@@ -1,6 +1,7 @@
 <?php
 
 use Infostud\NetSuiteSdk\Model\CreateCustomerResponse;
+use Infostud\NetSuiteSdk\Model\DeleteCustomerResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\ColumnDefinition;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\CustomerForm;
@@ -61,6 +62,15 @@ class ApiSerializerTest extends TestCase
 		self::assertInstanceOf(CreateCustomerResponse::class, $response);
 		self::assertTrue($response->isSuccessful());
 		self::assertEquals(41690, $response->getCustomerId());
+		}
+
+	public function testDeleteCustomerResult(): void
+		{
+		$serializer = new ApiSerializer();
+		$json       = file_get_contents(__DIR__ . '/delete_customer_response_success.json');
+		$response   = $serializer->deserialize($json, DeleteCustomerResponse::class);
+		self::assertInstanceOf(DeleteCustomerResponse::class, $response);
+		self::assertTrue($response->isSuccessful());
 		}
 
 	public function testSingleCustomerSearchResult(): void
