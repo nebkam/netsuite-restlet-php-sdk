@@ -6,6 +6,7 @@ use ArrayObject;
 use Countable;
 use DateTimeZone;
 use Doctrine\Common\Annotations\AnnotationReader;
+use Infostud\NetSuiteSdk\Model\CreateCustomerResponse;
 use Infostud\NetSuiteSdk\Model\CustomerForm;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetLocationsResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetSubsidiariesResponse;
@@ -58,7 +59,7 @@ class ApiSerializer
 	 *
 	 * @param string $json
 	 * @param string $className
-	 * @return SavedSearchCustomersResponse|GetDepartmentsResponse|GetSubsidiariesResponse|GetLocationsResponse
+	 * @return SavedSearchCustomersResponse|GetDepartmentsResponse|GetSubsidiariesResponse|GetLocationsResponse|CreateCustomerResponse
 	 */
 	public function deserialize(string $json, string $className)
 		{

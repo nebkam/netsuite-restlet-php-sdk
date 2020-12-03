@@ -6,6 +6,7 @@
   "accessTokenSecret": "",
   "restletIds": {
     "savedSearchCustomers": 0,
-    "suiteQL": 0
+    "suiteQL": 0,
+    "createDeleteCustomer": 0
   }
 }

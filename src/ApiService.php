@@ -11,6 +11,8 @@ use Eher\OAuth\Token;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
+use Infostud\NetSuiteSdk\Model\CreateCustomerResponse;
+use Infostud\NetSuiteSdk\Model\CustomerForm;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetLocationsResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetSubsidiariesResponse;
@@ -21,6 +23,7 @@ use Infostud\NetSuiteSdk\Model\SuiteQL\Location;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Subsidiary;
 use LogicException;
 use RuntimeException;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 class ApiService
 	{
@@ -61,6 +64,10 @@ class ApiService
 	 * @var int
 	 */
 	private $suiteQLId;
+	/**
+	 * @var int
+	 */
+	private $createDeleteCustomerId;
 
 	/**
 	 * @param string $configPath
@@ -82,6 +89,44 @@ class ApiService
 		$this->serializer             = new ApiSerializer();
 		$this->savedSearchCustomersId = $config['restletIds']['savedSearchCustomers'];
 		$this->suiteQLId              = $config['restletIds']['suiteQL'];
+		$this->createDeleteCustomerId = $config['restletIds']['createDeleteCustomer'];
+		}
+
+	/**
+	 * @param CustomerForm $customerForm
+	 * @return int|null
+	 * @throws ExceptionInterface
+	 */
+	public function createCustomer(CustomerForm $customerForm): ?int
+		{
+		$requestBody = $this->serializer->normalize($customerForm);
+		$url = $this->getUrl($this->createDeleteCustomerId, 3);
+		try
+			{
+			$guzzleResponse = $this->client->request(self::REQUEST_METHOD, $url, [
+				RequestOptions::HEADERS => $this->buildHeaders($url),
+				RequestOptions::JSON    => $requestBody
+			]);
+			if ($guzzleResponse->getStatusCode() === 200)
+				{
+				$contents = $guzzleResponse->getBody()->getContents();
+				/** @var CreateCustomerResponse $apiResponse */
+				$apiResponse = $this->serializer->deserialize($contents, CreateCustomerResponse::class);
+				if ($apiResponse->isSuccessful()
+					&& $apiResponse->getCustomerId())
+					{
+					return $apiResponse->getCustomerId();
+					}
+				}
+			}
+		catch (OAuthException $exception)
+			{
+			}
+		catch (GuzzleException $e)
+			{
+			}
+
+		return null;
 		}
 
 	/**

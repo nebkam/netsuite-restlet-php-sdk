@@ -1,5 +1,6 @@
 <?php
 
+use Infostud\NetSuiteSdk\Model\CreateCustomerResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\ColumnDefinition;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\CustomerForm;
@@ -18,7 +19,7 @@ class ApiSerializerTest extends TestCase
 	/**
 	 * @throws ExceptionInterface
 	 */
-	public function testCustomerFormRequest(): void
+	public function testNormalizeCustomerFormRequest(): void
 		{
 		$serializer   = new ApiSerializer();
 		$customerForm = (new CustomerForm())
@@ -50,6 +51,16 @@ class ApiSerializerTest extends TestCase
 		self::assertEquals('(u pasažu)', $address['addr2']);
 		self::assertEquals('24000', $address['zip']);
 		self::assertEquals(CustomerFormAddress::COUNTRY_SERBIA, $address['country']);
+		}
+
+	public function testCreateCustomerResult(): void
+		{
+		$serializer = new ApiSerializer();
+		$json       = file_get_contents(__DIR__ . '/customer_create_response_success.json');
+		$response   = $serializer->deserialize($json, CreateCustomerResponse::class);
+		self::assertInstanceOf(CreateCustomerResponse::class, $response);
+		self::assertTrue($response->isSuccessful());
+		self::assertEquals(41690, $response->getCustomerId());
 		}
 
 	public function testSingleCustomerSearchResult(): void
