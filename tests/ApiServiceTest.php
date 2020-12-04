@@ -1,6 +1,8 @@
 <?php
 
 use Infostud\NetSuiteSdk\ApiService;
+use Infostud\NetSuiteSdk\Model\CustomerForm;
+use Infostud\NetSuiteSdk\Model\CustomerFormAddress;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Department;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Location;
@@ -18,6 +20,37 @@ class ApiServiceTest extends TestCase
 		$configPath = getenv('CONFIG_PATH');
 
 		return new ApiService($configPath);
+		}
+
+	/**
+	 * @depends testParseConfig
+	 * @param ApiService $apiService
+	 * @return array
+	 */
+	public function testCreateCustomer(ApiService $apiService)
+		{
+		$customerForm = (new CustomerForm())
+			->setExternalId('PIB-123456')
+			->setCompanyName('Foo test customer')
+			->setSubsidiary(10)
+			->setVatIdentifier('101696893')
+			->setRegistryIdentifier('01234567')
+			->addAddress(
+				(new CustomerFormAddress())
+					->setLabel('Nazor')
+					->setCity('Subotica')
+					->setAddressLine1('Vladimira Nazora 7')
+					->setAddressLine2('(u pasažu)')
+					->setPostalCode('24000')
+					->setCountry(CustomerFormAddress::COUNTRY_SERBIA)
+			);
+		$customerId   = $apiService->createCustomer($customerForm);
+		self::assertNotNull($customerId);
+
+		return [
+			$apiService,
+			$customerId
+		];
 		}
 
 	/**
@@ -100,5 +133,19 @@ class ApiServiceTest extends TestCase
 			self::assertNotEmpty($location->getId());
 			self::assertNotEmpty($location->getName());
 			}
+		}
+
+	/**
+	 * @depends testCreateCustomer
+	 * @param array $param
+	 */
+	public function testDeleteCustomer(array $param)
+		{
+		/**
+		 * @var ApiService $apiService
+		 * @var int $customerId
+		 */
+		list($apiService, $customerId) = $param;
+		self::assertTrue($apiService->deleteCustomer($customerId));
 		}
 	}

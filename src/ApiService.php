@@ -11,6 +11,9 @@ use Eher\OAuth\Token;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
+use Infostud\NetSuiteSdk\Model\CreateCustomerResponse;
+use Infostud\NetSuiteSdk\Model\CustomerForm;
+use Infostud\NetSuiteSdk\Model\DeleteCustomerResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\SavedSearch\CustomerSearchResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Department;
@@ -62,6 +65,10 @@ class ApiService
 	 * @var int
 	 */
 	private $suiteQLId;
+	/**
+	 * @var int
+	 */
+	private $createDeleteCustomerId;
 
 	/**
 	 * @param string $configPath
@@ -83,6 +90,75 @@ class ApiService
 		$this->serializer             = new ApiSerializer();
 		$this->savedSearchCustomersId = $config['restletIds']['savedSearchCustomers'];
 		$this->suiteQLId              = $config['restletIds']['suiteQL'];
+		$this->createDeleteCustomerId = $config['restletIds']['createDeleteCustomer'];
+		}
+
+	/**
+	 * @param CustomerForm $customerForm
+	 * @return int|null
+	 */
+	public function createCustomer(CustomerForm $customerForm)
+		{
+		$requestBody = $this->serializer->normalize($customerForm);
+		$url         = $this->getRestletUrl($this->createDeleteCustomerId, 3);
+		try
+			{
+			$guzzleResponse = $this->client->request('POST', $url, [
+				RequestOptions::HEADERS => $this->buildHeaders('POST', $url),
+				RequestOptions::JSON    => $requestBody
+			]);
+			if ($guzzleResponse->getStatusCode() === 200)
+				{
+				$contents = $guzzleResponse->getBody()->getContents();
+				/** @var CreateCustomerResponse $apiResponse */
+				$apiResponse = $this->serializer->deserialize($contents, CreateCustomerResponse::class);
+				if ($apiResponse->isSuccessful()
+					&& $apiResponse->getCustomerId())
+					{
+					return $apiResponse->getCustomerId();
+					}
+				}
+			}
+		catch (OAuthException $exception)
+			{
+			}
+		catch (GuzzleException $exception)
+			{
+			}
+
+		return null;
+		}
+
+	/**
+	 * @param int $id
+	 * @return bool
+	 */
+	public function deleteCustomer($id)
+		{
+		$url = $this->getRestletUrl($this->createDeleteCustomerId, 3, [
+			'customerid' => $id
+		]);
+		try
+			{
+			$guzzleResponse = $this->client->request('DELETE', $url, [
+				RequestOptions::HEADERS => $this->buildHeaders('DELETE', $url)
+			]);
+			if ($guzzleResponse->getStatusCode() === 200)
+				{
+				$contents = $guzzleResponse->getBody()->getContents();
+				/** @var DeleteCustomerResponse $apiResponse */
+				$apiResponse = $this->serializer->deserialize($contents, DeleteCustomerResponse::class);
+				return $apiResponse->isSuccessful();
+				}
+			}
+		catch (OAuthException $exception)
+			{
+			}
+		catch (GuzzleException $exception)
+			{
+			}
+
+		return false;
 		}
 
 	/**
@@ -362,7 +438,8 @@ class ApiService
 
 		return [
 			'Authorization' => substr($request->to_header($this->account), 15),
-			'Host'          => $this->restletHost
+			'Host'          => $this->restletHost,
+			'Content-Type'  => 'application/json'
 		];
 		}
 
