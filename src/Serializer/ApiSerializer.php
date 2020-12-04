@@ -1,12 +1,10 @@
 <?php
 
-namespace Infostud\NetSuiteSdk;
+namespace Infostud\NetSuiteSdk\Serializer;
 
 use DateTimeZone;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
-use Infostud\NetSuiteSdk\Serializer\CustomObjectNormalizer;
-use Infostud\NetSuiteSdk\Serializer\SerializedNameConverter;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
@@ -30,15 +28,16 @@ class ApiSerializer
 			'class_exists'
 		);
 
-		$classMetadataFactory       = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-		$objectNormalizer           = new CustomObjectNormalizer(
+		$classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+		$groupsNameConverter  = new GroupsNameConverter($classMetadataFactory);
+		$objectNormalizer     = new CustomObjectNormalizer(
 			$classMetadataFactory,
-			new SerializedNameConverter($classMetadataFactory),
+			$groupsNameConverter,
 			null,
 			new PhpDocExtractor()
 		);
-		$dateTimeNormalizer = new DateTimeNormalizer([
-			DateTimeNormalizer::FORMAT_KEY => 'd.m.Y. H:i',
+		$dateTimeNormalizer   = new DateTimeNormalizer([
+			DateTimeNormalizer::FORMAT_KEY   => 'd.m.Y. H:i',
 			DateTimeNormalizer::TIMEZONE_KEY => new DateTimeZone('Europe/Belgrade')
 		]);
 

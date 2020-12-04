@@ -20,6 +20,7 @@ use Infostud\NetSuiteSdk\Model\SuiteQL\GetSubsidiariesResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Location;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Subsidiary;
 use Infostud\NetSuiteSdk\Model\SuiteQL\SuiteQLResponse;
+use Infostud\NetSuiteSdk\Serializer\ApiSerializer;
 use LogicException;
 use RuntimeException;
 

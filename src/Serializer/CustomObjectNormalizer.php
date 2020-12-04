@@ -28,13 +28,13 @@ use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 
 /**
  * Extracted from native Symfony's ObjectNormalizer and AbstractObjectNormalizer
- * to provide the custom SerializedNameConverter's `normalizeWithClass`
+ * to provide the custom GroupNameConverter's `normalizeWithClass`
  * and `denormalizeWithClass` methods with a className
  * (that was added in newer Symfony versions)
  *
  * @see ObjectNormalizer
  * @see AbstractObjectNormalizer
- * @see SerializedNameConverter
+ * @see GroupsNameConverter
  */
 class CustomObjectNormalizer extends AbstractNormalizer
 	{
@@ -43,7 +43,7 @@ class CustomObjectNormalizer extends AbstractNormalizer
 	const DISABLE_TYPE_ENFORCEMENT = 'disable_type_enforcement';
 
 	/**
-	 * @var NameClassConverterInterface|null
+	 * @var ClassAwareNameConverterInterface|null
 	 */
 	protected $nameConverter;
 	protected $propertyAccessor;
@@ -53,7 +53,7 @@ class CustomObjectNormalizer extends AbstractNormalizer
 
 	/**
 	 * @param ClassMetadataFactoryInterface|null $classMetadataFactory
-	 * @param NameClassConverterInterface|null $nameConverter
+	 * @param ClassAwareNameConverterInterface|null $nameConverter
 	 * @param PropertyAccessorInterface|null $propertyAccessor
 	 * @param PropertyTypeExtractorInterface|null $propertyTypeExtractor
 	 */

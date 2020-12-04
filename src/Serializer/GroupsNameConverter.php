@@ -6,13 +6,13 @@ use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 
 /**
  * Custom name converter that uses property AND class name to determine
- * what should the property be (de)normalized to
+ * what should the property be (de)normalized to.
  * Uses `Groups` annotation instead of `SerializedName` (that was added
- * in later Symfony versions)
+ * in later Symfony versions).
  * Because of that, using `Groups` for context groups
  * can lead to unexpected results and should be avoided at all cost.
  */
-class SerializedNameConverter implements NameClassConverterInterface
+class GroupsNameConverter implements ClassAwareNameConverterInterface
 	{
 	private static $normalizeCache = [];
 	private static $denormalizeCache = [];

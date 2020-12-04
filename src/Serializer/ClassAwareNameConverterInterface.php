@@ -6,9 +6,9 @@ use Symfony\Component\Serializer\NameConverter\NameConverterInterface;
 
 /**
  * Augments NameConverterInterface with `*withClass` methods
- * to allow passing $class into a SerializedNameConverter
+ * to allow passing $class
  */
-interface NameClassConverterInterface extends NameConverterInterface
+interface ClassAwareNameConverterInterface extends NameConverterInterface
 	{
 	/**
 	 * Converts a property name to its normalized value.

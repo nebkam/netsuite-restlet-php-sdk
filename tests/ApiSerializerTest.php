@@ -3,7 +3,7 @@
 use Infostud\NetSuiteSdk\Model\SavedSearch\ColumnDefinition;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\SavedSearch\CustomerSearchResponse;
-use Infostud\NetSuiteSdk\ApiSerializer;
+use Infostud\NetSuiteSdk\Serializer\ApiSerializer;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetDepartmentsResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\SearchDefinition;
 use Infostud\NetSuiteSdk\Model\SavedSearch\SearchMetadata;
