@@ -35,7 +35,17 @@ class GroupsNameConverter implements ClassAwareNameConverterInterface
 	 */
 	public function normalizeWithClass($propertyName, $class)
 		{
-		// TODO: Implement normalizeWithClass() method.
+		if (!array_key_exists($class, self::$normalizeCache)
+			|| !array_key_exists($propertyName, self::$normalizeCache[$class]))
+			{
+			self::$normalizeCache[$class][$propertyName] = $this->getCacheValueForNormalization($propertyName, $class);
+			}
+
+		if (self::$normalizeCache[$class][$propertyName])
+			{
+			return self::$normalizeCache[$class][$propertyName];
+			}
+
 		return $propertyName;
 		}
 
@@ -76,6 +86,24 @@ class GroupsNameConverter implements ClassAwareNameConverterInterface
 	public function denormalize($propertyName)
 		{
 		return $propertyName;
+		}
+
+	private function getCacheValueForNormalization($propertyName, $class)
+		{
+		if (!$this->metadataFactory->hasMetadataFor($class))
+			{
+			return null;
+			}
+
+		$attributesMetadata = $this->metadataFactory->getMetadataFor($class)->getAttributesMetadata();
+		if (!array_key_exists($propertyName, $attributesMetadata))
+			{
+			return null;
+			}
+
+		return !empty($attributesMetadata[$propertyName]->getGroups())
+			? $attributesMetadata[$propertyName]->getGroups()[0]
+			: null;
 		}
 
 	private function getCacheValueForDenormalization($propertyName, $class)

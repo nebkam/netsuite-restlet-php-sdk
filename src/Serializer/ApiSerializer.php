@@ -59,4 +59,13 @@ class ApiSerializer
 		{
 		return $this->serializer->deserialize($json, $className, 'json');
 		}
+
+	/**
+	 * @param $data
+	 * @return array|bool|float|int|mixed|string|null
+	 */
+	public function normalize($data)
+		{
+		return $this->serializer->normalize($data, 'json');
+		}
 	}
