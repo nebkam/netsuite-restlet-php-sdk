@@ -4,17 +4,15 @@ namespace Infostud\NetSuiteSdk;
 
 use DateTimeZone;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Infostud\NetSuiteSdk\Model\SavedSearch\CustomerSearchResponse;
-use Infostud\NetSuiteSdk\Model\SuiteQL\GetDepartmentsResponse;
-use Infostud\NetSuiteSdk\Model\SuiteQL\GetLocationsResponse;
-use Infostud\NetSuiteSdk\Model\SuiteQL\GetSubsidiariesResponse;
+use Doctrine\Common\Annotations\AnnotationRegistry;
+use Infostud\NetSuiteSdk\Serializer\CustomObjectNormalizer;
+use Infostud\NetSuiteSdk\Serializer\SerializedNameConverter;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -27,10 +25,15 @@ class ApiSerializer
 
 	public function __construct()
 		{
+		//Load annotations
+		AnnotationRegistry::registerLoader(
+			'class_exists'
+		);
+
 		$classMetadataFactory       = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-		$objectNormalizer           = new ObjectNormalizer(
+		$objectNormalizer           = new CustomObjectNormalizer(
 			$classMetadataFactory,
-			null,
+			new SerializedNameConverter($classMetadataFactory),
 			null,
 			new PhpDocExtractor()
 		);

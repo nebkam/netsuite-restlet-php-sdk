@@ -2,6 +2,8 @@
 
 namespace Infostud\NetSuiteSdk\Model\SavedSearch;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+
 class Customer
 	{
 	/**
@@ -9,9 +11,10 @@ class Customer
 	 */
 	private $id;
 	/**
+	 * @Groups("values")
 	 * @var CustomerAttributes
 	 */
-	private $values;
+	private $attributes;
 
 	/**
 	 * @return string
@@ -33,31 +36,20 @@ class Customer
 		}
 
 	/**
-	 * @deprecated
-	 * @see getAttributes
-	 * @return CustomerAttributes
-	 */
-	public function getValues()
-		{
-		return $this->values;
-		}
-
-	/**
 	 * @return CustomerAttributes
 	 */
 	public function getAttributes()
 		{
-		return $this->values;
+		return $this->attributes;
 		}
 
-
 	/**
-	 * @param CustomerAttributes $values
+	 * @param CustomerAttributes $attributes
 	 * @return self
 	 */
-	public function setValues($values)
+	public function setAttributes($attributes)
 		{
-		$this->values = $values;
+		$this->attributes = $attributes;
 
 		return $this;
 		}

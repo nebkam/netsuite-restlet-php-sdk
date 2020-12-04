@@ -2,12 +2,15 @@
 
 namespace Infostud\NetSuiteSdk\Model\SavedSearch;
 
+use Symfony\Component\Serializer\Annotation\Groups;
+
 class CustomerSearchResponse
 	{
 	/**
+	 * @Groups("myPagedData")
 	 * @var SearchMetadata
 	 */
-	private $myPagedData;
+	private $searchMetadata;
 	/**
 	 * @var Customer[]
 	 */
@@ -18,26 +21,16 @@ class CustomerSearchResponse
 	 */
 	public function getSearchMetadata()
 		{
-		return $this->myPagedData;
+		return $this->searchMetadata;
 		}
 
 	/**
-	 * @deprecated
-	 * @see getSearchMetadata
-	 * @return SearchMetadata
-	 */
-	public function getMyPagedData()
-		{
-		return $this->myPagedData;
-		}
-
-	/**
-	 * @param SearchMetadata $myPagedData
+	 * @param SearchMetadata $searchMetadata
 	 * @return CustomerSearchResponse
 	 */
-	public function setMyPagedData($myPagedData)
+	public function setSearchMetadata($searchMetadata)
 		{
-		$this->myPagedData = $myPagedData;
+		$this->searchMetadata = $searchMetadata;
 
 		return $this;
 		}
