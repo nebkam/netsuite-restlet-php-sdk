@@ -24,7 +24,6 @@ use Infostud\NetSuiteSdk\Model\SuiteQL\GetDepartmentsResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Location;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Subsidiary;
 use Infostud\NetSuiteSdk\Model\SuiteQL\SuiteQLResponse;
-use LogicException;
 use RuntimeException;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
@@ -134,6 +133,7 @@ class ApiService
 	/**
 	 * @param int $id
 	 * @return bool
+	 * @throws ApiException
 	 */
 	public function deleteCustomer(int $id): bool
 		{
@@ -142,28 +142,34 @@ class ApiService
 		]);
 		try
 			{
-			$guzzleResponse = $this->client->request('DELETE', $url, [
+			$clientResponse = $this->client->request('DELETE', $url, [
 				RequestOptions::HEADERS => $this->buildHeaders('DELETE', $url)
 			]);
-			if ($guzzleResponse->getStatusCode() === 200)
+			if ($clientResponse->getStatusCode() !== 200)
 				{
-				$contents = $guzzleResponse->getBody()->getContents();
-				/** @var DeleteCustomerResponse $apiResponse */
-				$apiResponse = $this->serializer->deserialize($contents, DeleteCustomerResponse::class);
-				return $apiResponse->isSuccessful();
+				throw ApiException::fromStatusCode($clientResponse->getStatusCode());
 				}
+
+			$contents = $clientResponse->getBody()->getContents();
+			/** @var DeleteCustomerResponse $response */
+			$response = $this->serializer->deserialize($contents, DeleteCustomerResponse::class);
+
+			return $response->isSuccessful();
 			}
 		catch (OAuthException $exception)
-			{}
+			{
+			throw ApiException::fromOAuthException($exception);
+			}
 		catch (GuzzleException $exception)
-			{}
-
-		return false;
+			{
+			throw ApiException::fromGuzzleException($exception);
+			}
 		}
 
 	/**
 	 * @param string $pib
 	 * @return Customer|null
+	 * @throws ApiException
 	 */
 	public function findCustomerByPib(string $pib): ?Customer
 		{
@@ -172,19 +178,10 @@ class ApiService
 			'operator' => 'is',
 			'values'   => [$pib]
 		]];
-		try
+		$results = $this->executeSavedSearchCustomers($filters);
+		if (!empty($results->getCustomers()))
 			{
-			$results = $this->executeSavedSearchCustomers($filters);
-			if (!empty($results->getCustomers()))
-				{
-				return $results->getCustomers()[0];
-				}
-			}
-		catch (OAuthException $exception)
-			{
-			}
-		catch (GuzzleException $e)
-			{
+			return $results->getCustomers()[0];
 			}
 
 		return null;
@@ -193,6 +190,7 @@ class ApiService
 	/**
 	 * @param string $pib
 	 * @return Customer|null
+	 * @throws ApiException
 	 */
 	public function findCustomerByPibFragment(string $pib): ?Customer
 		{
@@ -201,19 +199,10 @@ class ApiService
 			'operator' => 'contains',
 			'values'   => [$pib]
 		]];
-		try
+		$results = $this->executeSavedSearchCustomers($filters);
+		if (!empty($results->getCustomers()))
 			{
-			$results = $this->executeSavedSearchCustomers($filters);
-			if (!empty($results->getCustomers()))
-				{
-				return $results->getCustomers()[0];
-				}
-			}
-		catch (OAuthException $exception)
-			{
-			}
-		catch (GuzzleException $e)
-			{
+			return $results->getCustomers()[0];
 			}
 
 		return null;
@@ -222,6 +211,7 @@ class ApiService
 	/**
 	 * @param string $registryIdentifier
 	 * @return Customer|null
+	 * @throws ApiException
 	 */
 	public function findCustomerByRegistryIdentifier(string $registryIdentifier): ?Customer
 		{
@@ -230,19 +220,10 @@ class ApiService
 			'operator' => 'is',
 			'values'   => [$registryIdentifier]
 		]];
-		try
+		$results = $this->executeSavedSearchCustomers($filters);
+		if (!empty($results->getCustomers()))
 			{
-			$results = $this->executeSavedSearchCustomers($filters);
-			if (!empty($results->getCustomers()))
-				{
-				return $results->getCustomers()[0];
-				}
-			}
-		catch (OAuthException $exception)
-			{
-			}
-		catch (GuzzleException $e)
-			{
+			return $results->getCustomers()[0];
 			}
 
 		return null;
@@ -287,8 +268,7 @@ class ApiService
 	/**
 	 * @param array $filters
 	 * @return SavedSearchCustomersResponse
-	 * @throws OAuthException
-	 * @throws GuzzleException
+	 * @throws ApiException
 	 */
 	private function executeSavedSearchCustomers(array $filters): SavedSearchCustomersResponse
 		{
@@ -296,23 +276,32 @@ class ApiService
 			'filters' => $filters
 		];
 		$url            = $this->getRestletUrl($this->savedSearchCustomersId, 1);
-		$clientResponse = $this->client->request('POST', $url, [
-			RequestOptions::HEADERS => $this->buildHeaders('POST', $url),
-			RequestOptions::JSON    => $requestBody
-		]);
-
-		if ($clientResponse->getStatusCode() === 200)
+		try
 			{
+			$clientResponse = $this->client->request('POST', $url, [
+				RequestOptions::HEADERS => $this->buildHeaders('POST', $url),
+				RequestOptions::JSON    => $requestBody
+			]);
+
+			if ($clientResponse->getStatusCode() !== 200)
+				{
+				throw ApiException::fromStatusCode($clientResponse->getStatusCode());
+				}
+
 			$contents = $clientResponse->getBody()->getContents();
 			/** @var SavedSearchCustomersResponse $response */
 			$response = $this->serializer->deserialize($contents, SavedSearchCustomersResponse::class);
 
 			return $response;
 			}
-
-		throw new LogicException(
-			sprintf('Unexpected response status code: %d', $clientResponse->getStatusCode())
-		);
+		catch (OAuthException $exception)
+			{
+			throw ApiException::fromOAuthException($exception);
+			}
+		catch (GuzzleException $exception)
+			{
+			throw ApiException::fromGuzzleException($exception);
+			}
 		}
 
 	/**
