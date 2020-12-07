@@ -11,6 +11,7 @@ use Eher\OAuth\Token;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
+use Infostud\NetSuiteSdk\Exception\ApiException;
 use Infostud\NetSuiteSdk\Model\CreateCustomerResponse;
 use Infostud\NetSuiteSdk\Model\CustomerForm;
 use Infostud\NetSuiteSdk\Model\DeleteCustomerResponse;
@@ -249,68 +250,38 @@ class ApiService
 
 	/**
 	 * @return Subsidiary[]
+	 * @throws ApiException
 	 */
 	public function getSubsidiaries(): array
 		{
-		try
-			{
-			return $this->executeSuiteQuery(
-				GetSubsidiariesResponse::class,
-				'select parent, id , name from subsidiary'
-			);
-			}
-		catch (OAuthException $exception)
-			{
-			}
-		catch (GuzzleException $exception)
-			{
-			}
-
-		return [];
+		return $this->executeSuiteQuery(
+			GetSubsidiariesResponse::class,
+			'select parent, id , name from subsidiary'
+		);
 		}
 
 	/**
 	 * @return Department[]
+	 * @throws ApiException
 	 */
 	public function getDepartments(): array
 		{
-		try
-			{
-			return $this->executeSuiteQuery(
-				GetDepartmentsResponse::class,
-				'select parent, id , name from department'
-			);
-			}
-		catch (OAuthException $exception)
-			{
-			}
-		catch (GuzzleException $exception)
-			{
-			}
-
-		return [];
+		return $this->executeSuiteQuery(
+			GetDepartmentsResponse::class,
+			'select parent, id , name from department'
+		);
 		}
 
 	/**
 	 * @return Location[]
+	 * @throws ApiException
 	 */
 	public function getLocations(): array
 		{
-		try
-			{
-			return $this->executeSuiteQuery(
-				GetLocationsResponse::class,
-				'select id, name, parent from location'
-			);
-			}
-		catch (OAuthException $exception)
-			{
-			}
-		catch (GuzzleException $exception)
-			{
-			}
-
-		return [];
+		return $this->executeSuiteQuery(
+			GetLocationsResponse::class,
+			'select id, name, parent from location'
+		);
 		}
 
 	/**
@@ -350,8 +321,7 @@ class ApiService
 	 * @param string $where
 	 * @param array $params
 	 * @return array
-	 * @throws GuzzleException
-	 * @throws OAuthException
+	 * @throws ApiException
 	 */
 	public function executeSuiteQuery(
 		?string $responseClass,
@@ -366,13 +336,18 @@ class ApiService
 			'params'    => $params
 		];
 		$url            = $this->getRestletUrl($this->suiteQLId, 1);
-		$clientResponse = $this->client->request('POST', $url, [
-			RequestOptions::HEADERS => $this->buildHeaders('POST', $url),
-			RequestOptions::JSON    => $requestBody
-		]);
-
-		if ($clientResponse->getStatusCode() === 200)
+		try
 			{
+			$clientResponse = $this->client->request('POST', $url, [
+				RequestOptions::HEADERS => $this->buildHeaders('POST', $url),
+				RequestOptions::JSON    => $requestBody
+			]);
+
+			if ($clientResponse->getStatusCode() !== 200)
+				{
+				throw ApiException::fromStatusCode($clientResponse->getStatusCode());
+				}
+
 			$contents = $clientResponse->getBody()->getContents();
 			if ($responseClass)
 				{
@@ -384,10 +359,14 @@ class ApiService
 
 			return json_decode($contents, true);
 			}
-
-		throw new LogicException(
-			sprintf('Unexpected response status code: %d', $clientResponse->getStatusCode())
-		);
+		catch (OAuthException $exception)
+			{
+			throw ApiException::fromOAuthException($exception);
+			}
+		catch (GuzzleException $exception)
+			{
+			throw ApiException::fromGuzzleException($exception);
+			}
 		}
 
 	/**
