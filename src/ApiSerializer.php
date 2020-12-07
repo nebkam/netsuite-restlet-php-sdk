@@ -6,6 +6,7 @@ use ArrayObject;
 use Countable;
 use DateTimeZone;
 use Doctrine\Common\Annotations\AnnotationReader;
+use Infostud\NetSuiteSdk\Exception\ApiException;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
@@ -48,25 +49,37 @@ class ApiSerializer
 		}
 
 	/**
-	 * Add other top level classes to return
-	 * (explicit, to aid type-hinting)
-	 *
 	 * @param string $json
 	 * @param string $className
 	 * @return object|array
+	 * @throws ApiException
 	 */
 	public function deserialize(string $json, string $className)
 		{
-		return $this->serializer->deserialize($json, $className, 'json');
+		try
+			{
+			return $this->serializer->deserialize($json, $className, 'json');
+			}
+		catch (ExceptionInterface $exception)
+			{
+			throw ApiException::fromSerializationException($exception);
+			}
 		}
 
 	/**
 	 * @param mixed $data
 	 * @return array|ArrayObject|bool|Countable|float|int|string|Traversable|null
-	 * @throws ExceptionInterface
+	 * @throws ApiException
 	 */
 	public function normalize($data)
 		{
-		return $this->serializer->normalize($data, 'json');
+		try
+			{
+			return $this->serializer->normalize($data, 'json');
+			}
+		catch (ExceptionInterface $exception)
+			{
+			throw ApiException::fromSerializationException($exception);
+			}
 		}
 	}
