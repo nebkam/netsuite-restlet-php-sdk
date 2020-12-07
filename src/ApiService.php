@@ -11,6 +11,7 @@ use Eher\OAuth\Token;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
+use Infostud\NetSuiteSdk\Exception\ApiException;
 use Infostud\NetSuiteSdk\Model\CreateCustomerResponse;
 use Infostud\NetSuiteSdk\Model\CustomerForm;
 use Infostud\NetSuiteSdk\Model\DeleteCustomerResponse;
@@ -96,34 +97,19 @@ class ApiService
 	/**
 	 * @param CustomerForm $customerForm
 	 * @return int|null
+	 * @throws ApiException
 	 */
 	public function createCustomer(CustomerForm $customerForm)
 		{
-		$requestBody = $this->serializer->normalize($customerForm);
 		$url         = $this->getRestletUrl($this->createDeleteCustomerId, 3);
-		try
+		$requestBody = $this->serializer->normalize($customerForm);
+		$contents = $this->executePostRequest($url, $requestBody);
+		/** @var CreateCustomerResponse $apiResponse */
+		$apiResponse = $this->serializer->deserialize($contents, CreateCustomerResponse::class);
+		if ($apiResponse->isSuccessful()
+			&& $apiResponse->getCustomerId())
 			{
-			$guzzleResponse = $this->client->request('POST', $url, [
-				RequestOptions::HEADERS => $this->buildHeaders('POST', $url),
-				RequestOptions::JSON    => $requestBody
-			]);
-			if ($guzzleResponse->getStatusCode() === 200)
-				{
-				$contents = $guzzleResponse->getBody()->getContents();
-				/** @var CreateCustomerResponse $apiResponse */
-				$apiResponse = $this->serializer->deserialize($contents, CreateCustomerResponse::class);
-				if ($apiResponse->isSuccessful()
-					&& $apiResponse->getCustomerId())
-					{
-					return $apiResponse->getCustomerId();
-					}
-				}
-			}
-		catch (OAuthException $exception)
-			{
-			}
-		catch (GuzzleException $exception)
-			{
+			return $apiResponse->getCustomerId();
 			}
 
 		return null;
@@ -132,38 +118,24 @@ class ApiService
 	/**
 	 * @param int $id
 	 * @return bool
+	 * @throws ApiException
 	 */
 	public function deleteCustomer($id)
 		{
 		$url = $this->getRestletUrl($this->createDeleteCustomerId, 3, [
 			'customerid' => $id
 		]);
-		try
-			{
-			$guzzleResponse = $this->client->request('DELETE', $url, [
-				RequestOptions::HEADERS => $this->buildHeaders('DELETE', $url)
-			]);
-			if ($guzzleResponse->getStatusCode() === 200)
-				{
-				$contents = $guzzleResponse->getBody()->getContents();
-				/** @var DeleteCustomerResponse $apiResponse */
-				$apiResponse = $this->serializer->deserialize($contents, DeleteCustomerResponse::class);
-				return $apiResponse->isSuccessful();
-				}
-			}
-		catch (OAuthException $exception)
-			{
-			}
-		catch (GuzzleException $exception)
-			{
-			}
+		$contents = $this->executeDeleteRequest($url);
+		/** @var DeleteCustomerResponse $apiResponse */
+		$apiResponse = $this->serializer->deserialize($contents, DeleteCustomerResponse::class);
 
-		return false;
+		return $apiResponse->isSuccessful();
 		}
 
 	/**
 	 * @param string $pib
 	 * @return Customer|null
+	 * @throws ApiException
 	 */
 	public function findCustomerByPib($pib)
 		{
@@ -172,19 +144,10 @@ class ApiService
 			'operator' => 'is',
 			'values'   => [$pib]
 		]];
-		try
+		$results = $this->executeSavedSearchCustomers($filters);
+		if (!empty($results->getCustomers()))
 			{
-			$results = $this->executeSavedSearchCustomers($filters);
-			if (!empty($results->getCustomers()))
-				{
-				return $results->getCustomers()[0];
-				}
-			}
-		catch (OAuthException $exception)
-			{
-			}
-		catch (GuzzleException $e)
-			{
+			return $results->getCustomers()[0];
 			}
 
 		return null;
@@ -193,6 +156,7 @@ class ApiService
 	/**
 	 * @param string $pib
 	 * @return Customer|null
+	 * @throws ApiException
 	 */
 	public function findCustomerByPibFragment($pib)
 		{
@@ -201,19 +165,10 @@ class ApiService
 			'operator' => 'contains',
 			'values'   => [$pib]
 		]];
-		try
+		$results = $this->executeSavedSearchCustomers($filters);
+		if (!empty($results->getCustomers()))
 			{
-			$results = $this->executeSavedSearchCustomers($filters);
-			if (!empty($results->getCustomers()))
-				{
-				return $results->getCustomers()[0];
-				}
-			}
-		catch (OAuthException $exception)
-			{
-			}
-		catch (GuzzleException $exception)
-			{
+			return $results->getCustomers()[0];
 			}
 
 		return null;
@@ -224,6 +179,7 @@ class ApiService
 	 *
 	 * @param string $registryIdentifier
 	 * @return Customer|null
+	 * @throws ApiException
 	 */
 	public function findCustomerByRegistryIdentifier($registryIdentifier)
 		{
@@ -232,19 +188,10 @@ class ApiService
 			'operator' => 'is',
 			'values'   => [$registryIdentifier]
 		]];
-		try
+		$results = $this->executeSavedSearchCustomers($filters);
+		if (!empty($results->getCustomers()))
 			{
-			$results = $this->executeSavedSearchCustomers($filters);
-			if (!empty($results->getCustomers()))
-				{
-				return $results->getCustomers()[0];
-				}
-			}
-		catch (OAuthException $exception)
-			{
-			}
-		catch (GuzzleException $e)
-			{
+			return $results->getCustomers()[0];
 			}
 
 		return null;
@@ -252,98 +199,56 @@ class ApiService
 
 	/**
 	 * @return Subsidiary[]
+	 * @throws ApiException
 	 */
 	public function getSubsidiaries()
 		{
-		try
-			{
-			return $this->executeSuiteQuery(
-				GetSubsidiariesResponse::class,
-				'select id, name, parent from subsidiary'
-			);
-			}
-		catch (OAuthException $exception)
-			{
-			}
-		catch (GuzzleException $exception)
-			{
-			}
-
-		return [];
+		return $this->executeSuiteQuery(
+			GetSubsidiariesResponse::class,
+			'select id, name, parent from subsidiary'
+		);
 		}
 
 	/**
 	 * @return Department[]
+	 * @throws ApiException
 	 */
 	public function getDepartments()
 		{
-		try
-			{
-			return $this->executeSuiteQuery(
-				GetDepartmentsResponse::class,
-				'select id, name, parent from department'
-			);
-			}
-		catch (OAuthException $exception)
-			{
-			}
-		catch (GuzzleException $exception)
-			{
-			}
-
-		return [];
+		return $this->executeSuiteQuery(
+			GetDepartmentsResponse::class,
+			'select id, name, parent from department'
+		);
 		}
 
 	/**
 	 * @return Location[]
+	 * @throws ApiException
 	 */
 	public function getLocations()
 		{
-		try
-			{
-			return $this->executeSuiteQuery(
-				GetLocationsResponse::class,
-				'select id, name, parent from location'
-			);
-			}
-		catch (OAuthException $exception)
-			{
-			}
-		catch (GuzzleException $exception)
-			{
-			}
-
-		return [];
+		return $this->executeSuiteQuery(
+			GetLocationsResponse::class,
+			'select id, name, parent from location'
+		);
 		}
 
 	/**
 	 * @param array $filters
 	 * @return CustomerSearchResponse
-	 * @throws OAuthException|GuzzleException
+	 * @throws ApiException
 	 */
 	private function executeSavedSearchCustomers($filters)
 		{
-		$requestBody = [
+		$url            = $this->getRestletUrl($this->savedSearchCustomersId, 1);
+		$requestBody    = [
 			'filters' => $filters
 		];
-		$url         = $this->getRestletUrl($this->savedSearchCustomersId, 1);
-		$clientResponse = $this->client->request('POST', $url, [
-			RequestOptions::HEADERS => $this->buildHeaders('POST', $url),
-			RequestOptions::JSON    => $requestBody
-		]);
+		$contents = $this->executePostRequest($url, $requestBody);
+		/** @var CustomerSearchResponse $response */
+		$response = $this->serializer->deserialize($contents, CustomerSearchResponse::class);
 
-		if ($clientResponse->getStatusCode() === 200)
-			{
-			$contents = $clientResponse->getBody()->getContents();
-			/** @var CustomerSearchResponse $response */
-			$response = $this->serializer->deserialize($contents, CustomerSearchResponse::class);
-
-			return $response;
-			}
-
-		throw new LogicException(
-			sprintf('Unexpected response status code: %d', $clientResponse->getStatusCode())
-		);
+		return $response;
 		}
 
 	/**
@@ -352,39 +257,80 @@ class ApiService
 	 * @param string $where
 	 * @param array $params
 	 * @return array|mixed
-	 * @throws GuzzleException
-	 * @throws OAuthException
+	 * @throws ApiException
 	 */
 	public function executeSuiteQuery($responseClass, $from, $where = ' ', $params = [])
 		{
+		$url         = $this->getRestletUrl($this->suiteQLId, 1);
 		$requestBody = [
 			'sql_from'  => $from,
 			'sql_where' => $where,
 			'params'    => $params
 		];
-		$url         = $this->getRestletUrl($this->suiteQLId, 1);
-		$clientResponse = $this->client->request('POST', $url, [
-			RequestOptions::HEADERS => $this->buildHeaders('POST', $url),
-			RequestOptions::JSON    => $requestBody
-		]);
-
-		if ($clientResponse->getStatusCode() === 200)
+		$contents    = $this->executePostRequest($url, $requestBody);
+		if ($responseClass)
 			{
-			$contents = $clientResponse->getBody()->getContents();
-			if ($responseClass)
-				{
-				/** @var SuiteQLResponse $response */
-				$response = $this->serializer->deserialize($contents, $responseClass);
+			/** @var SuiteQLResponse $response */
+			$response = $this->serializer->deserialize($contents, $responseClass);
 
-				return !empty($response->getRows()) ? $response->getRows() : [];
-				}
-
-			return json_decode($contents, true);
+			return !empty($response->getRows()) ? $response->getRows() : [];
 			}
 
-		throw new LogicException(
-			sprintf('Unexpected response status code: %d', $clientResponse->getStatusCode())
-		);
+		return json_decode($contents, true);
+		}
+
+	/**
+	 * @param string $url
+	 * @param array $requestBody
+	 * @return string
+	 * @throws ApiException
+	 */
+	private function executePostRequest($url, array $requestBody)
+		{
+		try
+			{
+			$clientResponse = $this->client->request('POST', $url, [
+				RequestOptions::HEADERS => $this->buildHeaders('POST', $url),
+				RequestOptions::JSON    => $requestBody
+			]);
+			}
+		catch (GuzzleException $exception)
+			{
+			throw ApiException::fromGuzzleException($exception);
+			}
+
+		if ($clientResponse->getStatusCode() !== 200)
+			{
+			throw ApiException::fromStatusCode($clientResponse->getStatusCode());
+			}
+
+		return $clientResponse->getBody()->getContents();
+		}
+
+	/**
+	 * @param string $url
+	 * @return string
+	 * @throws ApiException
+	 */
+	private function executeDeleteRequest($url)
+		{
+		try
+			{
+			$clientResponse = $this->client->request('DELETE', $url, [
+				RequestOptions::HEADERS => $this->buildHeaders('DELETE', $url)
+			]);
+			}
+		catch (GuzzleException $exception)
+			{
+			throw ApiException::fromGuzzleException($exception);
+			}
+
+		if ($clientResponse->getStatusCode() !== 200)
+			{
+			throw ApiException::fromStatusCode($clientResponse->getStatusCode());
+			}
+
+		return $clientResponse->getBody()->getContents();
 		}
 
 	/**
@@ -408,7 +354,7 @@ class ApiService
 	 * @param $method
 	 * @param string $url
 	 * @return array
-	 * @throws OAuthException
+	 * @throws ApiException
 	 */
 	private function buildHeaders($method, $url)
 		{
@@ -424,11 +370,18 @@ class ApiService
 		$request->set_parameter('oauth_signature', $signature);
 		$request->set_parameter('realm', $this->account);
 
-		return [
-			'Authorization' => substr($request->to_header($this->account), 15),
-			'Host'          => $this->restletHost,
-			'Content-Type'  => 'application/json'
-		];
+		try
+			{
+			return [
+				'Authorization' => substr($request->to_header($this->account), 15),
+				'Host'          => $this->restletHost,
+				'Content-Type'  => 'application/json'
+			];
+			}
+		catch (OAuthException $exception)
+			{
+			throw ApiException::fromOAuthException($exception);
+			}
 		}
 
 	/**
