@@ -257,14 +257,10 @@ class ApiService
 		{
 		try
 			{
-			$results = $this->executeSuiteQuery(
+			return $this->executeSuiteQuery(
 				GetSubsidiariesResponse::class,
 				'select id, name, parent from subsidiary'
 			);
-			if (!empty($results->getRows()))
-				{
-				return $results->getRows();
-				}
 			}
 		catch (OAuthException $exception)
 			{
@@ -283,14 +279,10 @@ class ApiService
 		{
 		try
 			{
-			$results = $this->executeSuiteQuery(
+			return $this->executeSuiteQuery(
 				GetDepartmentsResponse::class,
 				'select id, name, parent from department'
 			);
-			if (!empty($results->getRows()))
-				{
-				return $results->getRows();
-				}
 			}
 		catch (OAuthException $exception)
 			{
@@ -309,14 +301,10 @@ class ApiService
 		{
 		try
 			{
-			$results = $this->executeSuiteQuery(
+			return $this->executeSuiteQuery(
 				GetLocationsResponse::class,
 				'select id, name, parent from location'
 			);
-			if (!empty($results->getRows()))
-				{
-				return $results->getRows();
-				}
 			}
 		catch (OAuthException $exception)
 			{
@@ -363,7 +351,7 @@ class ApiService
 	 * @param string $from
 	 * @param string $where
 	 * @param array $params
-	 * @return SuiteQLResponse|mixed
+	 * @return array|mixed
 	 * @throws GuzzleException
 	 * @throws OAuthException
 	 */
@@ -388,7 +376,7 @@ class ApiService
 				/** @var SuiteQLResponse $response */
 				$response = $this->serializer->deserialize($contents, $responseClass);
 
-				return $response;
+				return !empty($response->getRows()) ? $response->getRows() : [];
 				}
 
 			return json_decode($contents, true);
