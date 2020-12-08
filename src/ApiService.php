@@ -17,6 +17,8 @@ use Infostud\NetSuiteSdk\Model\CustomerForm;
 use Infostud\NetSuiteSdk\Model\DeleteCustomerResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\SavedSearch\CustomerSearchResponse;
+use Infostud\NetSuiteSdk\Model\SavedSearch\Item;
+use Infostud\NetSuiteSdk\Model\SavedSearch\ItemSearchResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Department;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetDepartmentsResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetLocationsResponse;
@@ -74,6 +76,10 @@ class ApiService
 	 * @var int
 	 */
 	private $createDeleteCustomerId;
+	/**
+	 * @var int
+	 */
+	private $savedSearchItemId;
 
 	/**
 	 * @param string $configPath
@@ -96,6 +102,7 @@ class ApiService
 		$this->savedSearchCustomersId = $config['restletIds']['savedSearchCustomers'];
 		$this->suiteQLId              = $config['restletIds']['suiteQL'];
 		$this->createDeleteCustomerId = $config['restletIds']['createDeleteCustomer'];
+		$this->savedSearchItemId      = $config['restletIds']['savedSearchItems'];
 		}
 
 	/**
@@ -201,6 +208,50 @@ class ApiService
 		return null;
 		}
 
+
+	/**
+	 * Find recently created items in specific subsidiaries, locations or classes
+	 *
+	 * @param string $registryIdentifier
+	 * @return Customer|null
+	 */
+	public function findRecentItems(\DateTime $periodStart,$subsidiary = null, $location = null, $classification = null)
+		{
+		$filters[] = [
+			'name'     => 'lastmodifieddate',
+			'operator' => 'notbefore',
+			'values'   => [$periodStart->format('d.m.Y H:i')]
+			];
+
+		if (!is_null($subsidiary))
+			{
+			$filters[] = [
+				'name' => 'subsidiary',
+				'operator' => 'is',
+				'values' => [$subsidiary]
+				];
+			}
+		if (!is_null($location))
+			{
+			$filters[] = [
+				'name' => 'location',
+				'operator' => 'is',
+				'values' => [$location]
+			];
+			}
+		if (!is_null($classification))
+			{
+			$filters[] = [
+				'name' => 'class',
+				'operator' => 'is',
+				'values' => [$classification]
+			];
+			}
+
+		$results = $this->executeSavedSearchItems($filters);
+		return $results->getItems();
+		}
+
 	/**
 	 * @return Subsidiary[]
 	 * @throws ApiException
@@ -275,6 +326,24 @@ class ApiService
 		$contents = $this->executePostRequest($url, $requestBody);
 		/** @var CustomerSearchResponse $response */
 		$response = $this->serializer->deserialize($contents, CustomerSearchResponse::class);
+
+		return $response;
+		}
+
+	/**
+	 * @param array $filters
+	 * @return ItemSearchResponse
+	 * @throws ApiException
+	 */
+	private function executeSavedSearchItems($filters)
+		{
+		$url            = $this->getRestletUrl($this->savedSearchItemId, 1);
+		$requestBody    = [
+			'filters' => $filters
+		];
+		$contents = $this->executePostRequest($url, $requestBody);
+		/** @var ItemSearchResponse $response */
+		$response = $this->serializer->deserialize($contents, ItemSearchResponse::class);
 
 		return $response;
 		}
