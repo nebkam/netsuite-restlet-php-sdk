@@ -21,8 +21,12 @@ use Infostud\NetSuiteSdk\Model\SuiteQL\Department;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetDepartmentsResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetLocationsResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetSubsidiariesResponse;
+use Infostud\NetSuiteSdk\Model\SuiteQL\GetClassificationsResponse;
+use Infostud\NetSuiteSdk\Model\SuiteQL\GetEmployeesResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Location;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Subsidiary;
+use Infostud\NetSuiteSdk\Model\SuiteQL\Classification;
+use Infostud\NetSuiteSdk\Model\SuiteQL\Employee;
 use Infostud\NetSuiteSdk\Model\SuiteQL\SuiteQLResponse;
 use Infostud\NetSuiteSdk\Serializer\ApiSerializer;
 use LogicException;
@@ -230,6 +234,30 @@ class ApiService
 		return $this->executeSuiteQuery(
 			GetLocationsResponse::class,
 			'select id, name, parent from location'
+		);
+		}
+
+	/**
+	 * @return Classification[]
+	 * @throws ApiException
+	 */
+	public function getClassifications()
+		{
+		return $this->executeSuiteQuery(
+			GetClassificationsResponse::class,
+			'select id, name from classification'
+		);
+		}
+
+	/**
+	 * @return Employee[]
+	 * @throws ApiException
+	 */
+	public function getEmployees()
+		{
+		return $this->executeSuiteQuery(
+			GetEmployeesResponse::class,
+			'select id, entityid from employee'
 		);
 		}
 
