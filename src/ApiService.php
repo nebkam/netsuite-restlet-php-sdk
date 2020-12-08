@@ -2,6 +2,7 @@
 
 namespace Infostud\NetSuiteSdk;
 
+use DateTime;
 use Eher\OAuth\Consumer;
 use Eher\OAuth\HmacSha1;
 use Eher\OAuth\OAuthException;
@@ -212,10 +213,14 @@ class ApiService
 	/**
 	 * Find recently created items in specific subsidiaries, locations or classes
 	 *
-	 * @param string $registryIdentifier
-	 * @return Customer|null
+	 * @param DateTime $periodStart
+	 * @param null $subsidiary
+	 * @param null $location
+	 * @param null $classification
+	 * @return Item[]
+	 * @throws ApiException
 	 */
-	public function findRecentItems(\DateTime $periodStart,$subsidiary = null, $location = null, $classification = null)
+	public function findRecentItems(DateTime $periodStart, $subsidiary = null, $location = null, $classification = null)
 		{
 		$filters[] = [
 			'name'     => 'lastmodifieddate',
@@ -249,6 +254,7 @@ class ApiService
 			}
 
 		$results = $this->executeSavedSearchItems($filters);
+
 		return $results->getItems();
 		}
 

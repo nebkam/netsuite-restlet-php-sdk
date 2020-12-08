@@ -5,6 +5,7 @@ use Infostud\NetSuiteSdk\Exception\ApiException;
 use Infostud\NetSuiteSdk\Model\CustomerForm;
 use Infostud\NetSuiteSdk\Model\CustomerFormAddress;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
+use Infostud\NetSuiteSdk\Model\SavedSearch\Item;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Classification;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Department;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Employee;
@@ -92,6 +93,17 @@ class ApiServiceTest extends TestCase
 		$customer = $apiService->findCustomerByRegistryIdentifier('63944017');
 		self::assertInstanceOf(Customer::class, $customer);
 		self::assertEquals('63944017', $customer->getAttributes()->getRegistryIdentifier());
+		}
+
+	/**
+	 * @depends testParseConfig
+	 * @param ApiService $apiService
+	 * @throws ApiException
+	 */
+	public function testFindRecentItems($apiService)
+		{
+		$items = $apiService->findRecentItems(new DateTime('-1 year'));
+		self::assertContainsOnlyInstancesOf(Item::class, $items);
 		}
 
 	/**
