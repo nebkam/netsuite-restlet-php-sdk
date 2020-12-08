@@ -1,18 +1,16 @@
 <?php
 
-namespace Infostud\NetSuiteSdk;
+namespace Infostud\NetSuiteSdk\Serializer;
 
 use DateTimeZone;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Infostud\NetSuiteSdk\Model\CustomerSearchResponse;
-use Infostud\NetSuiteSdk\Model\GetDepartmentsResponse;
+use Doctrine\Common\Annotations\AnnotationRegistry;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -25,15 +23,21 @@ class ApiSerializer
 
 	public function __construct()
 		{
-		$classMetadataFactory       = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-		$objectNormalizer           = new ObjectNormalizer(
+		//Load annotations
+		AnnotationRegistry::registerLoader(
+			'class_exists'
+		);
+
+		$classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+		$groupsNameConverter  = new GroupsNameConverter($classMetadataFactory);
+		$objectNormalizer     = new CustomObjectNormalizer(
 			$classMetadataFactory,
-			null,
+			$groupsNameConverter,
 			null,
 			new PhpDocExtractor()
 		);
-		$dateTimeNormalizer = new DateTimeNormalizer([
-			DateTimeNormalizer::FORMAT_KEY => 'd.m.Y. H:i',
+		$dateTimeNormalizer   = new DateTimeNormalizer([
+			DateTimeNormalizer::FORMAT_KEY   => 'd.m.Y. H:i',
 			DateTimeNormalizer::TIMEZONE_KEY => new DateTimeZone('Europe/Belgrade')
 		]);
 
@@ -49,11 +53,19 @@ class ApiSerializer
 	 *
 	 * @param string $json
 	 * @param string $className
-	 * @return CustomerSearchResponse|GetDepartmentsResponse
+	 * @return array|object
 	 */
 	public function deserialize($json, $className)
 		{
-		/** @noinspection PhpIncompatibleReturnTypeInspection */
 		return $this->serializer->deserialize($json, $className, 'json');
+		}
+
+	/**
+	 * @param $data
+	 * @return array|bool|float|int|mixed|string|null
+	 */
+	public function normalize($data)
+		{
+		return $this->serializer->normalize($data, 'json');
 		}
 	}

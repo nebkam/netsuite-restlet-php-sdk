@@ -1,8 +1,8 @@
 <?php
 
-namespace Infostud\NetSuiteSdk\Model;
+namespace Infostud\NetSuiteSdk\Model\SuiteQL;
 
-class GetDepartmentsResponse
+class GetDepartmentsResponse implements SuiteQLResponse
 	{
 	/**
 	 * @var Department[]
@@ -10,16 +10,6 @@ class GetDepartmentsResponse
 	private $rows;
 
 	/**
-	 * @return Department[]
-	 */
-	public function getDepartments()
-		{
-		return $this->rows;
-		}
-
-	/**
-	 * @deprecated
-	 * @see getDepartments
 	 * @return Department[]
 	 */
 	public function getRows()

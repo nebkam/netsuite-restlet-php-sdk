@@ -1,8 +1,9 @@
 <?php
 
-namespace Infostud\NetSuiteSdk\Model;
+namespace Infostud\NetSuiteSdk\Model\SavedSearch;
 
 use Doctrine\Common\Annotations\Annotation\Enum;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 class ColumnDefinition
 	{
@@ -21,11 +22,10 @@ class ColumnDefinition
 	 */
 	private $type;
 	/**
-	 * TODO Check for other available values
-	 * @Enum({"NONE"})
+	 * @Groups("sortdir")
 	 * @var string
 	 */
-	private $sortdir;
+	private $sortDirection;
 
 	/**
 	 * @return string
@@ -85,31 +85,20 @@ class ColumnDefinition
 		}
 
 	/**
-	 * @deprecated
-	 * @see getSortDirection
-	 * @return string
-	 */
-	public function getSortdir()
-		{
-		return $this->sortdir;
-		}
-
-	/**
-	 * Readable alias
 	 * @return string
 	 */
 	public function getSortDirection()
 		{
-		return $this->sortdir;
+		return $this->sortDirection;
 		}
 
 	/**
-	 * @param string $sortdir
+	 * @param string $sortDirection
 	 * @return self
 	 */
-	public function setSortdir($sortdir)
+	public function setSortDirection($sortDirection)
 		{
-		$this->sortdir = $sortdir;
+		$this->sortDirection = $sortDirection;
 
 		return $this;
 		}

@@ -1,8 +1,10 @@
 <?php
 
-namespace Infostud\NetSuiteSdk\Model;
+namespace Infostud\NetSuiteSdk\Model\SuiteQL;
 
-class Department
+use Symfony\Component\Serializer\Annotation\Groups;
+
+class Location implements SuiteQLItem
 	{
 	/**
 	 * @var int
@@ -13,9 +15,10 @@ class Department
 	 */
 	private $name;
 	/**
+	 * @Groups("parent")
 	 * @var int|null
 	 */
-	private $parent;
+	private $parentId;
 
 	/**
 	 * @return int
@@ -60,26 +63,16 @@ class Department
 	 */
 	public function getParentId()
 		{
-		return $this->parent;
+		return $this->parentId;
 		}
 
 	/**
-	 * @deprecated
-	 * @see getParentId
-	 * @return int|null
-	 */
-	public function getParent()
-		{
-		return $this->parent;
-		}
-
-	/**
-	 * @param int|null $parent
+	 * @param int|null $parentId
 	 * @return self
 	 */
-	public function setParent($parent)
+	public function setParentId($parentId)
 		{
-		$this->parent = $parent;
+		$this->parentId = $parentId;
 
 		return $this;
 		}
