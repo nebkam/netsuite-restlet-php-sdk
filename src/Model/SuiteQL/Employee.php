@@ -11,9 +11,10 @@ class Employee implements SuiteQLItem
 	 */
 	private $id;
 	/**
+	 * @Groups("entityid")
 	 * @var string
 	 */
-	private $entityId;
+	private $name;
 
 	/**
 	 * @return int
@@ -37,18 +38,18 @@ class Employee implements SuiteQLItem
 	/**
 	 * @return string
 	 */
-	public function getEntityId()
+	public function getName()
 		{
-		return $this->entityId;
+		return $this->name;
 		}
 
 	/**
-	 * @param string $entityId
+	 * @param string $name
 	 * @return self
 	 */
-	public function setEntityId($entityId)
+	public function setName($name)
 		{
-		$this->entityId = $entityId;
+		$this->name = $name;
 
 		return $this;
 		}

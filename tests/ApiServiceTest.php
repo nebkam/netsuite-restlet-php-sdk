@@ -1,10 +1,13 @@
 <?php
 
 use Infostud\NetSuiteSdk\ApiService;
+use Infostud\NetSuiteSdk\Exception\ApiException;
 use Infostud\NetSuiteSdk\Model\CustomerForm;
 use Infostud\NetSuiteSdk\Model\CustomerFormAddress;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
+use Infostud\NetSuiteSdk\Model\SuiteQL\Classification;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Department;
+use Infostud\NetSuiteSdk\Model\SuiteQL\Employee;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Location;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Subsidiary;
 use PHPUnit\Framework\TestCase;
@@ -26,6 +29,7 @@ class ApiServiceTest extends TestCase
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
 	 * @return array
+	 * @throws ApiException
 	 */
 	public function testCreateCustomer(ApiService $apiService)
 		{
@@ -56,6 +60,7 @@ class ApiServiceTest extends TestCase
 	/**
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
+	 * @throws ApiException
 	 */
 	public function testSearchByPib($apiService)
 		{
@@ -68,6 +73,7 @@ class ApiServiceTest extends TestCase
 	 * TODO Add real foreign PIB
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
+	 * @throws ApiException
 	 */
 	public function testSearchByPibFragment($apiService)
 		{
@@ -79,6 +85,7 @@ class ApiServiceTest extends TestCase
 	/**
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
+	 * @throws ApiException
 	 */
 	public function testSearchByRegistryIdentifier($apiService)
 		{
@@ -90,6 +97,7 @@ class ApiServiceTest extends TestCase
 	/**
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
+	 * @throws ApiException
 	 */
 	public function testGetSubsidiaries($apiService)
 		{
@@ -106,6 +114,7 @@ class ApiServiceTest extends TestCase
 	/**
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
+	 * @throws ApiException
 	 */
 	public function testGetDepartments($apiService)
 		{
@@ -122,6 +131,7 @@ class ApiServiceTest extends TestCase
 	/**
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
+	 * @throws ApiException
 	 */
 	public function testGetLocations($apiService)
 		{
@@ -136,8 +146,43 @@ class ApiServiceTest extends TestCase
 		}
 
 	/**
+	 * @depends testParseConfig
+	 * @param ApiService $apiService
+	 * @throws ApiException
+	 */
+	public function testGetClassifications($apiService)
+		{
+		$classifications = $apiService->getClassifications();
+		self::assertNotEmpty($classifications);
+		foreach ($classifications as $classification)
+			{
+			self::assertInstanceOf(Classification::class, $classification);
+			self::assertNotEmpty($classification->getId());
+			self::assertNotEmpty($classification->getName());
+			}
+		}
+
+	/**
+	 * @depends testParseConfig
+	 * @param ApiService $apiService
+	 * @throws ApiException
+	 */
+	public function testGetEmployees($apiService)
+		{
+		$employees = $apiService->getEmployees();
+		self::assertNotEmpty($employees);
+		foreach ($employees as $employee)
+			{
+			self::assertInstanceOf(Employee::class, $employee);
+			self::assertNotEmpty($employee->getId());
+			self::assertNotEmpty($employee->getName());
+			}
+		}
+
+	/**
 	 * @depends testCreateCustomer
 	 * @param array $param
+	 * @throws ApiException
 	 */
 	public function testDeleteCustomer(array $param)
 		{

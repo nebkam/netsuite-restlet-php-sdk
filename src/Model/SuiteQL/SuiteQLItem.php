@@ -12,8 +12,4 @@ interface SuiteQLItem
 	 * @return string
 	 */
 	public function getName();
-	/**
-	 * @return int|null
-	 */
-	public function getParentId();
 	}
