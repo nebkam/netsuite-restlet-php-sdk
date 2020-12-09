@@ -1,12 +1,12 @@
 <?php
 
 use Infostud\NetSuiteSdk\Exception\ApiException;
-use Infostud\NetSuiteSdk\Model\CreateCustomerResponse;
-use Infostud\NetSuiteSdk\Model\DeleteCustomerResponse;
+use Infostud\NetSuiteSdk\Model\Customer\CreateCustomerResponse;
+use Infostud\NetSuiteSdk\Model\Customer\DeleteCustomerResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\ColumnDefinition;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
-use Infostud\NetSuiteSdk\Model\CustomerForm;
-use Infostud\NetSuiteSdk\Model\CustomerFormAddress;
+use Infostud\NetSuiteSdk\Model\Customer\CustomerForm;
+use Infostud\NetSuiteSdk\Model\Customer\CustomerFormAddress;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Item;
 use Infostud\NetSuiteSdk\Model\SavedSearch\ItemSearchResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetEmployeesResponse;
@@ -17,13 +17,9 @@ use Infostud\NetSuiteSdk\ApiSerializer;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetDepartmentsResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\SuiteQLResponse;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 class ApiSerializerTest extends TestCase
 	{
-	/**
-	 * @throws ExceptionInterface
-	 */
 	public function testNormalizeCustomerFormRequest(): void
 		{
 		$serializer   = new ApiSerializer();
@@ -58,6 +54,9 @@ class ApiSerializerTest extends TestCase
 		self::assertEquals(CustomerFormAddress::COUNTRY_SERBIA, $address['country']);
 		}
 
+	/**
+	 * @throws ApiException
+	 */
 	public function testCreateCustomerResult(): void
 		{
 		$serializer = new ApiSerializer();
@@ -68,6 +67,9 @@ class ApiSerializerTest extends TestCase
 		self::assertEquals(41690, $response->getCustomerId());
 		}
 
+	/**
+	 * @throws ApiException
+	 */
 	public function testDeleteCustomerResult(): void
 		{
 		$serializer = new ApiSerializer();
@@ -77,6 +79,9 @@ class ApiSerializerTest extends TestCase
 		self::assertTrue($response->isSuccessful());
 		}
 
+	/**
+	 * @throws ApiException
+	 */
 	public function testSingleCustomerSearchResult(): void
 		{
 		$serializer = new ApiSerializer();

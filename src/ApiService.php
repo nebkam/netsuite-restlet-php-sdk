@@ -13,9 +13,9 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
 use Infostud\NetSuiteSdk\Exception\ApiException;
-use Infostud\NetSuiteSdk\Model\CreateCustomerResponse;
-use Infostud\NetSuiteSdk\Model\CustomerForm;
-use Infostud\NetSuiteSdk\Model\DeleteCustomerResponse;
+use Infostud\NetSuiteSdk\Model\Customer\CreateCustomerResponse;
+use Infostud\NetSuiteSdk\Model\Customer\CustomerForm;
+use Infostud\NetSuiteSdk\Model\Customer\DeleteCustomerResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Item;
 use Infostud\NetSuiteSdk\Model\SavedSearch\ItemSearchResponse;
@@ -226,25 +226,25 @@ class ApiService
 		if (!is_null($subsidiary))
 			{
 			$filters[] = [
-				'name' => 'subsidiary',
+				'name'     => 'subsidiary',
 				'operator' => 'is',
-				'values' => [$subsidiary]
+				'values'   => [$subsidiary]
 			];
 			}
 		if (!is_null($location))
 			{
 			$filters[] = [
-				'name' => 'location',
+				'name'     => 'location',
 				'operator' => 'is',
-				'values' => [$location]
+				'values'   => [$location]
 			];
 			}
 		if (!is_null($classification))
 			{
 			$filters[] = [
-				'name' => 'class',
+				'name'     => 'class',
 				'operator' => 'is',
-				'values' => [$classification]
+				'values'   => [$classification]
 			];
 			}
 
@@ -338,11 +338,11 @@ class ApiService
 	 */
 	private function executeSavedSearchItems(array $filters): ItemSearchResponse
 		{
-		$url            = $this->getRestletUrl($this->savedSearchItemId, 1);
-		$requestBody    = [
+		$url         = $this->getRestletUrl($this->savedSearchItemId, 1);
+		$requestBody = [
 			'filters' => $filters
 		];
-		$contents = $this->executePostRequest($url, $requestBody);
+		$contents    = $this->executePostRequest($url, $requestBody);
 		/** @var ItemSearchResponse $response */
 		$response = $this->serializer->deserialize($contents, ItemSearchResponse::class);
 

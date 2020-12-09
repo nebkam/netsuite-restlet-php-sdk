@@ -1,6 +1,6 @@
 <?php
 
-namespace Infostud\NetSuiteSdk\Model;
+namespace Infostud\NetSuiteSdk\Model\Customer;
 
 use Doctrine\Common\Annotations\Annotation\Enum;
 
