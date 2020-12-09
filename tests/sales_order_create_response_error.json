@@ -1,0 +1,30 @@
+{
+  "result": "error",
+  "message": "The field trandate contained more than the maximum number ( 10 ) of characters allowed.",
+  "errorName": "INVALID_FLD_VALUE",
+  "e": {
+    "type": "error.SuiteScriptError",
+    "name": "INVALID_FLD_VALUE",
+    "message": "The field trandate contained more than the maximum number ( 10 ) of characters allowed.",
+    "stack": [
+      "anonymous(N/serverRecordService)",
+      "doPost(/SuiteScripts/INFS/CRM2ERP/rsm_rl_new_salesorder_v1.js:42)",
+      "anonymous(N/serverRecordService)"
+    ],
+    "cause": {
+      "type": "internal error",
+      "code": "INVALID_FLD_VALUE",
+      "details": "The field trandate contained more than the maximum number ( 10 ) of characters allowed.",
+      "userEvent": null,
+      "stackTrace": [
+        "anonymous(N/serverRecordService)",
+        "doPost(/SuiteScripts/INFS/CRM2ERP/rsm_rl_new_salesorder_v1.js:42)",
+        "anonymous(N/serverRecordService)"
+      ],
+      "notifyOff": false
+    },
+    "id": "",
+    "notifyOff": false,
+    "userFacing": false
+  }
+}

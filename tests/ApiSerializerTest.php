@@ -3,6 +3,9 @@
 use Infostud\NetSuiteSdk\Exception\ApiException;
 use Infostud\NetSuiteSdk\Model\Customer\CreateCustomerResponse;
 use Infostud\NetSuiteSdk\Model\Customer\DeleteCustomerResponse;
+use Infostud\NetSuiteSdk\Model\SalesOrder\CreateSalesOrderResponse;
+use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderForm;
+use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderItem;
 use Infostud\NetSuiteSdk\Model\SavedSearch\ColumnDefinition;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerForm;
@@ -20,6 +23,9 @@ use PHPUnit\Framework\TestCase;
 
 class ApiSerializerTest extends TestCase
 	{
+	/**
+	 * @throws ApiException
+	 */
 	public function testNormalizeCustomerFormRequest(): void
 		{
 		$serializer   = new ApiSerializer();
@@ -77,6 +83,63 @@ class ApiSerializerTest extends TestCase
 		$response   = $serializer->deserialize($json, DeleteCustomerResponse::class);
 		self::assertInstanceOf(DeleteCustomerResponse::class, $response);
 		self::assertTrue($response->isSuccessful());
+		}
+
+	/**
+	 * @throws ApiException
+	 */
+	public function testNormalizeSalesOrderFormRequest(): void
+		{
+		$serializer = new ApiSerializer();
+		date_default_timezone_set('Europe/Belgrade');
+		$form       = (new SalesOrderForm())
+			->setSubsidiary(1)
+			->setDepartment(2)
+			->setLocation(3)
+			->setClassification(4)
+			->setCustomer(5)
+			->addItem(
+				(new SalesOrderItem())
+					->setId(8723)
+					->setQuantity(1)
+					->setRate(5000000.00)
+					->setTaxCode(8)
+			)
+			->setTransactionDate(new DateTime('2020-10-05'));
+		$normalized = $serializer->normalize($form);
+		self::assertEquals(1, $normalized['subsidiary']);
+		self::assertEquals(2, $normalized['department']);
+		self::assertEquals(3, $normalized['location']);
+		self::assertEquals(4, $normalized['class']);
+		self::assertEquals(5, $normalized['customer']);
+		self::assertNotEmpty($normalized['itemArray']);
+		$item = $normalized['itemArray'][0];
+		self::assertEquals(8723, $item['item']);
+		self::assertEquals(1, $item['quantity']);
+		self::assertEquals(5000000.00, $item['rate']);
+		self::assertEquals(8, $item['taxcode']);
+		self::assertEquals(
+			'05.10.2020. 00:00', //TODO strip time segment
+			$normalized['trandate']
+		);
+		}
+
+	/**
+	 * @throws ApiException
+	 */
+	public function testCreateSalesOrderError(): void
+		{
+		$serializer = new ApiSerializer();
+		$json       = file_get_contents(__DIR__ . '/sales_order_create_response_error.json');
+		$response   = $serializer->deserialize($json, CreateSalesOrderResponse::class);
+		self::assertInstanceOf(CreateSalesOrderResponse::class, $response);
+		/** @var CreateSalesOrderResponse $response */
+		self::assertFalse($response->isSuccessful());
+		self::assertEquals('INVALID_FLD_VALUE', $response->getErrorName());
+		self::assertEquals(
+			'The field trandate contained more than the maximum number ( 10 ) of characters allowed.',
+			$response->getErrorMessage()
+		);
 		}
 
 	/**

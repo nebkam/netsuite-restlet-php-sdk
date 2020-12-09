@@ -13,9 +13,12 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
 use Infostud\NetSuiteSdk\Exception\ApiException;
+use Infostud\NetSuiteSdk\Exception\NetSuiteException;
 use Infostud\NetSuiteSdk\Model\Customer\CreateCustomerResponse;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerForm;
 use Infostud\NetSuiteSdk\Model\Customer\DeleteCustomerResponse;
+use Infostud\NetSuiteSdk\Model\SalesOrder\CreateSalesOrderResponse;
+use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderForm;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Item;
 use Infostud\NetSuiteSdk\Model\SavedSearch\ItemSearchResponse;
@@ -79,6 +82,10 @@ class ApiService
 	 * @var int
 	 */
 	private $savedSearchItemId;
+	/**
+	 * @var int
+	 */
+	private $salesOrderId;
 
 	/**
 	 * @param string $configPath
@@ -102,17 +109,18 @@ class ApiService
 		$this->suiteQLId              = $config['restletIds']['suiteQL'];
 		$this->createDeleteCustomerId = $config['restletIds']['createDeleteCustomer'];
 		$this->savedSearchItemId      = $config['restletIds']['savedSearchItems'];
+		$this->salesOrderId           = $config['restletIds']['salesOrder'];
 		}
 
 	/**
-	 * @param CustomerForm $customerForm
+	 * @param CustomerForm $form
 	 * @return int|null
 	 * @throws ApiException
 	 */
-	public function createCustomer(CustomerForm $customerForm): ?int
+	public function createCustomer(CustomerForm $form): ?int
 		{
 		$url         = $this->getRestletUrl($this->createDeleteCustomerId, 3);
-		$requestBody = $this->serializer->normalize($customerForm);
+		$requestBody = $this->serializer->normalize($form);
 		$contents    = $this->executePostRequest($url, $requestBody);
 		/** @var CreateCustomerResponse $apiResponse */
 		$apiResponse = $this->serializer->deserialize($contents, CreateCustomerResponse::class);
@@ -140,6 +148,27 @@ class ApiService
 		$response = $this->serializer->deserialize($contents, DeleteCustomerResponse::class);
 
 		return $response->isSuccessful();
+		}
+
+	/**
+	 * @param SalesOrderForm $form
+	 * @return int
+	 * @throws ApiException|NetSuiteException
+	 */
+	public function createSalesOrder(SalesOrderForm $form): int
+		{
+		$url         = $this->getRestletUrl($this->salesOrderId, 1);
+		$requestBody = $this->serializer->normalize($form);
+		$contents    = $this->executePostRequest($url, $requestBody);
+		/** @var CreateSalesOrderResponse $apiResponse */
+		$apiResponse = $this->serializer->deserialize($contents, CreateSalesOrderResponse::class);
+		if ($apiResponse->isSuccessful()
+			&& $apiResponse->getOrderId())
+			{
+			return $apiResponse->getOrderId();
+			}
+
+		throw new NetSuiteException($apiResponse->getErrorName(), $apiResponse->getErrorMessage());
 		}
 
 	/**
