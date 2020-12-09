@@ -2,7 +2,6 @@
 
 namespace Infostud\NetSuiteSdk\Model\SalesOrder;
 
-use DateTime;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 
 class SalesOrderForm
@@ -35,7 +34,7 @@ class SalesOrderForm
 	private $items;
 	/**
 	 * @SerializedName("trandate")
-	 * @var DateTime
+	 * @var string
 	 */
 	private $transactionDate;
 
@@ -180,18 +179,24 @@ class SalesOrderForm
 		}
 
 	/**
-	 * @return DateTime
+	 * @return string
 	 */
-	public function getTransactionDate(): DateTime
+	public function getTransactionDate(): string
 		{
 		return $this->transactionDate;
 		}
 
 	/**
-	 * @param DateTime $transactionDate
+	 * Transaction date in "d.m.Y" format
+	 * @example "02.05.2020"
+	 *
+	 * Unfortunately, PHP doesn't have a native `Date` type
+	 * so we're passing string "as-is" to the API
+	 *
+	 * @param string $transactionDate
 	 * @return self
 	 */
-	public function setTransactionDate(DateTime $transactionDate): self
+	public function setTransactionDate(string $transactionDate): self
 		{
 		$this->transactionDate = $transactionDate;
 

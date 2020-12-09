@@ -91,7 +91,6 @@ class ApiSerializerTest extends TestCase
 	public function testNormalizeSalesOrderFormRequest(): void
 		{
 		$serializer = new ApiSerializer();
-		date_default_timezone_set('Europe/Belgrade');
 		$form       = (new SalesOrderForm())
 			->setSubsidiary(1)
 			->setDepartment(2)
@@ -105,7 +104,7 @@ class ApiSerializerTest extends TestCase
 					->setRate(5000000.00)
 					->setTaxCode(8)
 			)
-			->setTransactionDate(new DateTime('2020-10-05'));
+			->setTransactionDate('02.05.2020');
 		$normalized = $serializer->normalize($form);
 		self::assertEquals(1, $normalized['subsidiary']);
 		self::assertEquals(2, $normalized['department']);
@@ -119,7 +118,7 @@ class ApiSerializerTest extends TestCase
 		self::assertEquals(5000000.00, $item['rate']);
 		self::assertEquals(8, $item['taxcode']);
 		self::assertEquals(
-			'05.10.2020. 00:00', //TODO strip time segment
+			'02.05.2020',
 			$normalized['trandate']
 		);
 		}

@@ -2,8 +2,11 @@
 
 use Infostud\NetSuiteSdk\ApiService;
 use Infostud\NetSuiteSdk\Exception\ApiException;
+use Infostud\NetSuiteSdk\Exception\NetSuiteException;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerForm;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerFormAddress;
+use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderForm;
+use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderItem;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Item;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Classification;
@@ -37,7 +40,7 @@ class ApiServiceTest extends TestCase
 		$customerForm = (new CustomerForm())
 			->setExternalId('PIB-123456')
 			->setCompanyName('Foo test customer')
-			->setSubsidiary(10)
+			->setSubsidiary(getenv('SUBSIDIARY_ID'))
 			->setVatIdentifier('101696893')
 			->setRegistryIdentifier('01234567')
 			->addAddress(
@@ -56,6 +59,39 @@ class ApiServiceTest extends TestCase
 			$apiService,
 			$customerId
 		];
+		}
+
+	/**
+	 * @depends testCreateCustomer
+	 * @param array $params
+	 * @throws ApiException
+	 * @throws NetSuiteException
+	 */
+	public function testCreateSalesOrder(array $params): void
+		{
+		/**
+		 * @var $apiService ApiService
+		 * @var $customerId int
+		 */
+		[$apiService, $customerId] = $params;
+		self::markTestSkipped('Until test assets acquired');
+		$form = (new SalesOrderForm())
+			->setSubsidiary(getenv('SUBSIDIARY_ID'))
+			->setDepartment(getenv('DEPARTMENT_ID'))
+			->setLocation(getenv('LOCATION_ID'))
+			->setClassification(getenv('CLASSIFICATION_ID'))
+			->setCustomer($customerId)
+			->addItem(
+				(new SalesOrderItem())
+					->setId(2108) // TODO item id that's compatible with the subsidiary
+					->setQuantity(1)
+					->setRate(5000000.00)
+					->setTaxCode(8)
+			)
+			->setTransactionDate('02.05.2020');
+		$salesOrderId = $apiService->createSalesOrder($form);
+		self::assertNotEmpty($salesOrderId);
+		// TODO delete test sales order
 		}
 
 	/**

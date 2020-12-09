@@ -8,6 +8,10 @@
     <php>
         <ini name="error_reporting" value="-1"/>
         <env name="CONFIG_PATH" value=""/>
+        <env name="SUBSIDIARY_ID" value=""/>
+        <env name="DEPARTMENT_ID" value=""/>
+        <env name="LOCATION_ID" value=""/>
+        <env name="CLASSIFICATION_ID" value=""/>
     </php>
 
     <testsuites>
