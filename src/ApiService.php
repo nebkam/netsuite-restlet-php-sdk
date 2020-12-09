@@ -2,6 +2,7 @@
 
 namespace Infostud\NetSuiteSdk;
 
+use DateTime;
 use Eher\OAuth\Consumer;
 use Eher\OAuth\HmacSha1;
 use Eher\OAuth\OAuthException;
@@ -16,6 +17,8 @@ use Infostud\NetSuiteSdk\Model\CreateCustomerResponse;
 use Infostud\NetSuiteSdk\Model\CustomerForm;
 use Infostud\NetSuiteSdk\Model\DeleteCustomerResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
+use Infostud\NetSuiteSdk\Model\SavedSearch\Item;
+use Infostud\NetSuiteSdk\Model\SavedSearch\ItemSearchResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Classification;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Employee;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetClassificationsResponse;
@@ -72,6 +75,10 @@ class ApiService
 	 * @var int
 	 */
 	private $createDeleteCustomerId;
+	/**
+	 * @var int
+	 */
+	private $savedSearchItemId;
 
 	/**
 	 * @param string $configPath
@@ -94,6 +101,7 @@ class ApiService
 		$this->savedSearchCustomersId = $config['restletIds']['savedSearchCustomers'];
 		$this->suiteQLId              = $config['restletIds']['suiteQL'];
 		$this->createDeleteCustomerId = $config['restletIds']['createDeleteCustomer'];
+		$this->savedSearchItemId      = $config['restletIds']['savedSearchItems'];
 		}
 
 	/**
@@ -198,6 +206,54 @@ class ApiService
 		}
 
 	/**
+	 * Find recently created items in specific subsidiaries, locations or classes
+	 *
+	 * @param DateTime $periodStart
+	 * @param null $subsidiary
+	 * @param null $location
+	 * @param null $classification
+	 * @return Item[]
+	 * @throws ApiException
+	 */
+	public function findRecentItems(DateTime $periodStart, $subsidiary = null, $location = null, $classification = null): array
+		{
+		$filters[] = [
+			'name'     => 'lastmodifieddate',
+			'operator' => 'notbefore',
+			'values'   => [$periodStart->format('d.m.Y H:i')]
+		];
+
+		if (!is_null($subsidiary))
+			{
+			$filters[] = [
+				'name' => 'subsidiary',
+				'operator' => 'is',
+				'values' => [$subsidiary]
+			];
+			}
+		if (!is_null($location))
+			{
+			$filters[] = [
+				'name' => 'location',
+				'operator' => 'is',
+				'values' => [$location]
+			];
+			}
+		if (!is_null($classification))
+			{
+			$filters[] = [
+				'name' => 'class',
+				'operator' => 'is',
+				'values' => [$classification]
+			];
+			}
+
+		$results = $this->executeSavedSearchItems($filters);
+
+		return $results->getItems();
+		}
+
+	/**
 	 * @return Subsidiary[]
 	 * @throws ApiException
 	 */
@@ -271,6 +327,24 @@ class ApiService
 		$contents    = $this->executePostRequest($url, $requestBody);
 		/** @var SavedSearchCustomersResponse $response */
 		$response = $this->serializer->deserialize($contents, SavedSearchCustomersResponse::class);
+
+		return $response;
+		}
+
+	/**
+	 * @param array $filters
+	 * @return ItemSearchResponse
+	 * @throws ApiException
+	 */
+	private function executeSavedSearchItems(array $filters): ItemSearchResponse
+		{
+		$url            = $this->getRestletUrl($this->savedSearchItemId, 1);
+		$requestBody    = [
+			'filters' => $filters
+		];
+		$contents = $this->executePostRequest($url, $requestBody);
+		/** @var ItemSearchResponse $response */
+		$response = $this->serializer->deserialize($contents, ItemSearchResponse::class);
 
 		return $response;
 		}

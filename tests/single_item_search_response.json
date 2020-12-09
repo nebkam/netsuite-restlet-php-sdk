@@ -1,0 +1,97 @@
+{
+  "myPagedData": {
+    "count": 1,
+    "pageRanges": [
+      {
+        "index": 0,
+        "compoundLabel": "Marjan Special Order Guma"
+      }
+    ],
+    "pageSize": 500,
+    "searchDefinition": {
+      "type": "item",
+      "id": 136,
+      "filters": [
+        {
+          "name": "lastmodifieddate",
+          "operator": "notbefore",
+          "values": [
+            "02.12.2020 10:20"
+          ],
+          "formula": null,
+          "summarytype": null,
+          "isor": false,
+          "isnot": false,
+          "leftparens": 0,
+          "rightparens": 0
+        }
+      ],
+      "columns": [
+        {
+          "name": "itemid",
+          "label": "Name",
+          "type": "text",
+          "sortdir": "ASC"
+        },
+        {
+          "name": "displayname",
+          "label": "Display Name",
+          "type": "text",
+          "sortdir": "NONE"
+        },
+        {
+          "name": "salesdescription",
+          "label": "Description",
+          "type": "text",
+          "sortdir": "NONE"
+        },
+        {
+          "name": "type",
+          "label": "Type",
+          "type": "select",
+          "sortdir": "NONE"
+        },
+        {
+          "name": "baseprice",
+          "label": "Base Price",
+          "type": "currency2",
+          "sortdir": "NONE"
+        },
+        {
+          "name": "taxschedule",
+          "label": "Tax Schedule",
+          "type": "select",
+          "sortdir": "NONE"
+        }
+      ],
+      "settings": [],
+      "title": null,
+      "scriptId": "customsearch_snt_item_crm_export",
+      "isPublic": true
+    }
+  },
+  "items": [
+    {
+      "recordType": "inventoryitem",
+      "id": "9829",
+      "values": {
+        "itemid": "Marjan Special order guma",
+        "displayname": "",
+        "salesdescription": "",
+        "type": [
+          {
+            "value": "InvtPart",
+            "text": "Inventory Item"
+          }
+        ],
+        "baseprice": "",
+        "taxschedule": [
+          {
+            "value": "1",
+            "text": "Opšta stopa - promet dobara i usluga (20%)"
+          }
+        ]
+      }
+    }
+  ]
+}

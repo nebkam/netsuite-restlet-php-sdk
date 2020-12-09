@@ -7,6 +7,8 @@ use Infostud\NetSuiteSdk\Model\SavedSearch\ColumnDefinition;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\CustomerForm;
 use Infostud\NetSuiteSdk\Model\CustomerFormAddress;
+use Infostud\NetSuiteSdk\Model\SavedSearch\Item;
+use Infostud\NetSuiteSdk\Model\SavedSearch\ItemSearchResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetEmployeesResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetLocationsResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetSubsidiariesResponse;
@@ -110,6 +112,39 @@ class ApiSerializerTest extends TestCase
 			'2020-11-20T11:55:00+01:00',
 			$customer->getAttributes()->getLastModifiedAt()->format(DateTimeInterface::ATOM)
 		);
+		}
+
+	/**
+	 * @throws ApiException
+	 */
+	public function testSingleItemSearchResult(): void
+		{
+		$serializer = new ApiSerializer();
+		$json       = file_get_contents(__DIR__ . '/single_item_search_response.json');
+		$response   = $serializer->deserialize($json, ItemSearchResponse::class);
+		self::assertInstanceOf(ItemSearchResponse::class, $response);
+		/** @var ItemSearchResponse $response */
+		$searchMetadata = $response->getSearchMetadata();
+		self::assertEquals(1, $searchMetadata->getCount());
+		$searchDefinition = $searchMetadata->getSearchDefinition();
+		self::assertCount(6, $searchDefinition->getColumns());
+		self::assertContainsOnlyInstancesOf(ColumnDefinition::class, $searchDefinition->getColumns());
+		foreach ($searchDefinition->getColumns() as $columnDefinition)
+			{
+			self::assertNotEmpty($columnDefinition->getName());
+			self::assertNotEmpty($columnDefinition->getLabel());
+			self::assertNotEmpty($columnDefinition->getType());
+			self::assertNotEmpty($columnDefinition->getSortDirection());
+			}
+
+		self::assertCount(1, $response->getItems());
+		$item = $response->getItems()[0];
+		self::assertInstanceOf(Item::class, $item);
+		self::assertEquals('9829', $item->getId());
+		self::assertEquals('Marjan Special order guma', $item->getAttributes()->getName());
+		self::assertEquals('', $item->getAttributes()->getDisplayName());
+		self::assertEquals('', $item->getAttributes()->getDescription());
+		self::assertEquals('', $item->getAttributes()->getPrice());
 		}
 
 	/**
