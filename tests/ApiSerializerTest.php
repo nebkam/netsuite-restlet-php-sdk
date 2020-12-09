@@ -1,11 +1,13 @@
 <?php
 
+use Infostud\NetSuiteSdk\Exception\ApiException;
 use Infostud\NetSuiteSdk\Model\CreateCustomerResponse;
 use Infostud\NetSuiteSdk\Model\DeleteCustomerResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\ColumnDefinition;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\CustomerForm;
 use Infostud\NetSuiteSdk\Model\CustomerFormAddress;
+use Infostud\NetSuiteSdk\Model\SuiteQL\GetEmployeesResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetLocationsResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetSubsidiariesResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\SavedSearchCustomersResponse;
@@ -110,6 +112,9 @@ class ApiSerializerTest extends TestCase
 		);
 		}
 
+	/**
+	 * @throws ApiException
+	 */
 	public function testGetSubsidiariesResult(): void
 		{
 		$serializer = new ApiSerializer();
@@ -119,6 +124,9 @@ class ApiSerializerTest extends TestCase
 		self::assertSuiteQLResponse($response);
 		}
 
+	/**
+	 * @throws ApiException
+	 */
 	public function testGetDepartmentsResult(): void
 		{
 		$serializer = new ApiSerializer();
@@ -128,6 +136,9 @@ class ApiSerializerTest extends TestCase
 		self::assertSuiteQLResponse($response);
 		}
 
+	/**
+	 * @throws ApiException
+	 */
 	public function testGetLocationsResult(): void
 		{
 		$serializer = new ApiSerializer();
@@ -137,23 +148,28 @@ class ApiSerializerTest extends TestCase
 		self::assertSuiteQLResponse($response);
 		}
 
+	/**
+	 * @throws ApiException
+	 */
+	public function testGetEmployeesResult(): void
+		{
+		$serializer = new ApiSerializer();
+		$json       = file_get_contents(__DIR__ . '/employees_suiteql_response.json');
+		$response   = $serializer->deserialize($json, GetEmployeesResponse::class);
+		self::assertInstanceOf(GetEmployeesResponse::class, $response);
+		self::assertSuiteQLResponse($response);
+		}
+
+	/**
+	 * @param SuiteQLResponse|mixed $response
+	 */
 	private static function assertSuiteQLResponse(SuiteQLResponse $response): void
 		{
 		self::assertNotEmpty($response->getRows());
-		$ids = [];
 		foreach ($response->getRows() as $item)
 			{
 			self::assertNotEmpty($item->getId());
 			self::assertNotEmpty($item->getName());
-			$ids[] = $item->getId();
-			}
-		// Parent consistency
-		foreach ($response->getRows() as $item)
-			{
-			if ($item->getParentId())
-				{
-				self::assertContains($item->getParentId(), $ids);
-				}
 			}
 		}
 	}
