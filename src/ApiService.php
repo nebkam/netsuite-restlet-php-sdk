@@ -96,11 +96,11 @@ class ApiService
 	 */
 	private $createDeleteSalesOrderId;
 	/**
-	 * @var mixed
+	 * @var int
 	 */
 	private $savedSearchGenericId;
 	/**
-	 * @var mixed
+	 * @var int
 	 */
 	private $createDeleteContactId;
 
@@ -212,8 +212,8 @@ class ApiService
 
 	/**
 	 * @param ContactForm $contactForm
-	 * @return int|null
-	 * @throws ApiTransferException
+	 * @return int
+	 * @throws ApiTransferException|ApiLogicException
 	 */
 	public function createContact(ContactForm $contactForm)
 		{
@@ -228,7 +228,7 @@ class ApiService
 			return $apiResponse->getContactId();
 			}
 
-		return null;
+		throw new ApiLogicException($apiResponse->getErrorName(), $apiResponse->getErrorMessage());
 		}
 
 	/**

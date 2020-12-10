@@ -17,6 +17,15 @@ class CreateContactResponse
 	 * @var int|null
 	 */
 	private $contactId;
+	/**
+	 * @var string|null
+	 */
+	private $errorName;
+	/**
+	 * @Groups("message")
+	 * @var string|null
+	 */
+	private $errorMessage;
 
 	/**
 	 * @return string
@@ -60,6 +69,44 @@ class CreateContactResponse
 	public function setContactId($contactId)
 		{
 		$this->contactId = $contactId;
+
+		return $this;
+		}
+
+	/**
+	 * @return string|null
+	 */
+	public function getErrorName()
+		{
+		return $this->errorName;
+		}
+
+	/**
+	 * @param string|null $errorName
+	 * @return self
+	 */
+	public function setErrorName($errorName)
+		{
+		$this->errorName = $errorName;
+
+		return $this;
+		}
+
+	/**
+	 * @return string|null
+	 */
+	public function getErrorMessage()
+		{
+		return $this->errorMessage;
+		}
+
+	/**
+	 * @param string|null $errorMessage
+	 * @return self
+	 */
+	public function setErrorMessage($errorMessage)
+		{
+		$this->errorMessage = $errorMessage;
 
 		return $this;
 		}
