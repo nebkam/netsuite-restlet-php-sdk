@@ -25,10 +25,9 @@ class ContactForm
 	 */
 	private $email;
 	/**
-	 * @Groups("company")
 	 * @var int
 	 */
-	private $customerId;
+	private $company;
 	/**
 	 * @var string
 	 */
@@ -118,18 +117,20 @@ class ContactForm
 	/**
 	 * @return int
 	 */
-	public function getCustomerId()
+	public function getCompany()
 		{
-		return $this->customerId;
+		return $this->company;
 		}
 
 	/**
-	 * @param int $customerId
+	 * Set the Company (Customer/Vendor) ID
+	 *
+	 * @param int $company
 	 * @return self
 	 */
-	public function setCustomerId($customerId)
+	public function setCompany($company)
 		{
-		$this->customerId = $customerId;
+		$this->company = $company;
 
 		return $this;
 		}

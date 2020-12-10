@@ -78,7 +78,7 @@ class ApiServiceTest extends TestCase
 		list($apiService, $customerId) = $params;
 		$form = (new ContactForm())
 			->setSubsidiary(getenv('SUBSIDIARY_ID'))
-			->setCustomerId($customerId)
+			->setCompany($customerId)
 			->setFirstName('Little Bobby')
 			->setLastName('Tables')
 			->setEmail('little.bobby@tables.com')

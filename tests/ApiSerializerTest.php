@@ -105,7 +105,7 @@ class ApiSerializerTest extends TestCase
 			->setSubsidiary(getenv('SUBSIDIARY_ID'))
 			->setFirstName('Little Bobby')
 			->setLastName('Tables')
-			->setCustomerId(123)
+			->setCompany(123)
 			->setMobilePhone('065/8717169');
 		$normalized = $serializer->normalize($form);
 		self::assertEquals('Little Bobby', $normalized['firstname']);
