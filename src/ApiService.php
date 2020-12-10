@@ -27,6 +27,7 @@ use Infostud\NetSuiteSdk\Model\SavedSearch\Contact;
 use Infostud\NetSuiteSdk\Model\SavedSearch\ContactSearchResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\SavedSearch\CustomerSearchResponse;
+use Infostud\NetSuiteSdk\Model\SavedSearch\GenericSavedSearchResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Item;
 use Infostud\NetSuiteSdk\Model\SavedSearch\ItemSearchResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\TaxItem;
@@ -43,7 +44,6 @@ use Infostud\NetSuiteSdk\Model\SuiteQL\Classification;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Employee;
 use Infostud\NetSuiteSdk\Model\SuiteQL\SuiteQLResponse;
 use Infostud\NetSuiteSdk\Serializer\ApiSerializer;
-use LogicException;
 use RuntimeException;
 
 class ApiService
@@ -112,24 +112,24 @@ class ApiService
 		{
 		$config = $this->readJsonConfig($configPath);
 
-		$this->account                = $config['account'];
-		$this->restletHost            = $config['account'] . '.restlets.api.netsuite.com';
-		$this->client                 = new Client();
-		$this->consumer               = new Consumer(
+		$this->account                  = $config['account'];
+		$this->restletHost              = $config['account'] . '.restlets.api.netsuite.com';
+		$this->client                   = new Client();
+		$this->consumer                 = new Consumer(
 			$config['consumerKey'], $config['consumerSecret']
 		);
-		$this->accessToken            = new Token(
+		$this->accessToken              = new Token(
 			$config['accessTokenKey'], $config['accessTokenSecret']
 		);
-		$this->signatureMethod        = new HmacSha1();
-		$this->serializer             = new ApiSerializer();
-		$this->savedSearchCustomersId = $config['restletIds']['savedSearchCustomers'];
-		$this->suiteQLId              = $config['restletIds']['suiteQL'];
-		$this->createDeleteCustomerId = $config['restletIds']['createDeleteCustomer'];
-		$this->savedSearchItemId      = $config['restletIds']['savedSearchItems'];
+		$this->signatureMethod          = new HmacSha1();
+		$this->serializer               = new ApiSerializer();
+		$this->savedSearchCustomersId   = $config['restletIds']['savedSearchCustomers'];
+		$this->suiteQLId                = $config['restletIds']['suiteQL'];
+		$this->createDeleteCustomerId   = $config['restletIds']['createDeleteCustomer'];
+		$this->savedSearchItemId        = $config['restletIds']['savedSearchItems'];
 		$this->createDeleteSalesOrderId = $config['restletIds']['createDeleteSalesOrder'];
-		$this->savedSearchGenericId   = $config['restletIds']['savedSearchGeneric'];
-		$this->createDeleteContactId  = $config['restletIds']['createDeleteContact'];
+		$this->savedSearchGenericId     = $config['restletIds']['savedSearchGeneric'];
+		$this->createDeleteContactId    = $config['restletIds']['createDeleteContact'];
 		}
 
 	/**
@@ -141,7 +141,7 @@ class ApiService
 		{
 		$url         = $this->getRestletUrl($this->createDeleteCustomerId, 3);
 		$requestBody = $this->serializer->normalize($customerForm);
-		$contents = $this->executePostRequest($url, $requestBody);
+		$contents    = $this->executePostRequest($url, $requestBody);
 		/** @var CreateCustomerResponse $apiResponse */
 		$apiResponse = $this->serializer->deserialize($contents, CreateCustomerResponse::class);
 		if ($apiResponse->isSuccessful()
@@ -160,7 +160,7 @@ class ApiService
 	 */
 	public function deleteCustomer($id)
 		{
-		$url = $this->getRestletUrl($this->createDeleteCustomerId, 3, [
+		$url      = $this->getRestletUrl($this->createDeleteCustomerId, 3, [
 			'customerid' => $id
 		]);
 		$contents = $this->executeDeleteRequest($url);
@@ -220,7 +220,7 @@ class ApiService
 		{
 		$url         = $this->getRestletUrl($this->createDeleteContactId, 1);
 		$requestBody = $this->serializer->normalize($contactForm);
-		$contents = $this->executePostRequest($url, $requestBody);
+		$contents    = $this->executePostRequest($url, $requestBody);
 		/** @var CreateContactResponse $response */
 		$response = $this->serializer->deserialize($contents, CreateContactResponse::class);
 		if ($response->isSuccessful()
@@ -242,7 +242,7 @@ class ApiService
 	 */
 	public function deleteContact($id)
 		{
-		$url = $this->getRestletUrl($this->createDeleteContactId, 1, [
+		$url      = $this->getRestletUrl($this->createDeleteContactId, 1, [
 			'contactid' => $id
 		]);
 		$contents = $this->executeDeleteRequest($url);
@@ -260,10 +260,10 @@ class ApiService
 	public function findCustomerByPib($pib)
 		{
 		$filters = [[
-			            'name'     => 'custentity_pib',
-			            'operator' => 'is',
-			            'values'   => [$pib]
-		            ]];
+			'name'     => 'custentity_pib',
+			'operator' => 'is',
+			'values'   => [$pib]
+		]];
 		$results = $this->executeSavedSearchCustomers($filters);
 		if (!empty($results->getCustomers()))
 			{
@@ -281,10 +281,10 @@ class ApiService
 	public function findCustomerByPibFragment($pib)
 		{
 		$filters = [[
-			            'name'     => 'custentity_pib',
-			            'operator' => 'contains',
-			            'values'   => [$pib]
-		            ]];
+			'name'     => 'custentity_pib',
+			'operator' => 'contains',
+			'values'   => [$pib]
+		]];
 		$results = $this->executeSavedSearchCustomers($filters);
 		if (!empty($results->getCustomers()))
 			{
@@ -304,10 +304,10 @@ class ApiService
 	public function findCustomerByRegistryIdentifier($registryIdentifier)
 		{
 		$filters = [[
-			            'name'     => 'custentity_matbrpred',
-			            'operator' => 'is',
-			            'values'   => [$registryIdentifier]
-		            ]];
+			'name'     => 'custentity_matbrpred',
+			'operator' => 'is',
+			'values'   => [$registryIdentifier]
+		]];
 		$results = $this->executeSavedSearchCustomers($filters);
 		if (!empty($results->getCustomers()))
 			{
@@ -338,49 +338,61 @@ class ApiService
 		if (!is_null($subsidiary))
 			{
 			$filters[] = [
-				'name' => 'subsidiary',
+				'name'     => 'subsidiary',
 				'operator' => 'is',
-				'values' => [$subsidiary]
+				'values'   => [$subsidiary]
 			];
 			}
 		if (!is_null($location))
 			{
 			$filters[] = [
-				'name' => 'location',
+				'name'     => 'location',
 				'operator' => 'is',
-				'values' => [$location]
+				'values'   => [$location]
 			];
 			}
 		if (!is_null($classification))
 			{
 			$filters[] = [
-				'name' => 'class',
+				'name'     => 'class',
 				'operator' => 'is',
-				'values' => [$classification]
+				'values'   => [$classification]
 			];
 			}
 
 		$results = $this->executeSavedSearchItems($filters);
+
 		return $results->getItems();
 		}
 
 	/**
 	 * Get all contacts for a selected company
 	 *
-	 * @param string $companyId
+	 * @param int $companyId
 	 * @return Contact[]
 	 * @throws ApiTransferException
 	 */
 	public function findContactsByCompany($companyId)
 		{
-		$filters = [[
-			            'name'     => 'company',
-			            'operator' => 'is',
-			            'values'   => [$companyId]
-		            ]];
-		$columns = ['entityid', 'email', 'mobilephone', 'company','custentity_contact_location'];
-		$results = $this->executeSavedSearchContacts($columns,$filters);
-		return $results->getRows();
+		$filters     = [[
+			'name'     => 'company',
+			'operator' => 'is',
+			'values'   => [$companyId]
+		]];
+		$columnNames = [
+			'entityid',
+			'email',
+			'mobilephone',
+			'company',
+			'custentity_contact_location'
+		];
+
+		return $this->executeGenericSavedSearch(
+			'contact',
+			$columnNames,
+			$filters,
+			ContactSearchResponse::class
+		);
 		}
 
 	/**
@@ -396,13 +408,14 @@ class ApiService
 		if (!is_null($name))
 			{
 			$filters = [[
-				            'name'     => 'name',
-				            'operator' => 'is',
-				            'values'   => [$name]
-			            ]];
+				'name'     => 'name',
+				'operator' => 'is',
+				'values'   => [$name]
+			]];
 			}
 		$columns = ['name', 'rate', 'country'];
-		$results = $this->executeSavedSearchTaxItems($columns,$filters);
+		$results = $this->executeSavedSearchTaxItems($columns, $filters);
+
 		return $results->getRows();
 		}
 
@@ -473,11 +486,11 @@ class ApiService
 	 */
 	private function executeSavedSearchCustomers($filters)
 		{
-		$url            = $this->getRestletUrl($this->savedSearchCustomersId, 1);
-		$requestBody    = [
+		$url         = $this->getRestletUrl($this->savedSearchCustomersId, 1);
+		$requestBody = [
 			'filters' => $filters
 		];
-		$contents = $this->executePostRequest($url, $requestBody);
+		$contents    = $this->executePostRequest($url, $requestBody);
 		/** @var CustomerSearchResponse $response */
 		$response = $this->serializer->deserialize($contents, CustomerSearchResponse::class);
 
@@ -491,40 +504,14 @@ class ApiService
 	 */
 	private function executeSavedSearchItems($filters)
 		{
-		$url            = $this->getRestletUrl($this->savedSearchItemId, 1);
-		$requestBody    = [
+		$url         = $this->getRestletUrl($this->savedSearchItemId, 1);
+		$requestBody = [
 			'filters' => $filters
 		];
-		$contents = $this->executePostRequest($url, $requestBody);
+		$contents    = $this->executePostRequest($url, $requestBody);
 		/** @var ItemSearchResponse $response */
 		$response = $this->serializer->deserialize($contents, ItemSearchResponse::class);
 
-		return $response;
-		}
-
-	/**
-	 * @param array $filters
-	 * @return ContactSearchResponse
-	 * @throws ApiTransferException
-	 */
-	private function executeSavedSearchContacts($columns, $filters)
-		{
-		$url = $this->getRestletUrl($this->savedSearchGenericId, 1);
-
-		$columnArray = [];
-		foreach($columns as $columnName)
-			{
-			$columnArray[] = ['name' => $columnName];
-			}
-
-		$requestBody    = [
-			'type' => 'contact',
-			'columns' => $columnArray,
-			'filters' => $filters,
-		];
-		$contents = $this->executePostRequest($url, $requestBody);
-		/** @var ContactSearchResponse $response */
-		$response = $this->serializer->deserialize($contents, ContactSearchResponse::class);
 		return $response;
 		}
 
@@ -538,20 +525,51 @@ class ApiService
 		$url = $this->getRestletUrl($this->savedSearchGenericId, 1);
 
 		$columnArray = [];
-		foreach($columns as $columnName)
+		foreach ($columns as $columnName)
 			{
 			$columnArray[] = ['name' => $columnName];
 			}
 
-		$requestBody    = [
-			'type' => 'salestaxitem',
+		$requestBody = [
+			'type'    => 'salestaxitem',
 			'columns' => $columnArray,
 			'filters' => $filters,
 		];
-		$contents = $this->executePostRequest($url, $requestBody);
+		$contents    = $this->executePostRequest($url, $requestBody);
 		/** @var TaxItemSearchResponse $response */
 		$response = $this->serializer->deserialize($contents, TaxItemSearchResponse::class);
+
 		return $response;
+		}
+
+	/**
+	 * @param string $type
+	 * @param string[] $columnNames
+	 * @param array $filters
+	 * @param string $responseClass
+	 * @return array
+	 * @throws ApiTransferException
+	 */
+	private function executeGenericSavedSearch($type, $columnNames, $filters, $responseClass)
+		{
+		$url = $this->getRestletUrl($this->savedSearchGenericId, 1);
+
+		$columns = [];
+		foreach ($columnNames as $columnName)
+			{
+			$columns[] = ['name' => $columnName];
+			}
+
+		$requestBody = [
+			'type'    => $type,
+			'columns' => $columns,
+			'filters' => $filters,
+		];
+		$contents    = $this->executePostRequest($url, $requestBody);
+		/** @var GenericSavedSearchResponse $response */
+		$response = $this->serializer->deserialize($contents, $responseClass);
+
+		return !empty($response->getRows()) ? $response->getRows() : [];
 		}
 
 	/**

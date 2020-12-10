@@ -2,7 +2,7 @@
 
 namespace Infostud\NetSuiteSdk\Model\SavedSearch;
 
-class ContactSearchResponse
+class ContactSearchResponse implements GenericSavedSearchResponse
 	{
 	/**
 	 * @var Contact[]
