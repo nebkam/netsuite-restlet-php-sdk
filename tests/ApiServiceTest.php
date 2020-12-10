@@ -64,17 +64,17 @@ class ApiServiceTest extends TestCase
 	/**
 	 * @depends testCreateCustomer
 	 * @param array $params
+	 * @return array
 	 * @throws ApiException
 	 * @throws NetSuiteException
 	 */
-	public function testCreateSalesOrder(array $params): void
+	public function testCreateSalesOrder(array $params): array
 		{
 		/**
 		 * @var $apiService ApiService
 		 * @var $customerId int
 		 */
 		[$apiService, $customerId] = $params;
-		self::markTestSkipped('Until test assets acquired');
 		$form = (new SalesOrderForm())
 			->setSubsidiary(getenv('SUBSIDIARY_ID'))
 			->setDepartment(getenv('DEPARTMENT_ID'))
@@ -83,7 +83,7 @@ class ApiServiceTest extends TestCase
 			->setCustomer($customerId)
 			->addItem(
 				(new SalesOrderItem())
-					->setId(2108) // TODO item id that's compatible with the subsidiary
+					->setId(getenv('ITEM_ID'))
 					->setQuantity(1)
 					->setRate(5000000.00)
 					->setTaxCode(8)
@@ -92,6 +92,25 @@ class ApiServiceTest extends TestCase
 		$salesOrderId = $apiService->createSalesOrder($form);
 		self::assertNotEmpty($salesOrderId);
 		// TODO delete test sales order
+		return [
+			$apiService,
+			$salesOrderId
+		];
+		}
+
+	/**
+	 * @depends testCreateSalesOrder
+	 * @param array $param
+	 * @throws ApiException
+	 */
+	public function testDeleteSalesOrder(array $param): void
+		{
+		/**
+		 * @var ApiService $apiService
+		 * @var int $salesOrderId
+		 */
+		[$apiService, $salesOrderId] = $param;
+		$apiService->deleteSalesOrder($salesOrderId);
 		}
 
 	/**

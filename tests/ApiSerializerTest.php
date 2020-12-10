@@ -6,6 +6,7 @@ use Infostud\NetSuiteSdk\Model\Customer\DeleteCustomerResponse;
 use Infostud\NetSuiteSdk\Model\SalesOrder\CreateSalesOrderResponse;
 use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderForm;
 use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderItem;
+use Infostud\NetSuiteSdk\Model\SalesOrder\DeleteSalesOrderResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\ColumnDefinition;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerForm;
@@ -82,6 +83,18 @@ class ApiSerializerTest extends TestCase
 		$json       = file_get_contents(__DIR__ . '/delete_customer_response_success.json');
 		$response   = $serializer->deserialize($json, DeleteCustomerResponse::class);
 		self::assertInstanceOf(DeleteCustomerResponse::class, $response);
+		self::assertTrue($response->isSuccessful());
+		}
+
+	/**
+	 * @throws ApiException
+	 */
+	public function testDeleteSalesOrderResult(): void
+		{
+		$serializer = new ApiSerializer();
+		$json       = file_get_contents(__DIR__ . '/delete_sales_order_response_success.json');
+		$response   = $serializer->deserialize($json, DeleteSalesOrderResponse::class);
+		self::assertInstanceOf(DeleteSalesOrderResponse::class, $response);
 		self::assertTrue($response->isSuccessful());
 		}
 

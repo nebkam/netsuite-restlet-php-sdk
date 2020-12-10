@@ -19,6 +19,7 @@ use Infostud\NetSuiteSdk\Model\Customer\CustomerForm;
 use Infostud\NetSuiteSdk\Model\Customer\DeleteCustomerResponse;
 use Infostud\NetSuiteSdk\Model\SalesOrder\CreateSalesOrderResponse;
 use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderForm;
+use Infostud\NetSuiteSdk\Model\SalesOrder\DeleteSalesOrderResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Item;
 use Infostud\NetSuiteSdk\Model\SavedSearch\ItemSearchResponse;
@@ -85,7 +86,7 @@ class ApiService
 	/**
 	 * @var int
 	 */
-	private $salesOrderId;
+	private $createDeleteSalesOrderId;
 
 	/**
 	 * @param string $configPath
@@ -94,22 +95,22 @@ class ApiService
 		{
 		$config = $this->readJsonConfig($configPath);
 
-		$this->account                = $config['account'];
-		$this->restletHost            = $config['account'] . '.restlets.api.netsuite.com';
-		$this->client                 = new Client();
-		$this->consumer               = new Consumer(
+		$this->account                  = $config['account'];
+		$this->restletHost              = $config['account'] . '.restlets.api.netsuite.com';
+		$this->client                   = new Client();
+		$this->consumer                 = new Consumer(
 			$config['consumerKey'], $config['consumerSecret']
 		);
-		$this->accessToken            = new Token(
+		$this->accessToken              = new Token(
 			$config['accessTokenKey'], $config['accessTokenSecret']
 		);
-		$this->signatureMethod        = new HmacSha1();
-		$this->serializer             = new ApiSerializer();
-		$this->savedSearchCustomersId = $config['restletIds']['savedSearchCustomers'];
-		$this->suiteQLId              = $config['restletIds']['suiteQL'];
-		$this->createDeleteCustomerId = $config['restletIds']['createDeleteCustomer'];
-		$this->savedSearchItemId      = $config['restletIds']['savedSearchItems'];
-		$this->salesOrderId           = $config['restletIds']['salesOrder'];
+		$this->signatureMethod          = new HmacSha1();
+		$this->serializer               = new ApiSerializer();
+		$this->savedSearchCustomersId   = $config['restletIds']['savedSearchCustomers'];
+		$this->suiteQLId                = $config['restletIds']['suiteQL'];
+		$this->createDeleteCustomerId   = $config['restletIds']['createDeleteCustomer'];
+		$this->savedSearchItemId        = $config['restletIds']['savedSearchItems'];
+		$this->createDeleteSalesOrderId = $config['restletIds']['createDeleteSalesOrder'];
 		}
 
 	/**
@@ -134,9 +135,15 @@ class ApiService
 		}
 
 	/**
+	 * Since deleting a Customer can have unpredictable side-effects
+	 * if the Customer entity has relations to SalesOrders or other entities
+	 * this method should only be used in tests.
+	 * In production, setting the Customer to inactive is the recommended alternative.
+	 *
 	 * @param int $id
 	 * @return bool
 	 * @throws ApiException
+	 * @internal
 	 */
 	public function deleteCustomer(int $id): bool
 		{
@@ -157,7 +164,7 @@ class ApiService
 	 */
 	public function createSalesOrder(SalesOrderForm $form): int
 		{
-		$url         = $this->getRestletUrl($this->salesOrderId, 1);
+		$url         = $this->getRestletUrl($this->createDeleteSalesOrderId, 1);
 		$requestBody = $this->serializer->normalize($form);
 		$contents    = $this->executePostRequest($url, $requestBody);
 		/** @var CreateSalesOrderResponse $apiResponse */
@@ -169,6 +176,23 @@ class ApiService
 			}
 
 		throw new NetSuiteException($apiResponse->getErrorName(), $apiResponse->getErrorMessage());
+		}
+
+	/**
+	 * @param int $id
+	 * @return bool
+	 * @throws ApiException
+	 */
+	public function deleteSalesOrder(int $id): bool
+		{
+		$url      = $this->getRestletUrl($this->createDeleteSalesOrderId, 1, [
+			'orderid' => $id
+		]);
+		$contents = $this->executeDeleteRequest($url);
+		/** @var DeleteSalesOrderResponse $response */
+		$response = $this->serializer->deserialize($contents, DeleteSalesOrderResponse::class);
+
+		return $response->isSuccessful();
 		}
 
 	/**
