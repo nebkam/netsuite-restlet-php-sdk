@@ -179,9 +179,12 @@ class ApiService
 		}
 
 	/**
+	 * Used by tests only. Production usage not explicitly confirmed yet
+	 *
 	 * @param int $id
 	 * @return bool
 	 * @throws ApiException
+	 * @internal
 	 */
 	public function deleteSalesOrder(int $id): bool
 		{

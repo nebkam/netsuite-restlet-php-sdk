@@ -25,11 +25,22 @@ use PHPUnit\Framework\TestCase;
 class ApiSerializerTest extends TestCase
 	{
 	/**
+	 * Make sure no exceptions are thrown
+	 *
+	 * @return ApiSerializer
+	 */
+	public function testInitialize(): ApiSerializer
+		{
+		return new ApiSerializer();
+		}
+
+	/**
+	 * @depends testInitialize
+	 * @param ApiSerializer $serializer
 	 * @throws ApiException
 	 */
-	public function testNormalizeCustomerFormRequest(): void
+	public function testNormalizeCustomerFormRequest(ApiSerializer $serializer): void
 		{
-		$serializer   = new ApiSerializer();
 		$customerForm = (new CustomerForm())
 			->setExternalId('PIB-123456')
 			->setCompanyName('Test item')
@@ -62,11 +73,12 @@ class ApiSerializerTest extends TestCase
 		}
 
 	/**
+	 * @depends testInitialize
+	 * @param ApiSerializer $serializer
 	 * @throws ApiException
 	 */
-	public function testCreateCustomerResult(): void
+	public function testCreateCustomerResult(ApiSerializer $serializer): void
 		{
-		$serializer = new ApiSerializer();
 		$json       = file_get_contents(__DIR__ . '/customer_create_response_success.json');
 		$response   = $serializer->deserialize($json, CreateCustomerResponse::class);
 		self::assertInstanceOf(CreateCustomerResponse::class, $response);
@@ -75,11 +87,12 @@ class ApiSerializerTest extends TestCase
 		}
 
 	/**
+	 * @depends testInitialize
+	 * @param ApiSerializer $serializer
 	 * @throws ApiException
 	 */
-	public function testDeleteCustomerResult(): void
+	public function testDeleteCustomerResult(ApiSerializer $serializer): void
 		{
-		$serializer = new ApiSerializer();
 		$json       = file_get_contents(__DIR__ . '/delete_customer_response_success.json');
 		$response   = $serializer->deserialize($json, DeleteCustomerResponse::class);
 		self::assertInstanceOf(DeleteCustomerResponse::class, $response);
@@ -87,11 +100,12 @@ class ApiSerializerTest extends TestCase
 		}
 
 	/**
+	 * @depends testInitialize
+	 * @param ApiSerializer $serializer
 	 * @throws ApiException
 	 */
-	public function testDeleteSalesOrderResult(): void
+	public function testDeleteSalesOrderResult(ApiSerializer $serializer): void
 		{
-		$serializer = new ApiSerializer();
 		$json       = file_get_contents(__DIR__ . '/delete_sales_order_response_success.json');
 		$response   = $serializer->deserialize($json, DeleteSalesOrderResponse::class);
 		self::assertInstanceOf(DeleteSalesOrderResponse::class, $response);
@@ -99,11 +113,12 @@ class ApiSerializerTest extends TestCase
 		}
 
 	/**
+	 * @depends testInitialize
+	 * @param ApiSerializer $serializer
 	 * @throws ApiException
 	 */
-	public function testNormalizeSalesOrderFormRequest(): void
+	public function testNormalizeSalesOrderFormRequest(ApiSerializer $serializer): void
 		{
-		$serializer = new ApiSerializer();
 		$form       = (new SalesOrderForm())
 			->setSubsidiary(1)
 			->setDepartment(2)
@@ -137,11 +152,12 @@ class ApiSerializerTest extends TestCase
 		}
 
 	/**
+	 * @depends testInitialize
+	 * @param ApiSerializer $serializer
 	 * @throws ApiException
 	 */
-	public function testCreateSalesOrderError(): void
+	public function testCreateSalesOrderError(ApiSerializer $serializer): void
 		{
-		$serializer = new ApiSerializer();
 		$json       = file_get_contents(__DIR__ . '/sales_order_create_response_error.json');
 		$response   = $serializer->deserialize($json, CreateSalesOrderResponse::class);
 		self::assertInstanceOf(CreateSalesOrderResponse::class, $response);
@@ -155,11 +171,12 @@ class ApiSerializerTest extends TestCase
 		}
 
 	/**
+	 * @depends testInitialize
+	 * @param ApiSerializer $serializer
 	 * @throws ApiException
 	 */
-	public function testSingleCustomerSearchResult(): void
+	public function testSingleCustomerSearchResult(ApiSerializer $serializer): void
 		{
-		$serializer = new ApiSerializer();
 		$json       = file_get_contents(__DIR__ . '/single_customer_search_response.json');
 		$response   = $serializer->deserialize($json, SavedSearchCustomersResponse::class);
 		self::assertInstanceOf(SavedSearchCustomersResponse::class, $response);
@@ -195,11 +212,12 @@ class ApiSerializerTest extends TestCase
 		}
 
 	/**
+	 * @depends testInitialize
+	 * @param ApiSerializer $serializer
 	 * @throws ApiException
 	 */
-	public function testSingleItemSearchResult(): void
+	public function testSingleItemSearchResult(ApiSerializer $serializer): void
 		{
-		$serializer = new ApiSerializer();
 		$json       = file_get_contents(__DIR__ . '/single_item_search_response.json');
 		$response   = $serializer->deserialize($json, ItemSearchResponse::class);
 		self::assertInstanceOf(ItemSearchResponse::class, $response);
@@ -228,11 +246,12 @@ class ApiSerializerTest extends TestCase
 		}
 
 	/**
+	 * @depends testInitialize
+	 * @param ApiSerializer $serializer
 	 * @throws ApiException
 	 */
-	public function testGetSubsidiariesResult(): void
+	public function testGetSubsidiariesResult(ApiSerializer $serializer): void
 		{
-		$serializer = new ApiSerializer();
 		$json       = file_get_contents(__DIR__ . '/subsidiaries_suiteql_response.json');
 		$response   = $serializer->deserialize($json, GetSubsidiariesResponse::class);
 		self::assertInstanceOf(GetSubsidiariesResponse::class, $response);
@@ -240,11 +259,12 @@ class ApiSerializerTest extends TestCase
 		}
 
 	/**
+	 * @depends testInitialize
+	 * @param ApiSerializer $serializer
 	 * @throws ApiException
 	 */
-	public function testGetDepartmentsResult(): void
+	public function testGetDepartmentsResult(ApiSerializer $serializer): void
 		{
-		$serializer = new ApiSerializer();
 		$json       = file_get_contents(__DIR__ . '/departments_suiteql_response.json');
 		$response   = $serializer->deserialize($json, GetDepartmentsResponse::class);
 		self::assertInstanceOf(GetDepartmentsResponse::class, $response);
@@ -252,11 +272,12 @@ class ApiSerializerTest extends TestCase
 		}
 
 	/**
+	 * @depends testInitialize
+	 * @param ApiSerializer $serializer
 	 * @throws ApiException
 	 */
-	public function testGetLocationsResult(): void
+	public function testGetLocationsResult(ApiSerializer $serializer): void
 		{
-		$serializer = new ApiSerializer();
 		$json       = file_get_contents(__DIR__ . '/locations_suiteql_response.json');
 		$response   = $serializer->deserialize($json, GetLocationsResponse::class);
 		self::assertInstanceOf(GetLocationsResponse::class, $response);
@@ -264,11 +285,12 @@ class ApiSerializerTest extends TestCase
 		}
 
 	/**
+	 * @depends testInitialize
+	 * @param ApiSerializer $serializer
 	 * @throws ApiException
 	 */
-	public function testGetEmployeesResult(): void
+	public function testGetEmployeesResult(ApiSerializer $serializer): void
 		{
-		$serializer = new ApiSerializer();
 		$json       = file_get_contents(__DIR__ . '/employees_suiteql_response.json');
 		$response   = $serializer->deserialize($json, GetEmployeesResponse::class);
 		self::assertInstanceOf(GetEmployeesResponse::class, $response);
