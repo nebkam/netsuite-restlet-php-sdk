@@ -3,6 +3,7 @@
 use Infostud\NetSuiteSdk\ApiService;
 use Infostud\NetSuiteSdk\Exception\ApiLogicException;
 use Infostud\NetSuiteSdk\Exception\ApiTransferException;
+use Infostud\NetSuiteSdk\Model\Contact\ContactForm;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerForm;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerFormAddress;
 use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderForm;
@@ -59,6 +60,49 @@ class ApiServiceTest extends TestCase
 			$apiService,
 			$customerId
 		];
+		}
+
+	/**
+	 * @depends testCreateCustomer
+	 * @param $params array
+	 * @return array
+	 * @throws ApiLogicException
+	 * @throws ApiTransferException
+	 */
+	public function testCreateContact($params)
+		{
+		/**
+		 * @var $apiService ApiService
+		 * @var $customerId int
+		 */
+		list($apiService, $customerId) = $params;
+		$form = (new ContactForm())
+			->setSubsidiary(getenv('SUBSIDIARY_ID'))
+			->setFirstName('Little Bobby')
+			->setLastName('Tables')
+			->setCustomerId($customerId);
+		$contactId = $apiService->createContact($form);
+		self::assertNotNull($contactId);
+
+		return [
+			$apiService,
+			$contactId
+			];
+		}
+
+	/**
+	 * @depends testCreateContact
+	 * @param array $params
+	 * @throws ApiTransferException
+	 */
+	public function testDeleteContact($params)
+		{
+		/**
+		 * @var $apiService ApiService
+		 * @var $contactId int
+		 */
+		list($apiService, $contactId) = $params;
+		self::assertTrue($apiService->deleteContact($contactId));
 		}
 
 	/**

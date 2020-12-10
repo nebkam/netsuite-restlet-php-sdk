@@ -14,6 +14,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
 use Infostud\NetSuiteSdk\Exception\ApiLogicException;
 use Infostud\NetSuiteSdk\Exception\ApiTransferException;
+use Infostud\NetSuiteSdk\Model\Contact\DeleteContactResponse;
 use Infostud\NetSuiteSdk\Model\Customer\CreateCustomerResponse;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerForm;
 use Infostud\NetSuiteSdk\Model\Customer\DeleteCustomerResponse;
@@ -229,6 +230,26 @@ class ApiService
 			}
 
 		throw new ApiLogicException($apiResponse->getErrorName(), $apiResponse->getErrorMessage());
+		}
+
+	/**
+	 * Used by tests only. Production usage not explicitly confirmed yet
+	 *
+	 * @param int $id
+	 * @return bool
+	 * @throws ApiTransferException
+	 * @internal
+	 */
+	public function deleteContact($id)
+		{
+		$url = $this->getRestletUrl($this->createDeleteContactId, 1, [
+			'contactid' => $id
+		]);
+		$contents = $this->executeDeleteRequest($url);
+		/** @var DeleteContactResponse $apiResponse */
+		$apiResponse = $this->serializer->deserialize($contents, DeleteContactResponse::class);
+
+		return $apiResponse->isSuccessful();
 		}
 
 	/**
