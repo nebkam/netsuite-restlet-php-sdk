@@ -17,6 +17,9 @@ use Infostud\NetSuiteSdk\Exception\ApiTransferException;
 use Infostud\NetSuiteSdk\Model\Customer\CreateCustomerResponse;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerForm;
 use Infostud\NetSuiteSdk\Model\Customer\DeleteCustomerResponse;
+use Infostud\NetSuiteSdk\Model\SalesOrder\CreateSalesOrderResponse;
+use Infostud\NetSuiteSdk\Model\SalesOrder\DeleteSalesOrderResponse;
+use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderForm;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\SavedSearch\CustomerSearchResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Item;
@@ -148,6 +151,47 @@ class ApiService
 		$apiResponse = $this->serializer->deserialize($contents, DeleteCustomerResponse::class);
 
 		return $apiResponse->isSuccessful();
+		}
+
+	/**
+	 * @param SalesOrderForm $form
+	 * @return int
+	 * @throws ApiTransferException|ApiLogicException
+	 */
+	public function createSalesOrder(SalesOrderForm $form)
+		{
+		$url         = $this->getRestletUrl($this->createDeleteSalesOrderId, 1);
+		$requestBody = $this->serializer->normalize($form);
+		$contents    = $this->executePostRequest($url, $requestBody);
+		/** @var CreateSalesOrderResponse $apiResponse */
+		$apiResponse = $this->serializer->deserialize($contents, CreateSalesOrderResponse::class);
+		if ($apiResponse->isSuccessful()
+			&& $apiResponse->getOrderId())
+			{
+			return $apiResponse->getOrderId();
+			}
+
+		throw new ApiLogicException($apiResponse->getErrorName(), $apiResponse->getErrorMessage());
+		}
+
+	/**
+	 * Used by tests only. Production usage not explicitly confirmed yet
+	 *
+	 * @param int $id
+	 * @return bool
+	 * @throws ApiTransferException
+	 * @internal
+	 */
+	public function deleteSalesOrder($id)
+		{
+		$url      = $this->getRestletUrl($this->createDeleteSalesOrderId, 1, [
+			'orderid' => $id
+		]);
+		$contents = $this->executeDeleteRequest($url);
+		/** @var DeleteSalesOrderResponse $response */
+		$response = $this->serializer->deserialize($contents, DeleteSalesOrderResponse::class);
+
+		return $response->isSuccessful();
 		}
 
 	/**

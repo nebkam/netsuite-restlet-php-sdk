@@ -5,6 +5,8 @@ use Infostud\NetSuiteSdk\Exception\ApiLogicException;
 use Infostud\NetSuiteSdk\Exception\ApiTransferException;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerForm;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerFormAddress;
+use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderForm;
+use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderItem;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Item;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Classification;
@@ -57,6 +59,57 @@ class ApiServiceTest extends TestCase
 			$apiService,
 			$customerId
 		];
+		}
+
+	/**
+	 * @depends testCreateCustomer
+	 * @param array $params
+	 * @return array
+	 * @throws ApiTransferException
+	 * @throws ApiLogicException
+	 */
+	public function testCreateSalesOrder(array $params)
+		{
+		/**
+		 * @var $apiService ApiService
+		 * @var $customerId int
+		 */
+		list($apiService, $customerId) = $params;
+		$form = (new SalesOrderForm())
+			->setSubsidiary(getenv('SUBSIDIARY_ID'))
+			->setDepartment(getenv('DEPARTMENT_ID'))
+			->setLocation(getenv('LOCATION_ID'))
+			->setClassification(getenv('CLASSIFICATION_ID'))
+			->setCustomer($customerId)
+			->addItem(
+				(new SalesOrderItem())
+					->setId(getenv('ITEM_ID'))
+					->setQuantity(1)
+					->setRate(5000000.00)
+					->setTaxCode(8)
+			)
+			->setTransactionDate('02.05.2020');
+		$salesOrderId = $apiService->createSalesOrder($form);
+		self::assertNotEmpty($salesOrderId);
+		return [
+			$apiService,
+			$salesOrderId
+		];
+		}
+
+	/**
+	 * @depends testCreateSalesOrder
+	 * @param array $param
+	 * @throws ApiTransferException
+	 */
+	public function testDeleteSalesOrder(array $param)
+		{
+		/**
+		 * @var ApiService $apiService
+		 * @var int $salesOrderId
+		 */
+		list($apiService, $salesOrderId) = $param;
+		$apiService->deleteSalesOrder($salesOrderId);
 		}
 
 	/**
