@@ -1,5 +1,7 @@
 <?php
 
+use Infostud\NetSuiteSdk\Model\Contact\ContactForm;
+use Infostud\NetSuiteSdk\Model\Contact\CreateContactResponse;
 use Infostud\NetSuiteSdk\Model\Customer\CreateCustomerResponse;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerForm;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerFormAddress;
@@ -91,6 +93,39 @@ class ApiSerializerTest extends TestCase
 		$response   = $serializer->deserialize($json, DeleteCustomerResponse::class);
 		self::assertInstanceOf(DeleteCustomerResponse::class, $response);
 		self::assertTrue($response->isSuccessful());
+		}
+
+	/**
+	 * @depends testInitialize
+	 * @param $serializer ApiSerializer
+	 */
+	public function testNormalizeContactFormResult($serializer)
+		{
+		$form = (new ContactForm())
+			->setSubsidiary(getenv('SUBSIDIARY_ID'))
+			->setFirstName('Little Bobby')
+			->setLastName('Tables')
+			->setCustomerId(123)
+			->setMobilePhone('065/8717169');
+		$normalized = $serializer->normalize($form);
+		self::assertEquals('Little Bobby', $normalized['firstname']);
+		self::assertEquals('Tables', $normalized['lastname']);
+		self::assertEquals(123, $normalized['company']);
+		self::assertEquals('065/8717169', $normalized['mobilephone']);
+		}
+
+	/**
+	 * @depends testInitialize
+	 * @param $serializer ApiSerializer
+	 */
+	public function testCreateContactResult($serializer)
+		{
+		$json       = file_get_contents(__DIR__ . '/contact_create_response_success.json');
+		$response   = $serializer->deserialize($json, CreateContactResponse::class);
+		/** @var CreateContactResponse $response */
+		self::assertInstanceOf(CreateContactResponse::class, $response);
+		self::assertTrue($response->isSuccessful());
+		self::assertEquals(52198, $response->getContactId());
 		}
 
 	/**

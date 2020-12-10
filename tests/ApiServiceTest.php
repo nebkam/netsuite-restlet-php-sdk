@@ -78,9 +78,12 @@ class ApiServiceTest extends TestCase
 		list($apiService, $customerId) = $params;
 		$form = (new ContactForm())
 			->setSubsidiary(getenv('SUBSIDIARY_ID'))
+			->setCustomerId($customerId)
 			->setFirstName('Little Bobby')
 			->setLastName('Tables')
-			->setCustomerId($customerId);
+			->setEmail('little.bobby@tables.com')
+			->setPhone('024 543839')
+			->setMobilePhone('065 8717169');
 		$contactId = $apiService->createContact($form);
 		self::assertNotNull($contactId);
 

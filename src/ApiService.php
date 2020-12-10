@@ -221,15 +221,15 @@ class ApiService
 		$url         = $this->getRestletUrl($this->createDeleteContactId, 1);
 		$requestBody = $this->serializer->normalize($contactForm);
 		$contents = $this->executePostRequest($url, $requestBody);
-		/** @var CreateContactResponse $apiResponse */
-		$apiResponse = $this->serializer->deserialize($contents, CreateContactResponse::class);
-		if ($apiResponse->isSuccessful()
-			&& $apiResponse->getContactId())
+		/** @var CreateContactResponse $response */
+		$response = $this->serializer->deserialize($contents, CreateContactResponse::class);
+		if ($response->isSuccessful()
+			&& $response->getContactId())
 			{
-			return $apiResponse->getContactId();
+			return $response->getContactId();
 			}
 
-		throw new ApiLogicException($apiResponse->getErrorName(), $apiResponse->getErrorMessage());
+		throw new ApiLogicException($response->getErrorName(), $response->getErrorMessage());
 		}
 
 	/**
