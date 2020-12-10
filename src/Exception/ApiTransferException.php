@@ -6,7 +6,7 @@ use Eher\OAuth\OAuthException;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 
-class ApiException extends Exception
+class ApiTransferException extends Exception
 	{
 	public static function fromStatusCode($statusCode)
 		{

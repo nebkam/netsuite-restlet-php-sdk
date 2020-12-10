@@ -12,7 +12,7 @@ use Eher\OAuth\Token;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
-use Infostud\NetSuiteSdk\Exception\ApiException;
+use Infostud\NetSuiteSdk\Exception\ApiTransferException;
 use Infostud\NetSuiteSdk\Model\CreateCustomerResponse;
 use Infostud\NetSuiteSdk\Model\CustomerForm;
 use Infostud\NetSuiteSdk\Model\DeleteCustomerResponse;
@@ -109,7 +109,7 @@ class ApiService
 	/**
 	 * @param CustomerForm $customerForm
 	 * @return int|null
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function createCustomer(CustomerForm $customerForm)
 		{
@@ -130,7 +130,7 @@ class ApiService
 	/**
 	 * @param int $id
 	 * @return bool
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function deleteCustomer($id)
 		{
@@ -147,7 +147,7 @@ class ApiService
 	/**
 	 * @param string $pib
 	 * @return Customer|null
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function findCustomerByPib($pib)
 		{
@@ -168,7 +168,7 @@ class ApiService
 	/**
 	 * @param string $pib
 	 * @return Customer|null
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function findCustomerByPibFragment($pib)
 		{
@@ -191,7 +191,7 @@ class ApiService
 	 *
 	 * @param string $registryIdentifier
 	 * @return Customer|null
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function findCustomerByRegistryIdentifier($registryIdentifier)
 		{
@@ -218,7 +218,7 @@ class ApiService
 	 * @param null $location
 	 * @param null $classification
 	 * @return Item[]
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function findRecentItems(DateTime $periodStart, $subsidiary = null, $location = null, $classification = null)
 		{
@@ -260,7 +260,7 @@ class ApiService
 
 	/**
 	 * @return Subsidiary[]
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function getSubsidiaries()
 		{
@@ -272,7 +272,7 @@ class ApiService
 
 	/**
 	 * @return Department[]
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function getDepartments()
 		{
@@ -284,7 +284,7 @@ class ApiService
 
 	/**
 	 * @return Location[]
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function getLocations()
 		{
@@ -296,7 +296,7 @@ class ApiService
 
 	/**
 	 * @return Classification[]
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function getClassifications()
 		{
@@ -308,7 +308,7 @@ class ApiService
 
 	/**
 	 * @return Employee[]
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function getEmployees()
 		{
@@ -321,7 +321,7 @@ class ApiService
 	/**
 	 * @param array $filters
 	 * @return CustomerSearchResponse
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	private function executeSavedSearchCustomers($filters)
 		{
@@ -339,7 +339,7 @@ class ApiService
 	/**
 	 * @param array $filters
 	 * @return ItemSearchResponse
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	private function executeSavedSearchItems($filters)
 		{
@@ -360,7 +360,7 @@ class ApiService
 	 * @param string $where
 	 * @param array $params
 	 * @return array|mixed
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function executeSuiteQuery($responseClass, $from, $where = ' ', $params = [])
 		{
@@ -386,7 +386,7 @@ class ApiService
 	 * @param string $url
 	 * @param array $requestBody
 	 * @return string
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	private function executePostRequest($url, array $requestBody)
 		{
@@ -399,12 +399,12 @@ class ApiService
 			}
 		catch (GuzzleException $exception)
 			{
-			throw ApiException::fromGuzzleException($exception);
+			throw ApiTransferException::fromGuzzleException($exception);
 			}
 
 		if ($clientResponse->getStatusCode() !== 200)
 			{
-			throw ApiException::fromStatusCode($clientResponse->getStatusCode());
+			throw ApiTransferException::fromStatusCode($clientResponse->getStatusCode());
 			}
 
 		return $clientResponse->getBody()->getContents();
@@ -413,7 +413,7 @@ class ApiService
 	/**
 	 * @param string $url
 	 * @return string
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	private function executeDeleteRequest($url)
 		{
@@ -425,12 +425,12 @@ class ApiService
 			}
 		catch (GuzzleException $exception)
 			{
-			throw ApiException::fromGuzzleException($exception);
+			throw ApiTransferException::fromGuzzleException($exception);
 			}
 
 		if ($clientResponse->getStatusCode() !== 200)
 			{
-			throw ApiException::fromStatusCode($clientResponse->getStatusCode());
+			throw ApiTransferException::fromStatusCode($clientResponse->getStatusCode());
 			}
 
 		return $clientResponse->getBody()->getContents();
@@ -457,7 +457,7 @@ class ApiService
 	 * @param $method
 	 * @param string $url
 	 * @return array
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	private function buildHeaders($method, $url)
 		{
@@ -483,7 +483,7 @@ class ApiService
 			}
 		catch (OAuthException $exception)
 			{
-			throw ApiException::fromOAuthException($exception);
+			throw ApiTransferException::fromOAuthException($exception);
 			}
 		}
 
