@@ -4,7 +4,7 @@ namespace Infostud\NetSuiteSdk\Model\SavedSearch;
 
 use Symfony\Component\Serializer\Annotation\Groups;
 
-class TextValueTuple
+class IdNameTuple
 	{
 	/**
 	 * @Groups("value")
@@ -45,7 +45,7 @@ class TextValueTuple
 		}
 
 	/**
-	 * @param string $attributes
+	 * @param string $name
 	 * @return self
 	 */
 	public function setName($name)

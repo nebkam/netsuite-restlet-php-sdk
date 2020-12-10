@@ -89,8 +89,32 @@ class ApiServiceTest extends TestCase
 
 		return [
 			$apiService,
-			$contactId
+			$contactId,
+			$customerId
 			];
+		}
+
+	/**
+	 * @depends testCreateContact
+	 * @param array $params
+	 * @throws ApiTransferException
+	 */
+	public function testShowContacts($params)
+		{
+		/**
+		 * @var $apiService ApiService
+		 * @var $customerId int
+		 */
+		list($apiService, $contactId, $customerId) = $params;
+		$contacts = $apiService->findContactsByCompany($customerId);
+		self::assertNotEmpty($contacts);
+		$contact = $contacts[0];
+		self::assertEquals($contactId, (int) $contact->getId());
+		self::assertEquals('Little Bobby Tables', $contact->getAttributes()->getFullName());
+		self::assertEquals('065 8717169', $contact->getAttributes()->getMobilePhone());
+		self::assertEquals('little.bobby@tables.com', $contact->getAttributes()->getEmail());
+		self::assertNotEmpty($contact->getAttributes()->getCompanies());
+		self::assertEquals($customerId, (int) $contact->getAttributes()->getCompanies()[0]->getId());
 		}
 
 	/**

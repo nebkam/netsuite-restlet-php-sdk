@@ -369,8 +369,9 @@ class ApiService
 	 *
 	 * @param string $companyId
 	 * @return Contact[]
+	 * @throws ApiTransferException
 	 */
-	public function getCompanyContacts($companyId)
+	public function findContactsByCompany($companyId)
 		{
 		$filters = [[
 			            'name'     => 'company',

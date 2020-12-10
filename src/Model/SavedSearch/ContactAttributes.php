@@ -2,7 +2,6 @@
 
 namespace Infostud\NetSuiteSdk\Model\SavedSearch;
 
-use DateTime;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 class ContactAttributes
@@ -11,7 +10,7 @@ class ContactAttributes
 	 * @Groups("entityid")
 	 * @var string
 	 */
-	private $id;
+	private $fullName;
 	/**
 	 * @var string
 	 */
@@ -21,30 +20,31 @@ class ContactAttributes
 	 */
 	private $email;
 	/**
-	 * @var TextValueTuple[]
+	 * @Groups("company")
+	 * @var IdNameTuple[]
 	 */
-	private $company;
+	private $companies;
 	/**
 	 * @Groups("custentity_contact_location")
-	 * @var TextValueTuple[]
+	 * @var IdNameTuple[]
 	 */
-	private $location;
+	private $locations;
 
 	/**
 	 * @return string
 	 */
-	public function getId()
+	public function getFullName()
 		{
-		return $this->id;
+		return $this->fullName;
 		}
 
 	/**
-	 * @param string $id
+	 * @param string $fullName
 	 * @return self
 	 */
-	public function setId($id)
+	public function setFullName($fullName)
 		{
-		$this->id = $id;
+		$this->fullName = $fullName;
 
 		return $this;
 		}
@@ -88,39 +88,39 @@ class ContactAttributes
 		}
 
 	/**
-	 * @return TextValueTuple[]
+	 * @return IdNameTuple[]
 	 */
-	public function getCompany()
+	public function getCompanies()
 		{
-		return $this->company;
+		return $this->companies;
 		}
 
 	/**
-	 * @param TextValueTuple[] $rows
+	 * @param IdNameTuple[] $companies
 	 * @return self
 	 */
-	public function setCompany($company)
+	public function setCompanies($companies)
 		{
-		$this->company = $company;
+		$this->companies = $companies;
 
 		return $this;
 		}
 
 	/**
-	 * @return TextValueTuple[]
+	 * @return IdNameTuple[]
 	 */
-	public function getLocation()
+	public function getLocations()
 		{
-		return $this->location;
+		return $this->locations;
 		}
 
 	/**
-	 * @param TextValueTuple[] $rows
+	 * @param IdNameTuple[] $locations
 	 * @return self
 	 */
-	public function setLocation($location)
+	public function setLocations($locations)
 		{
-		$this->location = $location;
+		$this->locations = $locations;
 
 		return $this;
 		}
