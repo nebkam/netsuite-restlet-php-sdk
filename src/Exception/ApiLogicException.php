@@ -4,7 +4,7 @@ namespace Infostud\NetSuiteSdk\Exception;
 
 use Exception;
 
-class NetSuiteException extends Exception
+class ApiLogicException extends Exception
 	{
 	/**
 	 * @var string

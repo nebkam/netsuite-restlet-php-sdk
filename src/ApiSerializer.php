@@ -6,7 +6,7 @@ use ArrayObject;
 use Countable;
 use DateTimeZone;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Infostud\NetSuiteSdk\Exception\ApiException;
+use Infostud\NetSuiteSdk\Exception\ApiTransferException;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
@@ -52,7 +52,7 @@ class ApiSerializer
 	 * @param string $json
 	 * @param string $className
 	 * @return object|array
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function deserialize(string $json, string $className)
 		{
@@ -62,14 +62,14 @@ class ApiSerializer
 			}
 		catch (ExceptionInterface $exception)
 			{
-			throw ApiException::fromSerializationException($exception);
+			throw ApiTransferException::fromSerializationException($exception);
 			}
 		}
 
 	/**
 	 * @param mixed $data
 	 * @return array|ArrayObject|bool|Countable|float|int|string|Traversable|null
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function normalize($data)
 		{
@@ -79,7 +79,7 @@ class ApiSerializer
 			}
 		catch (ExceptionInterface $exception)
 			{
-			throw ApiException::fromSerializationException($exception);
+			throw ApiTransferException::fromSerializationException($exception);
 			}
 		}
 	}

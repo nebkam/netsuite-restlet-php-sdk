@@ -7,7 +7,7 @@ use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
-class ApiException extends Exception
+class ApiTransferException extends Exception
 	{
 	public static function fromSerializationException(ExceptionInterface $exception): self
 		{

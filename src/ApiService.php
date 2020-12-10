@@ -12,8 +12,8 @@ use Eher\OAuth\Token;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
-use Infostud\NetSuiteSdk\Exception\ApiException;
-use Infostud\NetSuiteSdk\Exception\NetSuiteException;
+use Infostud\NetSuiteSdk\Exception\ApiTransferException;
+use Infostud\NetSuiteSdk\Exception\ApiLogicException;
 use Infostud\NetSuiteSdk\Model\Customer\CreateCustomerResponse;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerForm;
 use Infostud\NetSuiteSdk\Model\Customer\DeleteCustomerResponse;
@@ -116,7 +116,7 @@ class ApiService
 	/**
 	 * @param CustomerForm $form
 	 * @return int|null
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function createCustomer(CustomerForm $form): ?int
 		{
@@ -142,7 +142,7 @@ class ApiService
 	 *
 	 * @param int $id
 	 * @return bool
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 * @internal
 	 */
 	public function deleteCustomer(int $id): bool
@@ -160,7 +160,7 @@ class ApiService
 	/**
 	 * @param SalesOrderForm $form
 	 * @return int
-	 * @throws ApiException|NetSuiteException
+	 * @throws ApiTransferException|ApiLogicException
 	 */
 	public function createSalesOrder(SalesOrderForm $form): int
 		{
@@ -175,7 +175,7 @@ class ApiService
 			return $apiResponse->getOrderId();
 			}
 
-		throw new NetSuiteException($apiResponse->getErrorName(), $apiResponse->getErrorMessage());
+		throw new ApiLogicException($apiResponse->getErrorName(), $apiResponse->getErrorMessage());
 		}
 
 	/**
@@ -183,7 +183,7 @@ class ApiService
 	 *
 	 * @param int $id
 	 * @return bool
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 * @internal
 	 */
 	public function deleteSalesOrder(int $id): bool
@@ -201,7 +201,7 @@ class ApiService
 	/**
 	 * @param string $pib
 	 * @return Customer|null
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function findCustomerByPib(string $pib): ?Customer
 		{
@@ -222,7 +222,7 @@ class ApiService
 	/**
 	 * @param string $pib
 	 * @return Customer|null
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function findCustomerByPibFragment(string $pib): ?Customer
 		{
@@ -243,7 +243,7 @@ class ApiService
 	/**
 	 * @param string $registryIdentifier
 	 * @return Customer|null
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function findCustomerByRegistryIdentifier(string $registryIdentifier): ?Customer
 		{
@@ -269,7 +269,7 @@ class ApiService
 	 * @param null $location
 	 * @param null $classification
 	 * @return Item[]
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function findRecentItems(DateTime $periodStart, $subsidiary = null, $location = null, $classification = null): array
 		{
@@ -311,7 +311,7 @@ class ApiService
 
 	/**
 	 * @return Subsidiary[]
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function getSubsidiaries(): array
 		{
@@ -323,7 +323,7 @@ class ApiService
 
 	/**
 	 * @return Department[]
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function getDepartments(): array
 		{
@@ -335,7 +335,7 @@ class ApiService
 
 	/**
 	 * @return Location[]
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function getLocations(): array
 		{
@@ -347,7 +347,7 @@ class ApiService
 
 	/**
 	 * @return Classification[]
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function getClassifications(): array
 		{
@@ -359,7 +359,7 @@ class ApiService
 
 	/**
 	 * @return Employee[]
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function getEmployees(): array
 		{
@@ -372,7 +372,7 @@ class ApiService
 	/**
 	 * @param array $filters
 	 * @return SavedSearchCustomersResponse
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	private function executeSavedSearchCustomers(array $filters): SavedSearchCustomersResponse
 		{
@@ -390,7 +390,7 @@ class ApiService
 	/**
 	 * @param array $filters
 	 * @return ItemSearchResponse
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	private function executeSavedSearchItems(array $filters): ItemSearchResponse
 		{
@@ -411,7 +411,7 @@ class ApiService
 	 * @param string $where
 	 * @param array $params
 	 * @return array
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function executeSuiteQuery(
 		?string $responseClass,
@@ -442,7 +442,7 @@ class ApiService
 	 * @param string $url
 	 * @param array $requestBody
 	 * @return string
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	private function executePostRequest(string $url, array $requestBody): string
 		{
@@ -455,12 +455,12 @@ class ApiService
 			}
 		catch (GuzzleException $exception)
 			{
-			throw ApiException::fromGuzzleException($exception);
+			throw ApiTransferException::fromGuzzleException($exception);
 			}
 
 		if ($clientResponse->getStatusCode() !== 200)
 			{
-			throw ApiException::fromStatusCode($clientResponse->getStatusCode());
+			throw ApiTransferException::fromStatusCode($clientResponse->getStatusCode());
 			}
 
 		return $clientResponse->getBody()->getContents();
@@ -469,7 +469,7 @@ class ApiService
 	/**
 	 * @param string $url
 	 * @return string
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	private function executeDeleteRequest(string $url): string
 		{
@@ -481,12 +481,12 @@ class ApiService
 			}
 		catch (GuzzleException $exception)
 			{
-			throw ApiException::fromGuzzleException($exception);
+			throw ApiTransferException::fromGuzzleException($exception);
 			}
 
 		if ($clientResponse->getStatusCode() !== 200)
 			{
-			throw ApiException::fromStatusCode($clientResponse->getStatusCode());
+			throw ApiTransferException::fromStatusCode($clientResponse->getStatusCode());
 			}
 
 		return $clientResponse->getBody()->getContents();
@@ -513,7 +513,7 @@ class ApiService
 	 * @param string $method
 	 * @param string $url
 	 * @return array
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	private function buildHeaders(string $method, string $url): array
 		{
@@ -539,7 +539,7 @@ class ApiService
 			}
 		catch (OAuthException $exception)
 			{
-			throw ApiException::fromOAuthException($exception);
+			throw ApiTransferException::fromOAuthException($exception);
 			}
 		}
 

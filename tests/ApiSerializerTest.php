@@ -1,6 +1,6 @@
 <?php
 
-use Infostud\NetSuiteSdk\Exception\ApiException;
+use Infostud\NetSuiteSdk\Exception\ApiTransferException;
 use Infostud\NetSuiteSdk\Model\Customer\CreateCustomerResponse;
 use Infostud\NetSuiteSdk\Model\Customer\DeleteCustomerResponse;
 use Infostud\NetSuiteSdk\Model\SalesOrder\CreateSalesOrderResponse;
@@ -37,7 +37,7 @@ class ApiSerializerTest extends TestCase
 	/**
 	 * @depends testInitialize
 	 * @param ApiSerializer $serializer
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function testNormalizeCustomerFormRequest(ApiSerializer $serializer): void
 		{
@@ -75,7 +75,7 @@ class ApiSerializerTest extends TestCase
 	/**
 	 * @depends testInitialize
 	 * @param ApiSerializer $serializer
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function testCreateCustomerResult(ApiSerializer $serializer): void
 		{
@@ -89,7 +89,7 @@ class ApiSerializerTest extends TestCase
 	/**
 	 * @depends testInitialize
 	 * @param ApiSerializer $serializer
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function testDeleteCustomerResult(ApiSerializer $serializer): void
 		{
@@ -102,7 +102,7 @@ class ApiSerializerTest extends TestCase
 	/**
 	 * @depends testInitialize
 	 * @param ApiSerializer $serializer
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function testDeleteSalesOrderResult(ApiSerializer $serializer): void
 		{
@@ -115,7 +115,7 @@ class ApiSerializerTest extends TestCase
 	/**
 	 * @depends testInitialize
 	 * @param ApiSerializer $serializer
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function testNormalizeSalesOrderFormRequest(ApiSerializer $serializer): void
 		{
@@ -154,7 +154,7 @@ class ApiSerializerTest extends TestCase
 	/**
 	 * @depends testInitialize
 	 * @param ApiSerializer $serializer
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function testCreateSalesOrderError(ApiSerializer $serializer): void
 		{
@@ -173,7 +173,7 @@ class ApiSerializerTest extends TestCase
 	/**
 	 * @depends testInitialize
 	 * @param ApiSerializer $serializer
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function testSingleCustomerSearchResult(ApiSerializer $serializer): void
 		{
@@ -214,7 +214,7 @@ class ApiSerializerTest extends TestCase
 	/**
 	 * @depends testInitialize
 	 * @param ApiSerializer $serializer
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function testSingleItemSearchResult(ApiSerializer $serializer): void
 		{
@@ -248,7 +248,7 @@ class ApiSerializerTest extends TestCase
 	/**
 	 * @depends testInitialize
 	 * @param ApiSerializer $serializer
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function testGetSubsidiariesResult(ApiSerializer $serializer): void
 		{
@@ -261,7 +261,7 @@ class ApiSerializerTest extends TestCase
 	/**
 	 * @depends testInitialize
 	 * @param ApiSerializer $serializer
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function testGetDepartmentsResult(ApiSerializer $serializer): void
 		{
@@ -274,7 +274,7 @@ class ApiSerializerTest extends TestCase
 	/**
 	 * @depends testInitialize
 	 * @param ApiSerializer $serializer
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function testGetLocationsResult(ApiSerializer $serializer): void
 		{
@@ -287,7 +287,7 @@ class ApiSerializerTest extends TestCase
 	/**
 	 * @depends testInitialize
 	 * @param ApiSerializer $serializer
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function testGetEmployeesResult(ApiSerializer $serializer): void
 		{

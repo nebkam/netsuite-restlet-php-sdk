@@ -1,8 +1,8 @@
 <?php
 
 use Infostud\NetSuiteSdk\ApiService;
-use Infostud\NetSuiteSdk\Exception\ApiException;
-use Infostud\NetSuiteSdk\Exception\NetSuiteException;
+use Infostud\NetSuiteSdk\Exception\ApiTransferException;
+use Infostud\NetSuiteSdk\Exception\ApiLogicException;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerForm;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerFormAddress;
 use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderForm;
@@ -33,7 +33,7 @@ class ApiServiceTest extends TestCase
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
 	 * @return array
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function testCreateCustomer(ApiService $apiService): array
 		{
@@ -65,8 +65,8 @@ class ApiServiceTest extends TestCase
 	 * @depends testCreateCustomer
 	 * @param array $params
 	 * @return array
-	 * @throws ApiException
-	 * @throws NetSuiteException
+	 * @throws ApiTransferException
+	 * @throws ApiLogicException
 	 */
 	public function testCreateSalesOrder(array $params): array
 		{
@@ -101,7 +101,7 @@ class ApiServiceTest extends TestCase
 	/**
 	 * @depends testCreateSalesOrder
 	 * @param array $param
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function testDeleteSalesOrder(array $param): void
 		{
@@ -116,7 +116,7 @@ class ApiServiceTest extends TestCase
 	/**
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function testSearchByPib(ApiService $apiService): void
 		{
@@ -129,7 +129,7 @@ class ApiServiceTest extends TestCase
 	 * TODO Add real foreign PIB
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function testSearchByPibFragment(ApiService $apiService): void
 		{
@@ -141,7 +141,7 @@ class ApiServiceTest extends TestCase
 	/**
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function testSearchByRegistryIdentifier(ApiService $apiService): void
 		{
@@ -153,7 +153,7 @@ class ApiServiceTest extends TestCase
 	/**
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function testFindRecentItems(ApiService $apiService): void
 		{
@@ -165,7 +165,7 @@ class ApiServiceTest extends TestCase
 	/**
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function testGetSubsidiaries(ApiService $apiService): void
 		{
@@ -182,7 +182,7 @@ class ApiServiceTest extends TestCase
 	/**
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function testGetDepartments(ApiService $apiService): void
 		{
@@ -199,7 +199,7 @@ class ApiServiceTest extends TestCase
 	/**
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function testGetLocations(ApiService $apiService): void
 		{
@@ -216,7 +216,7 @@ class ApiServiceTest extends TestCase
 	/**
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function testGetClassifications(ApiService $apiService): void
 		{
@@ -233,7 +233,7 @@ class ApiServiceTest extends TestCase
 	/**
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function testGetEmployees(ApiService $apiService): void
 		{
@@ -250,7 +250,7 @@ class ApiServiceTest extends TestCase
 	/**
 	 * @depends testCreateCustomer
 	 * @param array $param
-	 * @throws ApiException
+	 * @throws ApiTransferException
 	 */
 	public function testDeleteCustomer(array $param): void
 		{
