@@ -1,6 +1,7 @@
 <?php
 
 use Infostud\NetSuiteSdk\ApiService;
+use Infostud\NetSuiteSdk\Exception\ApiLogicException;
 use Infostud\NetSuiteSdk\Exception\ApiTransferException;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerForm;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerFormAddress;
@@ -30,7 +31,7 @@ class ApiServiceTest extends TestCase
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
 	 * @return array
-	 * @throws ApiTransferException
+	 * @throws ApiTransferException|ApiLogicException
 	 */
 	public function testCreateCustomer(ApiService $apiService)
 		{

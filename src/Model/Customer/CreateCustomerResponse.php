@@ -17,6 +17,15 @@ class CreateCustomerResponse
 	 * @var int|null
 	 */
 	private $customerId;
+	/**
+	 * @var string|null
+	 */
+	private $errorName;
+	/**
+	 * @Groups("message")
+	 * @var string|null
+	 */
+	private $errorMessage;
 
 	/**
 	 * @return string
@@ -60,6 +69,44 @@ class CreateCustomerResponse
 	public function setCustomerId($customerId)
 		{
 		$this->customerId = $customerId;
+
+		return $this;
+		}
+
+	/**
+	 * @return string|null
+	 */
+	public function getErrorName()
+		{
+		return $this->errorName;
+		}
+
+	/**
+	 * @param string|null $errorName
+	 * @return self
+	 */
+	public function setErrorName($errorName)
+		{
+		$this->errorName = $errorName;
+
+		return $this;
+		}
+
+	/**
+	 * @return string|null
+	 */
+	public function getErrorMessage()
+		{
+		return $this->errorMessage;
+		}
+
+	/**
+	 * @param string|null $errorMessage
+	 * @return self
+	 */
+	public function setErrorMessage($errorMessage)
+		{
+		$this->errorMessage = $errorMessage;
 
 		return $this;
 		}

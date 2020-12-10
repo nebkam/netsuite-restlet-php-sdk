@@ -12,6 +12,7 @@ use Eher\OAuth\Token;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
+use Infostud\NetSuiteSdk\Exception\ApiLogicException;
 use Infostud\NetSuiteSdk\Exception\ApiTransferException;
 use Infostud\NetSuiteSdk\Model\Customer\CreateCustomerResponse;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerForm;
@@ -113,8 +114,8 @@ class ApiService
 
 	/**
 	 * @param CustomerForm $customerForm
-	 * @return int|null
-	 * @throws ApiTransferException
+	 * @return int
+	 * @throws ApiTransferException|ApiLogicException
 	 */
 	public function createCustomer(CustomerForm $customerForm)
 		{
@@ -129,7 +130,7 @@ class ApiService
 			return $apiResponse->getCustomerId();
 			}
 
-		return null;
+		throw new ApiLogicException($apiResponse->getErrorName(), $apiResponse->getErrorMessage());
 		}
 
 	/**
