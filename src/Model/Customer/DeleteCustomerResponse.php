@@ -1,22 +1,16 @@
 <?php
 
-namespace Infostud\NetSuiteSdk\Model;
+namespace Infostud\NetSuiteSdk\Model\Customer;
 
 use Doctrine\Common\Annotations\Annotation\Enum;
-use Symfony\Component\Serializer\Annotation\Groups;
 
-class CreateCustomerResponse
+class DeleteCustomerResponse
 	{
 	/**
 	 * @Enum({"ok", "error"})
 	 * @var string
 	 */
 	private $result;
-	/**
-	 * @Groups("internalid")
-	 * @var int|null
-	 */
-	private $customerId;
 
 	/**
 	 * @return string
@@ -43,24 +37,5 @@ class CreateCustomerResponse
 	public function isSuccessful()
 		{
 		return $this->result === 'ok';
-		}
-
-	/**
-	 * @return int|null
-	 */
-	public function getCustomerId()
-		{
-		return $this->customerId;
-		}
-
-	/**
-	 * @param int|null $customerId
-	 * @return self
-	 */
-	public function setCustomerId($customerId)
-		{
-		$this->customerId = $customerId;
-
-		return $this;
 		}
 	}

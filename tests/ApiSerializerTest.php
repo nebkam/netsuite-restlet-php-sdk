@@ -1,9 +1,9 @@
 <?php
 
-use Infostud\NetSuiteSdk\Model\CreateCustomerResponse;
-use Infostud\NetSuiteSdk\Model\CustomerForm;
-use Infostud\NetSuiteSdk\Model\CustomerFormAddress;
-use Infostud\NetSuiteSdk\Model\DeleteCustomerResponse;
+use Infostud\NetSuiteSdk\Model\Customer\CreateCustomerResponse;
+use Infostud\NetSuiteSdk\Model\Customer\CustomerForm;
+use Infostud\NetSuiteSdk\Model\Customer\CustomerFormAddress;
+use Infostud\NetSuiteSdk\Model\Customer\DeleteCustomerResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\ColumnDefinition;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\SavedSearch\CustomerSearchResponse;

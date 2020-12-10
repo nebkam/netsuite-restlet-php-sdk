@@ -2,8 +2,8 @@
 
 use Infostud\NetSuiteSdk\ApiService;
 use Infostud\NetSuiteSdk\Exception\ApiTransferException;
-use Infostud\NetSuiteSdk\Model\CustomerForm;
-use Infostud\NetSuiteSdk\Model\CustomerFormAddress;
+use Infostud\NetSuiteSdk\Model\Customer\CustomerForm;
+use Infostud\NetSuiteSdk\Model\Customer\CustomerFormAddress;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Item;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Classification;
