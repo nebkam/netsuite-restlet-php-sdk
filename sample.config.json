@@ -8,6 +8,7 @@
     "savedSearchCustomers": 0,
     "suiteQL": 0,
     "createDeleteCustomer": 0,
-    "savedSearchItems": 0
+    "savedSearchItems": 0,
+    "createDeleteSalesOrder": 0
   }
 }

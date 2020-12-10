@@ -81,6 +81,10 @@ class ApiService
 	 * @var int
 	 */
 	private $savedSearchItemId;
+	/**
+	 * @var int
+	 */
+	private $createDeleteSalesOrderId;
 
 	/**
 	 * @param string $configPath
@@ -89,21 +93,22 @@ class ApiService
 		{
 		$config = $this->readJsonConfig($configPath);
 
-		$this->account                = $config['account'];
-		$this->restletHost            = $config['account'] . '.restlets.api.netsuite.com';
-		$this->client                 = new Client();
-		$this->consumer               = new Consumer(
+		$this->account                  = $config['account'];
+		$this->restletHost              = $config['account'] . '.restlets.api.netsuite.com';
+		$this->client                   = new Client();
+		$this->consumer                 = new Consumer(
 			$config['consumerKey'], $config['consumerSecret']
 		);
-		$this->accessToken            = new Token(
+		$this->accessToken              = new Token(
 			$config['accessTokenKey'], $config['accessTokenSecret']
 		);
-		$this->signatureMethod        = new HmacSha1();
-		$this->serializer             = new ApiSerializer();
-		$this->savedSearchCustomersId = $config['restletIds']['savedSearchCustomers'];
-		$this->suiteQLId              = $config['restletIds']['suiteQL'];
-		$this->createDeleteCustomerId = $config['restletIds']['createDeleteCustomer'];
-		$this->savedSearchItemId      = $config['restletIds']['savedSearchItems'];
+		$this->signatureMethod          = new HmacSha1();
+		$this->serializer               = new ApiSerializer();
+		$this->savedSearchCustomersId   = $config['restletIds']['savedSearchCustomers'];
+		$this->suiteQLId                = $config['restletIds']['suiteQL'];
+		$this->createDeleteCustomerId   = $config['restletIds']['createDeleteCustomer'];
+		$this->savedSearchItemId        = $config['restletIds']['savedSearchItems'];
+		$this->createDeleteSalesOrderId = $config['restletIds']['createDeleteSalesOrder'];
 		}
 
 	/**
@@ -115,7 +120,7 @@ class ApiService
 		{
 		$url         = $this->getRestletUrl($this->createDeleteCustomerId, 3);
 		$requestBody = $this->serializer->normalize($customerForm);
-		$contents = $this->executePostRequest($url, $requestBody);
+		$contents    = $this->executePostRequest($url, $requestBody);
 		/** @var CreateCustomerResponse $apiResponse */
 		$apiResponse = $this->serializer->deserialize($contents, CreateCustomerResponse::class);
 		if ($apiResponse->isSuccessful()
@@ -134,7 +139,7 @@ class ApiService
 	 */
 	public function deleteCustomer($id)
 		{
-		$url = $this->getRestletUrl($this->createDeleteCustomerId, 3, [
+		$url      = $this->getRestletUrl($this->createDeleteCustomerId, 3, [
 			'customerid' => $id
 		]);
 		$contents = $this->executeDeleteRequest($url);
@@ -226,30 +231,30 @@ class ApiService
 			'name'     => 'lastmodifieddate',
 			'operator' => 'notbefore',
 			'values'   => [$periodStart->format('d.m.Y H:i')]
-			];
+		];
 
 		if (!is_null($subsidiary))
 			{
 			$filters[] = [
-				'name' => 'subsidiary',
+				'name'     => 'subsidiary',
 				'operator' => 'is',
-				'values' => [$subsidiary]
-				];
+				'values'   => [$subsidiary]
+			];
 			}
 		if (!is_null($location))
 			{
 			$filters[] = [
-				'name' => 'location',
+				'name'     => 'location',
 				'operator' => 'is',
-				'values' => [$location]
+				'values'   => [$location]
 			];
 			}
 		if (!is_null($classification))
 			{
 			$filters[] = [
-				'name' => 'class',
+				'name'     => 'class',
 				'operator' => 'is',
-				'values' => [$classification]
+				'values'   => [$classification]
 			];
 			}
 
@@ -325,11 +330,11 @@ class ApiService
 	 */
 	private function executeSavedSearchCustomers($filters)
 		{
-		$url            = $this->getRestletUrl($this->savedSearchCustomersId, 1);
-		$requestBody    = [
+		$url         = $this->getRestletUrl($this->savedSearchCustomersId, 1);
+		$requestBody = [
 			'filters' => $filters
 		];
-		$contents = $this->executePostRequest($url, $requestBody);
+		$contents    = $this->executePostRequest($url, $requestBody);
 		/** @var CustomerSearchResponse $response */
 		$response = $this->serializer->deserialize($contents, CustomerSearchResponse::class);
 
@@ -343,11 +348,11 @@ class ApiService
 	 */
 	private function executeSavedSearchItems($filters)
 		{
-		$url            = $this->getRestletUrl($this->savedSearchItemId, 1);
-		$requestBody    = [
+		$url         = $this->getRestletUrl($this->savedSearchItemId, 1);
+		$requestBody = [
 			'filters' => $filters
 		];
-		$contents = $this->executePostRequest($url, $requestBody);
+		$contents    = $this->executePostRequest($url, $requestBody);
 		/** @var ItemSearchResponse $response */
 		$response = $this->serializer->deserialize($contents, ItemSearchResponse::class);
 
