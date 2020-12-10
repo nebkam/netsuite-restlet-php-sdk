@@ -2,7 +2,7 @@
 
 namespace Infostud\NetSuiteSdk\Model\SavedSearch;
 
-class TaxItemSearchResponse
+class TaxItemSearchResponse implements GenericSavedSearchResponse
 	{
 	/**
 	 * @var TaxItem[]

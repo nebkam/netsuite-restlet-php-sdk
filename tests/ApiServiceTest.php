@@ -99,7 +99,7 @@ class ApiServiceTest extends TestCase
 	 * @param array $params
 	 * @throws ApiTransferException
 	 */
-	public function testShowContacts($params)
+	public function testFindContacts($params)
 		{
 		/**
 		 * @var $apiService ApiService
@@ -229,6 +229,23 @@ class ApiServiceTest extends TestCase
 		{
 		$items = $apiService->findRecentItems(new DateTime('-1 year'));
 		self::assertContainsOnlyInstancesOf(Item::class, $items);
+		}
+
+	/**
+	 * @depends testParseConfig
+	 * @param ApiService $apiService
+	 * @throws ApiTransferException
+	 */
+	public function testFindTaxItems($apiService)
+		{
+		$taxItems = $apiService->findTaxItems();
+		self::assertNotEmpty($taxItems);
+		foreach ($taxItems as $taxItem)
+			{
+			self::assertNotEmpty($taxItem->getId());
+			self::assertNotEmpty($taxItem->getAttributes()->getName());
+			self::assertNotEmpty($taxItem->getAttributes()->getRate());
+			}
 		}
 
 	/**

@@ -396,10 +396,9 @@ class ApiService
 		}
 
 	/**
-	 * Get all contacts for a selected company
-	 *
 	 * @param string $name
 	 * @return TaxItem[]
+	 * @throws ApiTransferException
 	 */
 	public function findTaxItems($name = null)
 		{
@@ -413,10 +412,17 @@ class ApiService
 				'values'   => [$name]
 			]];
 			}
-		$columns = ['name', 'rate', 'country'];
-		$results = $this->executeSavedSearchTaxItems($columns, $filters);
-
-		return $results->getRows();
+		$columnNames = [
+			'name',
+			'rate',
+			'country'
+		];
+		return $this->executeGenericSavedSearch(
+			'salestaxitem',
+			$columnNames,
+			$filters,
+			TaxItemSearchResponse::class
+		);
 		}
 
 	/**
@@ -516,33 +522,6 @@ class ApiService
 		}
 
 	/**
-	 * @param array $filters
-	 * @return TaxItemSearchResponse
-	 * @throws ApiTransferException
-	 */
-	private function executeSavedSearchTaxItems($columns, $filters)
-		{
-		$url = $this->getRestletUrl($this->savedSearchGenericId, 1);
-
-		$columnArray = [];
-		foreach ($columns as $columnName)
-			{
-			$columnArray[] = ['name' => $columnName];
-			}
-
-		$requestBody = [
-			'type'    => 'salestaxitem',
-			'columns' => $columnArray,
-			'filters' => $filters,
-		];
-		$contents    = $this->executePostRequest($url, $requestBody);
-		/** @var TaxItemSearchResponse $response */
-		$response = $this->serializer->deserialize($contents, TaxItemSearchResponse::class);
-
-		return $response;
-		}
-
-	/**
 	 * @param string $type
 	 * @param string[] $columnNames
 	 * @param array $filters
@@ -554,11 +533,9 @@ class ApiService
 		{
 		$url = $this->getRestletUrl($this->savedSearchGenericId, 1);
 
-		$columns = [];
-		foreach ($columnNames as $columnName)
-			{
-			$columns[] = ['name' => $columnName];
-			}
+		$columns = array_map(static function($columnName){
+			return ['name' => $columnName];
+		}, $columnNames);
 
 		$requestBody = [
 			'type'    => $type,
