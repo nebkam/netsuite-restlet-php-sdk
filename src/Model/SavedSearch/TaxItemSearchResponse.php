@@ -2,8 +2,6 @@
 
 namespace Infostud\NetSuiteSdk\Model\SavedSearch;
 
-use Symfony\Component\Serializer\Annotation\Groups;
-
 class TaxItemSearchResponse
 	{
 	/**
