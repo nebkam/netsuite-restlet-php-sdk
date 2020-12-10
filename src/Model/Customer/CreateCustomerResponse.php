@@ -17,6 +17,15 @@ class CreateCustomerResponse
 	 * @var int|null
 	 */
 	private $customerId;
+	/**
+	 * @var string|null
+	 */
+	private $errorName;
+	/**
+	 * @SerializedName("message")
+	 * @var string|null
+	 */
+	private $errorMessage;
 
 	/**
 	 * @return string
@@ -57,6 +66,44 @@ class CreateCustomerResponse
 	public function setCustomerId(?int $customerId): self
 		{
 		$this->customerId = $customerId;
+
+		return $this;
+		}
+
+	/**
+	 * @return string|null
+	 */
+	public function getErrorName(): ?string
+		{
+		return $this->errorName;
+		}
+
+	/**
+	 * @param string|null $errorName
+	 * @return self
+	 */
+	public function setErrorName(?string $errorName): self
+		{
+		$this->errorName = $errorName;
+
+		return $this;
+		}
+
+	/**
+	 * @return string|null
+	 */
+	public function getErrorMessage(): ?string
+		{
+		return $this->errorMessage;
+		}
+
+	/**
+	 * @param string|null $errorMessage
+	 * @return self
+	 */
+	public function setErrorMessage(?string $errorMessage): self
+		{
+		$this->errorMessage = $errorMessage;
 
 		return $this;
 		}

@@ -33,7 +33,7 @@ class ApiServiceTest extends TestCase
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
 	 * @return array
-	 * @throws ApiTransferException
+	 * @throws ApiTransferException|ApiLogicException
 	 */
 	public function testCreateCustomer(ApiService $apiService): array
 		{

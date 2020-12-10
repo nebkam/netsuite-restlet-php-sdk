@@ -115,10 +115,11 @@ class ApiService
 
 	/**
 	 * @param CustomerForm $form
-	 * @return int|null
+	 * @return int
 	 * @throws ApiTransferException
+	 * @throws ApiLogicException
 	 */
-	public function createCustomer(CustomerForm $form): ?int
+	public function createCustomer(CustomerForm $form): int
 		{
 		$url         = $this->getRestletUrl($this->createDeleteCustomerId, 3);
 		$requestBody = $this->serializer->normalize($form);
@@ -131,7 +132,7 @@ class ApiService
 			return $apiResponse->getCustomerId();
 			}
 
-		return null;
+		throw new ApiLogicException($apiResponse->getErrorName(), $apiResponse->getErrorMessage());
 		}
 
 	/**
