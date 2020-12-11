@@ -4,11 +4,13 @@
   "consumerSecret": "",
   "accessTokenKey": "",
   "accessTokenSecret": "",
-  "restletIds": {
-    "savedSearchCustomers": 0,
-    "suiteQL": 0,
+  "restletMap": {
+    "createDeleteContact": 0,
     "createDeleteCustomer": 0,
+    "createDeleteSalesOrder": 0,
+    "savedSearchCustomers": 0,
+    "savedSearchGeneric": 0,
     "savedSearchItems": 0,
-    "createDeleteSalesOrder": 0
+    "suiteQL": 0
   }
 }

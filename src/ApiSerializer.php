@@ -49,6 +49,7 @@ class ApiSerializer
 		}
 
 	/**
+	 * TODO throw a different error for local deserializing
 	 * @param string $json
 	 * @param string $className
 	 * @return object|array

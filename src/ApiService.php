@@ -40,14 +40,6 @@ use RuntimeException;
 class ApiService
 	{
 	/**
-	 * @var string
-	 */
-	private $account;
-	/**
-	 * @var string
-	 */
-	private $restletHost;
-	/**
 	 * @var Client
 	 */
 	private $client;
@@ -68,49 +60,28 @@ class ApiService
 	 */
 	private $serializer;
 	/**
-	 * @var int
+	 * @var ApiConfig
 	 */
-	private $savedSearchCustomersId;
-	/**
-	 * @var int
-	 */
-	private $suiteQLId;
-	/**
-	 * @var int
-	 */
-	private $createDeleteCustomerId;
-	/**
-	 * @var int
-	 */
-	private $savedSearchItemId;
-	/**
-	 * @var int
-	 */
-	private $createDeleteSalesOrderId;
+	private $config;
 
 	/**
 	 * @param string $configPath
+	 * @throws ApiTransferException
 	 */
 	public function __construct(string $configPath)
 		{
-		$config = $this->readJsonConfig($configPath);
-
-		$this->account                  = $config['account'];
-		$this->restletHost              = $config['account'] . '.restlets.api.netsuite.com';
-		$this->client                   = new Client();
-		$this->consumer                 = new Consumer(
-			$config['consumerKey'], $config['consumerSecret']
+		$this->client = new Client();
+		$this->serializer = new ApiSerializer();
+		$this->config = $this->readJsonConfig($configPath);
+		$this->signatureMethod = new HmacSha1();
+		$this->consumer = new Consumer(
+			$this->config->consumerKey,
+			$this->config->consumerSecret
 		);
 		$this->accessToken              = new Token(
-			$config['accessTokenKey'], $config['accessTokenSecret']
+			$this->config->accessTokenKey,
+			$this->config->accessTokenSecret
 		);
-		$this->signatureMethod          = new HmacSha1();
-		$this->serializer               = new ApiSerializer();
-		$this->savedSearchCustomersId   = $config['restletIds']['savedSearchCustomers'];
-		$this->suiteQLId                = $config['restletIds']['suiteQL'];
-		$this->createDeleteCustomerId   = $config['restletIds']['createDeleteCustomer'];
-		$this->savedSearchItemId        = $config['restletIds']['savedSearchItems'];
-		$this->createDeleteSalesOrderId = $config['restletIds']['createDeleteSalesOrder'];
 		}
 
 	/**
@@ -121,7 +92,7 @@ class ApiService
 	 */
 	public function createCustomer(CustomerForm $form): int
 		{
-		$url         = $this->getRestletUrl($this->createDeleteCustomerId, 3);
+		$url         = $this->getRestletUrl($this->config->restletMap->createDeleteCustomer, 3);
 		$requestBody = $this->serializer->normalize($form);
 		$contents    = $this->executePostRequest($url, $requestBody);
 		/** @var CreateCustomerResponse $apiResponse */
@@ -148,7 +119,7 @@ class ApiService
 	 */
 	public function deleteCustomer(int $id): bool
 		{
-		$url      = $this->getRestletUrl($this->createDeleteCustomerId, 3, [
+		$url      = $this->getRestletUrl($this->config->restletMap->createDeleteCustomer, 3, [
 			'customerid' => $id
 		]);
 		$contents = $this->executeDeleteRequest($url);
@@ -165,7 +136,7 @@ class ApiService
 	 */
 	public function createSalesOrder(SalesOrderForm $form): int
 		{
-		$url         = $this->getRestletUrl($this->createDeleteSalesOrderId, 1);
+		$url         = $this->getRestletUrl($this->config->restletMap->createDeleteSalesOrder, 1);
 		$requestBody = $this->serializer->normalize($form);
 		$contents    = $this->executePostRequest($url, $requestBody);
 		/** @var CreateSalesOrderResponse $apiResponse */
@@ -189,7 +160,7 @@ class ApiService
 	 */
 	public function deleteSalesOrder(int $id): bool
 		{
-		$url      = $this->getRestletUrl($this->createDeleteSalesOrderId, 1, [
+		$url      = $this->getRestletUrl($this->config->restletMap->createDeleteSalesOrder, 1, [
 			'orderid' => $id
 		]);
 		$contents = $this->executeDeleteRequest($url);
@@ -377,7 +348,7 @@ class ApiService
 	 */
 	private function executeSavedSearchCustomers(array $filters): SavedSearchCustomersResponse
 		{
-		$url         = $this->getRestletUrl($this->savedSearchCustomersId, 1);
+		$url         = $this->getRestletUrl($this->config->restletMap->savedSearchCustomers, 1);
 		$requestBody = [
 			'filters' => $filters
 		];
@@ -395,7 +366,7 @@ class ApiService
 	 */
 	private function executeSavedSearchItems(array $filters): ItemSearchResponse
 		{
-		$url         = $this->getRestletUrl($this->savedSearchItemId, 1);
+		$url         = $this->getRestletUrl($this->config->restletMap->savedSearchItems, 1);
 		$requestBody = [
 			'filters' => $filters
 		];
@@ -426,7 +397,7 @@ class ApiService
 			'sql_where' => $where,
 			'params'    => $params
 		];
-		$url         = $this->getRestletUrl($this->suiteQLId, 1);
+		$url         = $this->getRestletUrl($this->config->restletMap->suiteQL, 1);
 		$contents    = $this->executePostRequest($url, $requestBody);
 		if ($responseClass)
 			{
@@ -506,8 +477,13 @@ class ApiService
 			'deploy' => $deploymentId
 		], $additionalQueryParams);
 
-		return sprintf('https://%s.restlets.api.netsuite.com/app/site/hosting/restlet.nl?', $this->account)
+		return sprintf('https://%s.restlets.api.netsuite.com/app/site/hosting/restlet.nl?', $this->config->account)
 			. http_build_query($queryParams);
+		}
+
+	private function getRestletHost(): string
+		{
+		return sprintf('%s.restlets.api.netsuite.com', $this->config->account);
 		}
 
 	/**
@@ -528,13 +504,13 @@ class ApiService
 		]);
 		$signature = $request->build_signature($this->signatureMethod, $this->consumer, $this->accessToken);
 		$request->set_parameter('oauth_signature', $signature);
-		$request->set_parameter('realm', $this->account);
+		$request->set_parameter('realm', $this->config->account);
 
 		try
 			{
 			return [
-				'Authorization' => substr($request->to_header($this->account), 15),
-				'Host'          => $this->restletHost,
+				'Authorization' => substr($request->to_header($this->config->account), 15),
+				'Host'          => $this->getRestletHost(),
 				'Content-Type'  => 'application/json'
 			];
 			}
@@ -546,10 +522,10 @@ class ApiService
 
 	/**
 	 * @param string $path
-	 * @return array
-	 * @throws RuntimeException
+	 * @return ApiConfig
+	 * @throws ApiTransferException
 	 */
-	private function readJsonConfig(string $path): array
+	private function readJsonConfig(string $path): ApiConfig
 		{
 		if (!file_exists($path)
 			|| !is_readable($path))
@@ -558,16 +534,9 @@ class ApiService
 				sprintf('File at `%s` doesn\'t exist or isn\'t readable', $path)
 			);
 			}
+		$contents = file_get_contents($path);
 
-		$config = json_decode(file_get_contents($path), true);
-		if (!$config)
-			{
-			throw new RuntimeException(sprintf(
-				'Malformed JSON, see %s for reference',
-				dirname(__DIR__) . '/sample.config.json'
-			));
-			}
-
-		return $config;
+		/** @noinspection PhpIncompatibleReturnTypeInspection */
+		return $this->serializer->deserialize($contents, ApiConfig::class);
 		}
 	}
