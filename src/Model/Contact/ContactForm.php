@@ -2,6 +2,7 @@
 
 namespace Infostud\NetSuiteSdk\Model\Contact;
 
+use Infostud\NetSuiteSdk\Exception\ApiLogicException;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 
 class ContactForm
@@ -52,8 +53,14 @@ class ContactForm
 		}
 
 	/**
+	 * Keep in mind that firstName+lastName combination
+	 * is required to be unique across Contacts in NetSuite.
+	 * Trying to create a Contact with the same combination
+	 * will throw an ApiLogicException
+	 *
 	 * @param string $firstName
 	 * @return self
+	 * @see ApiLogicException
 	 */
 	public function setFirstName(string $firstName): self
 		{
@@ -71,8 +78,14 @@ class ContactForm
 		}
 
 	/**
+	 * Keep in mind that firstName+lastName combination
+	 * is required to be unique across Contacts in NetSuite.
+	 * Trying to create a Contact with the same combination
+	 * will throw an ApiLogicException
+	 *
 	 * @param string|null $lastName
 	 * @return self
+	 * @see ApiLogicException
 	 */
 	public function setLastName(?string $lastName): self
 		{
