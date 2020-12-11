@@ -49,14 +49,6 @@ use RuntimeException;
 class ApiService
 	{
 	/**
-	 * @var string
-	 */
-	private $account;
-	/**
-	 * @var string
-	 */
-	private $restletHost;
-	/**
 	 * @var Client
 	 */
 	private $client;
@@ -77,59 +69,27 @@ class ApiService
 	 */
 	private $serializer;
 	/**
-	 * @var int
+	 * @var ApiConfig
 	 */
-	private $savedSearchCustomersId;
-	/**
-	 * @var int
-	 */
-	private $suiteQLId;
-	/**
-	 * @var int
-	 */
-	private $createDeleteCustomerId;
-	/**
-	 * @var int
-	 */
-	private $savedSearchItemId;
-	/**
-	 * @var int
-	 */
-	private $createDeleteSalesOrderId;
-	/**
-	 * @var int
-	 */
-	private $savedSearchGenericId;
-	/**
-	 * @var int
-	 */
-	private $createDeleteContactId;
+	private $config;
 
 	/**
 	 * @param string $configPath
 	 */
 	public function __construct($configPath)
 		{
-		$config = $this->readJsonConfig($configPath);
-
-		$this->account                  = $config['account'];
-		$this->restletHost              = $config['account'] . '.restlets.api.netsuite.com';
-		$this->client                   = new Client();
-		$this->consumer                 = new Consumer(
-			$config['consumerKey'], $config['consumerSecret']
+		$this->client = new Client();
+		$this->serializer = new ApiSerializer();
+		$this->config = $this->readJsonConfig($configPath);
+		$this->signatureMethod = new HmacSha1();
+		$this->consumer = new Consumer(
+			$this->config->consumerKey,
+			$this->config->consumerSecret
 		);
 		$this->accessToken              = new Token(
-			$config['accessTokenKey'], $config['accessTokenSecret']
+			$this->config->accessTokenKey,
+			$this->config->accessTokenSecret
 		);
-		$this->signatureMethod          = new HmacSha1();
-		$this->serializer               = new ApiSerializer();
-		$this->savedSearchCustomersId   = $config['restletIds']['savedSearchCustomers'];
-		$this->suiteQLId                = $config['restletIds']['suiteQL'];
-		$this->createDeleteCustomerId   = $config['restletIds']['createDeleteCustomer'];
-		$this->savedSearchItemId        = $config['restletIds']['savedSearchItems'];
-		$this->createDeleteSalesOrderId = $config['restletIds']['createDeleteSalesOrder'];
-		$this->savedSearchGenericId     = $config['restletIds']['savedSearchGeneric'];
-		$this->createDeleteContactId    = $config['restletIds']['createDeleteContact'];
 		}
 
 	/**
@@ -139,7 +99,7 @@ class ApiService
 	 */
 	public function createCustomer(CustomerForm $customerForm)
 		{
-		$url         = $this->getRestletUrl($this->createDeleteCustomerId, 3);
+		$url         = $this->getRestletUrl($this->config->restletMap->createDeleteCustomer, 3);
 		$requestBody = $this->serializer->normalize($customerForm);
 		$contents    = $this->executePostRequest($url, $requestBody);
 		/** @var CreateCustomerResponse $apiResponse */
@@ -160,7 +120,7 @@ class ApiService
 	 */
 	public function deleteCustomer($id)
 		{
-		$url      = $this->getRestletUrl($this->createDeleteCustomerId, 3, [
+		$url      = $this->getRestletUrl($this->config->restletMap->createDeleteCustomer, 3, [
 			'customerid' => $id
 		]);
 		$contents = $this->executeDeleteRequest($url);
@@ -177,7 +137,7 @@ class ApiService
 	 */
 	public function createSalesOrder(SalesOrderForm $form)
 		{
-		$url         = $this->getRestletUrl($this->createDeleteSalesOrderId, 1);
+		$url         = $this->getRestletUrl($this->config->restletMap->createDeleteSalesOrder, 1);
 		$requestBody = $this->serializer->normalize($form);
 		$contents    = $this->executePostRequest($url, $requestBody);
 		/** @var CreateSalesOrderResponse $apiResponse */
@@ -201,7 +161,7 @@ class ApiService
 	 */
 	public function deleteSalesOrder($id)
 		{
-		$url      = $this->getRestletUrl($this->createDeleteSalesOrderId, 1, [
+		$url      = $this->getRestletUrl($this->config->restletMap->createDeleteSalesOrder, 1, [
 			'orderid' => $id
 		]);
 		$contents = $this->executeDeleteRequest($url);
@@ -218,7 +178,7 @@ class ApiService
 	 */
 	public function createContact(ContactForm $contactForm)
 		{
-		$url         = $this->getRestletUrl($this->createDeleteContactId, 1);
+		$url         = $this->getRestletUrl($this->config->restletMap->createDeleteContact, 1);
 		$requestBody = $this->serializer->normalize($contactForm);
 		$contents    = $this->executePostRequest($url, $requestBody);
 		/** @var CreateContactResponse $response */
@@ -242,7 +202,7 @@ class ApiService
 	 */
 	public function deleteContact($id)
 		{
-		$url      = $this->getRestletUrl($this->createDeleteContactId, 1, [
+		$url      = $this->getRestletUrl($this->config->restletMap->createDeleteContact, 1, [
 			'contactid' => $id
 		]);
 		$contents = $this->executeDeleteRequest($url);
@@ -492,7 +452,7 @@ class ApiService
 	 */
 	private function executeSavedSearchCustomers($filters)
 		{
-		$url         = $this->getRestletUrl($this->savedSearchCustomersId, 1);
+		$url         = $this->getRestletUrl($this->config->restletMap->savedSearchCustomers, 1);
 		$requestBody = [
 			'filters' => $filters
 		];
@@ -510,7 +470,7 @@ class ApiService
 	 */
 	private function executeSavedSearchItems($filters)
 		{
-		$url         = $this->getRestletUrl($this->savedSearchItemId, 1);
+		$url         = $this->getRestletUrl($this->config->restletMap->savedSearchItems, 1);
 		$requestBody = [
 			'filters' => $filters
 		];
@@ -531,7 +491,7 @@ class ApiService
 	 */
 	private function executeGenericSavedSearch($type, $columnNames, $filters, $responseClass)
 		{
-		$url = $this->getRestletUrl($this->savedSearchGenericId, 1);
+		$url = $this->getRestletUrl($this->config->restletMap->savedSearchGeneric, 1);
 
 		$columns = array_map(static function($columnName){
 			return ['name' => $columnName];
@@ -559,7 +519,7 @@ class ApiService
 	 */
 	public function executeSuiteQuery($responseClass, $from, $where = ' ', $params = [])
 		{
-		$url         = $this->getRestletUrl($this->suiteQLId, 1);
+		$url         = $this->getRestletUrl($this->config->restletMap->suiteQL, 1);
 		$requestBody = [
 			'sql_from'  => $from,
 			'sql_where' => $where,
@@ -644,8 +604,16 @@ class ApiService
 			'deploy' => $deploymentId
 		], $additionalQueryData);
 
-		return sprintf('https://%s.restlets.api.netsuite.com/app/site/hosting/restlet.nl?', $this->account)
+		return sprintf('https://%s.restlets.api.netsuite.com/app/site/hosting/restlet.nl?', $this->config->account)
 			. http_build_query($queryData);
+		}
+
+	/**
+	 * @return string
+	 */
+	private function getRestletHost()
+		{
+		return sprintf('%s.restlets.api.netsuite.com', $this->config->account);
 		}
 
 	/**
@@ -666,13 +634,13 @@ class ApiService
 		]);
 		$signature = $request->build_signature($this->signatureMethod, $this->consumer, $this->accessToken);
 		$request->set_parameter('oauth_signature', $signature);
-		$request->set_parameter('realm', $this->account);
+		$request->set_parameter('realm', $this->config->account);
 
 		try
 			{
 			return [
-				'Authorization' => substr($request->to_header($this->account), 15),
-				'Host'          => $this->restletHost,
+				'Authorization' => substr($request->to_header($this->config->account), 15),
+				'Host'          => $this->getRestletHost(),
 				'Content-Type'  => 'application/json'
 			];
 			}
@@ -684,7 +652,7 @@ class ApiService
 
 	/**
 	 * @param string $path
-	 * @return array
+	 * @return ApiConfig|object
 	 * @throws RuntimeException
 	 */
 	private function readJsonConfig($path)
@@ -697,15 +665,8 @@ class ApiService
 			);
 			}
 
-		$config = json_decode(file_get_contents($path), true);
-		if (!$config)
-			{
-			throw new RuntimeException(sprintf(
-				'Malformed JSON, see %s for reference',
-				dirname(__DIR__) . '/sample.config.json'
-			));
-			}
+		$contents = file_get_contents($path);
 
-		return $config;
+		return $this->serializer->deserialize($contents, ApiConfig::class);
 		}
 	}
