@@ -40,6 +40,23 @@ class CustomerForm
 	 */
 	private $individual;
 	/**
+	 * @var string
+	 */
+	private $email;
+	/**
+	 * @var string
+	 */
+	private $url;
+	/**
+	 * @var string
+	 */
+	private $phone;
+	/**
+	 * @Groups("altphone")
+	 * @var string
+	 */
+	private $altPhone;
+	/**
 	 * @Groups("address")
 	 * @var CustomerFormAddress[]
 	 */
@@ -216,5 +233,69 @@ class CustomerForm
 		$this->addresses = [];
 
 		return $this;
+		}
+
+	/**
+	 * @return string
+	 */
+	public function getEmail()
+		{
+		return $this->email;
+		}
+
+	/**
+	 * @param string $email
+	 */
+	public function setEmail($email)
+		{
+		$this->email = $email;
+		}
+
+	/**
+	 * @return string
+	 */
+	public function getUrl()
+		{
+		return $this->url;
+		}
+
+	/**
+	 * @param string $url
+	 */
+	public function setUrl($url)
+		{
+		$this->url = $url;
+		}
+
+	/**
+	 * @return string
+	 */
+	public function getPhone()
+		{
+		return $this->phone;
+		}
+
+	/**
+	 * @param string $phone
+	 */
+	public function setPhone($phone)
+		{
+		$this->phone = $phone;
+		}
+
+	/**
+	 * @return string
+	 */
+	public function getAltPhone()
+		{
+		return $this->altPhone;
+		}
+
+	/**
+	 * @param string $altPhone
+	 */
+	public function setAltPhone($altPhone)
+		{
+		$this->altPhone = $altPhone;
 		}
 	}
