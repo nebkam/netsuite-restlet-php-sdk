@@ -44,6 +44,9 @@ class ApiServiceTest extends TestCase
 			->setSubsidiary(10)
 			->setVatIdentifier('101696893')
 			->setRegistryIdentifier('01234567')
+			->setPhone('065/871-71-69')
+			->setAlternativePhone('024/843-839')
+			->setUrl('https://www.4zida.rs')
 			->addAddress(
 				(new CustomerFormAddress())
 					->setLabel('Nazor')

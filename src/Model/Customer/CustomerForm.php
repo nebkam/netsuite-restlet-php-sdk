@@ -55,7 +55,7 @@ class CustomerForm
 	 * @Groups("altphone")
 	 * @var string
 	 */
-	private $altPhone;
+	private $alternativePhone;
 	/**
 	 * @Groups("address")
 	 * @var CustomerFormAddress[]
@@ -261,10 +261,13 @@ class CustomerForm
 
 	/**
 	 * @param string $url
+	 * @return self
 	 */
 	public function setUrl($url)
 		{
 		$this->url = $url;
+
+		return $this;
 		}
 
 	/**
@@ -277,25 +280,31 @@ class CustomerForm
 
 	/**
 	 * @param string $phone
+	 * @return self
 	 */
 	public function setPhone($phone)
 		{
 		$this->phone = $phone;
+
+		return $this;
 		}
 
 	/**
 	 * @return string
 	 */
-	public function getAltPhone()
+	public function getAlternativePhone()
 		{
-		return $this->altPhone;
+		return $this->alternativePhone;
 		}
 
 	/**
-	 * @param string $altPhone
+	 * @param string $alternativePhone
+	 * @return self
 	 */
-	public function setAltPhone($altPhone)
+	public function setAlternativePhone($alternativePhone)
 		{
-		$this->altPhone = $altPhone;
+		$this->alternativePhone = $alternativePhone;
+
+		return $this;
 		}
 	}

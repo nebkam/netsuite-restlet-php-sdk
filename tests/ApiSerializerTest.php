@@ -45,6 +45,9 @@ class ApiSerializerTest extends TestCase
 			->setSubsidiary(9)
 			->setVatIdentifier('101696893')
 			->setRegistryIdentifier('01234567')
+			->setPhone('065/871-71-69')
+			->setAlternativePhone('024/843-839')
+			->setUrl('https://www.4zida.rs')
 			->addAddress(
 				(new CustomerFormAddress())
 					->setLabel('Nazor')
@@ -60,6 +63,9 @@ class ApiSerializerTest extends TestCase
 		self::assertEquals(9, $normalized['subsidiary']);
 		self::assertEquals('101696893', $normalized['custentity_pib']);
 		self::assertEquals('01234567', $normalized['custentity_matbrpred']);
+		self::assertEquals('065/871-71-69', $normalized['phone']);
+		self::assertEquals('024/843-839', $normalized['altphone']);
+		self::assertEquals('https://www.4zida.rs', $normalized['url']);
 		self::assertCount(1, $normalized['address']);
 		$address = $normalized['address'][0];
 		self::assertEquals('Nazor', $address['label']);
