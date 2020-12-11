@@ -3,6 +3,7 @@
 use Infostud\NetSuiteSdk\ApiService;
 use Infostud\NetSuiteSdk\Exception\ApiTransferException;
 use Infostud\NetSuiteSdk\Exception\ApiLogicException;
+use Infostud\NetSuiteSdk\Model\Contact\ContactForm;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerForm;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerFormAddress;
 use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderForm;
@@ -21,6 +22,7 @@ class ApiServiceTest extends TestCase
 	/**
 	 * Test that it doesn't throw exceptions
 	 * @return ApiService
+	 * @throws ApiTransferException
 	 */
 	public function testParseConfig(): ApiService
 		{
@@ -59,6 +61,76 @@ class ApiServiceTest extends TestCase
 			$apiService,
 			$customerId
 		];
+		}
+
+	/**
+	 * @depends testCreateCustomer
+	 * @param $params array
+	 * @return array
+	 * @throws ApiLogicException
+	 * @throws ApiTransferException
+	 */
+	public function testCreateContact(array $params): array
+		{
+		/**
+		 * @var $apiService ApiService
+		 * @var $customerId int
+		 */
+		[$apiService, $customerId] = $params;
+		$form = (new ContactForm())
+			->setSubsidiary(getenv('SUBSIDIARY_ID'))
+			->setCompany($customerId)
+			->setFirstName('Little Bobby')
+			->setLastName('Tables')
+			->setEmail('little.bobby@tables.com')
+			->setPhone('024 543839')
+			->setMobilePhone('065 8717169');
+		$contactId = $apiService->createContact($form);
+		self::assertNotNull($contactId);
+
+		return [
+			$apiService,
+			$contactId,
+			$customerId
+		];
+		}
+
+	/**
+	 * @depends testCreateContact
+	 * @param array $params
+	 * @throws ApiTransferException
+	 */
+	public function testFindContacts(array $params): void
+		{
+		/**
+		 * @var $apiService ApiService
+		 * @var $customerId int
+		 */
+		[$apiService, $contactId, $customerId] = $params;
+		$contacts = $apiService->findContactsByCompany($customerId);
+		self::assertNotEmpty($contacts);
+		$contact = $contacts[0];
+		self::assertEquals($contactId, (int) $contact->getId());
+		self::assertEquals('Little Bobby Tables', $contact->getAttributes()->getFullName());
+		self::assertEquals('065 8717169', $contact->getAttributes()->getMobilePhone());
+		self::assertEquals('little.bobby@tables.com', $contact->getAttributes()->getEmail());
+		self::assertNotEmpty($contact->getAttributes()->getCompanies());
+		self::assertEquals($customerId, (int) $contact->getAttributes()->getCompanies()[0]->getId());
+		}
+
+	/**
+	 * @depends testCreateContact
+	 * @param array $params
+	 * @throws ApiTransferException
+	 */
+	public function testDeleteContact(array $params): void
+		{
+		/**
+		 * @var $apiService ApiService
+		 * @var $contactId int
+		 */
+		[$apiService, $contactId] = $params;
+		self::assertTrue($apiService->deleteContact($contactId));
 		}
 
 	/**

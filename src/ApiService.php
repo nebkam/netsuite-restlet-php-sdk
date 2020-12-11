@@ -14,13 +14,19 @@ use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
 use Infostud\NetSuiteSdk\Exception\ApiTransferException;
 use Infostud\NetSuiteSdk\Exception\ApiLogicException;
+use Infostud\NetSuiteSdk\Model\Contact\ContactForm;
+use Infostud\NetSuiteSdk\Model\Contact\CreateContactResponse;
+use Infostud\NetSuiteSdk\Model\Contact\DeleteContactResponse;
 use Infostud\NetSuiteSdk\Model\Customer\CreateCustomerResponse;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerForm;
 use Infostud\NetSuiteSdk\Model\Customer\DeleteCustomerResponse;
 use Infostud\NetSuiteSdk\Model\SalesOrder\CreateSalesOrderResponse;
 use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderForm;
 use Infostud\NetSuiteSdk\Model\SalesOrder\DeleteSalesOrderResponse;
+use Infostud\NetSuiteSdk\Model\SavedSearch\Contact;
+use Infostud\NetSuiteSdk\Model\SavedSearch\ContactSearchResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
+use Infostud\NetSuiteSdk\Model\SavedSearch\GenericSavedSearchResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Item;
 use Infostud\NetSuiteSdk\Model\SavedSearch\ItemSearchResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Classification;
@@ -82,6 +88,47 @@ class ApiService
 			$this->config->accessTokenKey,
 			$this->config->accessTokenSecret
 		);
+		}
+
+	/**
+	 * @param ContactForm $contactForm
+	 * @return int
+	 * @throws ApiTransferException|ApiLogicException
+	 */
+	public function createContact(ContactForm $contactForm): int
+		{
+		$url         = $this->getRestletUrl($this->config->restletMap->createDeleteContact, 1);
+		$requestBody = $this->serializer->normalize($contactForm);
+		$contents    = $this->executePostRequest($url, $requestBody);
+		/** @var CreateContactResponse $response */
+		$response = $this->serializer->deserialize($contents, CreateContactResponse::class);
+		if ($response->isSuccessful()
+			&& $response->getContactId())
+			{
+			return $response->getContactId();
+			}
+
+		throw new ApiLogicException($response->getErrorName(), $response->getErrorMessage());
+		}
+
+	/**
+	 * Used by tests only. Production usage not explicitly confirmed yet
+	 *
+	 * @param int $id
+	 * @return bool
+	 * @throws ApiTransferException
+	 * @internal
+	 */
+	public function deleteContact(int $id): bool
+		{
+		$url      = $this->getRestletUrl($this->config->restletMap->createDeleteContact, 1, [
+			'contactid' => $id
+		]);
+		$contents = $this->executeDeleteRequest($url);
+		/** @var DeleteContactResponse $apiResponse */
+		$apiResponse = $this->serializer->deserialize($contents, DeleteContactResponse::class);
+
+		return $apiResponse->isSuccessful();
 		}
 
 	/**
@@ -282,6 +329,36 @@ class ApiService
 		}
 
 	/**
+	 * Get all contacts for a selected company
+	 *
+	 * @param int $companyId
+	 * @return Contact[]
+	 * @throws ApiTransferException
+	 */
+	public function findContactsByCompany(int $companyId): array
+		{
+		$filters     = [[
+			'name'     => 'company',
+			'operator' => 'is',
+			'values'   => [$companyId]
+		]];
+		$columnNames = [
+			'entityid',
+			'email',
+			'mobilephone',
+			'company',
+			'custentity_contact_location'
+		];
+
+		return $this->executeGenericSavedSearch(
+			'contact',
+			$columnNames,
+			$filters,
+			ContactSearchResponse::class
+		);
+		}
+
+	/**
 	 * @return Subsidiary[]
 	 * @throws ApiTransferException
 	 */
@@ -375,6 +452,39 @@ class ApiService
 		$response = $this->serializer->deserialize($contents, ItemSearchResponse::class);
 
 		return $response;
+		}
+
+	/**
+	 * @param string $type
+	 * @param string[] $columnNames
+	 * @param array $filters
+	 * @param string $responseClass
+	 * @return array
+	 * @throws ApiTransferException
+	 */
+	private function executeGenericSavedSearch(
+		string $type,
+		array $columnNames,
+		array $filters,
+		string $responseClass
+	): array
+		{
+		$url = $this->getRestletUrl($this->config->restletMap->savedSearchGeneric, 1);
+
+		$columns = array_map(static function($columnName){
+			return ['name' => $columnName];
+		}, $columnNames);
+
+		$requestBody = [
+			'type'    => $type,
+			'columns' => $columns,
+			'filters' => $filters,
+		];
+		$contents    = $this->executePostRequest($url, $requestBody);
+		/** @var GenericSavedSearchResponse $response */
+		$response = $this->serializer->deserialize($contents, $responseClass);
+
+		return !empty($response->getRows()) ? $response->getRows() : [];
 		}
 
 	/**
