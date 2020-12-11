@@ -239,6 +239,23 @@ class ApiServiceTest extends TestCase
 	 * @param ApiService $apiService
 	 * @throws ApiTransferException
 	 */
+	public function testFindTaxItems(ApiService $apiService): void
+		{
+		$taxItems = $apiService->findTaxItems();
+		self::assertNotEmpty($taxItems);
+		foreach ($taxItems as $taxItem)
+			{
+			self::assertNotEmpty($taxItem->getId());
+			self::assertNotEmpty($taxItem->getAttributes()->getName());
+			self::assertNotEmpty($taxItem->getAttributes()->getRate());
+			}
+		}
+
+	/**
+	 * @depends testParseConfig
+	 * @param ApiService $apiService
+	 * @throws ApiTransferException
+	 */
 	public function testGetSubsidiaries(ApiService $apiService): void
 		{
 		$subsidiaries = $apiService->getSubsidiaries();

@@ -29,6 +29,8 @@ use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\SavedSearch\GenericSavedSearchResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Item;
 use Infostud\NetSuiteSdk\Model\SavedSearch\ItemSearchResponse;
+use Infostud\NetSuiteSdk\Model\SavedSearch\TaxItem;
+use Infostud\NetSuiteSdk\Model\SavedSearch\TaxItemSearchResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Classification;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Employee;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetClassificationsResponse;
@@ -355,6 +357,36 @@ class ApiService
 			$columnNames,
 			$filters,
 			ContactSearchResponse::class
+		);
+		}
+
+	/**
+	 * @param string $name
+	 * @return TaxItem[]
+	 * @throws ApiTransferException
+	 */
+	public function findTaxItems($name = null): array
+		{
+		$filters = [];
+
+		if (!is_null($name))
+			{
+			$filters = [[
+				'name'     => 'name',
+				'operator' => 'is',
+				'values'   => [$name]
+			]];
+			}
+		$columnNames = [
+			'name',
+			'rate',
+			'country'
+		];
+		return $this->executeGenericSavedSearch(
+			'salestaxitem',
+			$columnNames,
+			$filters,
+			TaxItemSearchResponse::class
 		);
 		}
 
