@@ -37,6 +37,11 @@ class ContactForm
 	 * @var string
 	 */
 	private $mobilePhone;
+	/**
+	 * @Groups("custentity_contact_location")
+	 * @var int[]
+	 */
+	private $locations;
 
 	/**
 	 * @return string
@@ -169,6 +174,25 @@ class ContactForm
 	public function setMobilePhone($mobilePhone)
 		{
 		$this->mobilePhone = $mobilePhone;
+
+		return $this;
+		}
+
+	/**
+	 * @return int[]
+	 */
+	public function getLocations()
+		{
+		return $this->locations;
+		}
+
+	/**
+	 * @param int[] $locations
+	 * @return self
+	 */
+	public function setLocations($locations)
+		{
+		$this->locations = $locations;
 
 		return $this;
 		}
