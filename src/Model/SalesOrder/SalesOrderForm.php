@@ -52,6 +52,20 @@ class SalesOrderForm
 	 * @var bool|null
 	 */
 	private $invoiceImmediately;
+	/**
+	 * @var string|null
+	 */
+	private $memo;
+	/**
+	 * @Groups("startdate")
+	 * @var string|null
+	 */
+	private $startDate;
+	/**
+	 * @Groups("enddate")
+	 * @var string|null
+	 */
+	private $endDate;
 
 	public function __construct()
 		{
@@ -203,13 +217,13 @@ class SalesOrderForm
 
 	/**
 	 * Transaction date in "d.m.Y" format
+	 * @param string $transactionDate
+	 * @return self
 	 * @example "02.05.2020"
 	 *
 	 * Unfortunately, PHP doesn't have a native `Date` type
 	 * so we're passing string "as-is" to the API
 	 *
-	 * @param string $transactionDate
-	 * @return self
 	 */
 	public function setTransactionDate($transactionDate)
 		{
@@ -271,6 +285,75 @@ class SalesOrderForm
 	public function setInvoiceImmediately($value)
 		{
 		$this->invoiceImmediately = $value;
+
+		return $this;
+		}
+
+	/**
+	 * @return string|null
+	 */
+	public function getMemo()
+		{
+		return $this->memo;
+		}
+
+	/**
+	 * @param string|null $memo
+	 * @return self
+	 */
+	public function setMemo($memo)
+		{
+		$this->memo = $memo;
+
+		return $this;
+		}
+
+	/**
+	 * @return string|null
+	 */
+	public function getStartDate()
+		{
+		return $this->startDate;
+		}
+
+	/**
+	 * Start date in "d.m.Y" format
+	 * @param string|null $startDate
+	 * @return self
+	 * @example "02.05.2020"
+	 *
+	 * Unfortunately, PHP doesn't have a native `Date` type
+	 * so we're passing string "as-is" to the API
+	 *
+	 */
+	public function setStartDate($startDate)
+		{
+		$this->startDate = $startDate;
+
+		return $this;
+		}
+
+	/**
+	 * @return string|null
+	 */
+	public function getEndDate()
+		{
+		return $this->endDate;
+		}
+
+	/**
+	 * End date in "d.m.Y" format
+	 * @param string|null $endDate
+	 * @return self
+	 * @example "02.05.2020"
+	 *
+	 * Unfortunately, PHP doesn't have a native `Date` type
+	 * so we're passing string "as-is" to the API
+	 *
+	 */
+	public function setEndDate($endDate)
+		{
+		$this->endDate = $endDate;
 
 		return $this;
 		}
