@@ -52,6 +52,20 @@ class SalesOrderForm
 	 * @var bool|null
 	 */
 	private $invoiceImmediately;
+	/**
+	 * @var string|null
+	 */
+	private $memo;
+	/**
+	 * @SerializedName("startdate")
+	 * @var string|null
+	 */
+	private $startDate;
+	/**
+	 * @SerializedName("enddate")
+	 * @var string|null
+	 */
+	private $endDate;
 
 	public function __construct()
 		{
@@ -271,6 +285,73 @@ class SalesOrderForm
 	public function setInvoiceImmediately(?bool $value): self
 		{
 		$this->invoiceImmediately = $value;
+
+		return $this;
+		}
+
+	/**
+	 * @return string|null
+	 */
+	public function getMemo(): ?string
+		{
+		return $this->memo;
+		}
+
+	/**
+	 * @param string|null $memo
+	 * @return self
+	 */
+	public function setMemo(?string $memo): self
+		{
+		$this->memo = $memo;
+
+		return $this;
+		}
+
+	/**
+	 * @return string|null
+	 */
+	public function getStartDate(): ?string
+		{
+		return $this->startDate;
+		}
+
+	/**
+	 * Start date in "d.m.Y" format
+	 * @param string|null $startDate
+	 * @return self
+	 * @example "02.05.2020"
+	 *
+	 * Unfortunately, PHP doesn't have a native `Date` type
+	 * so we're passing string "as-is" to the API
+	 */
+	public function setStartDate(?string $startDate): self
+		{
+		$this->startDate = $startDate;
+
+		return $this;
+		}
+
+	/**
+	 * @return string|null
+	 */
+	public function getEndDate(): ?string
+		{
+		return $this->endDate;
+		}
+
+	/**
+	 * End date in "d.m.Y" format
+	 * @param string|null $endDate
+	 * @return self
+	 * @example "02.05.2020"
+	 *
+	 * Unfortunately, PHP doesn't have a native `Date` type
+	 * so we're passing string "as-is" to the API
+	 */
+	public function setEndDate(?string $endDate): self
+		{
+		$this->endDate = $endDate;
 
 		return $this;
 		}
