@@ -37,6 +37,21 @@ class SalesOrderForm
 	 * @var string
 	 */
 	private $transactionDate;
+	/**
+	 * @Groups("custbody_rsm_infs_fakturista")
+	 * @var int|null
+	 */
+	private $createdBy;
+	/**
+	 * @Groups("custbody_rsm_infs_representative")
+	 * @var int|null
+	 */
+	private $appointedSeller;
+	/**
+	 * @Groups("custbody_rsm_force_invoice")
+	 * @var bool|null
+	 */
+	private $invoiceImmediately;
 
 	public function __construct()
 		{
@@ -199,6 +214,63 @@ class SalesOrderForm
 	public function setTransactionDate($transactionDate)
 		{
 		$this->transactionDate = $transactionDate;
+
+		return $this;
+		}
+
+	/**
+	 * @return int|null
+	 */
+	public function getCreatedBy()
+		{
+		return $this->createdBy;
+		}
+
+	/**
+	 * @param int|null $id
+	 * @return self
+	 */
+	public function setCreatedBy($id)
+		{
+		$this->createdBy = $id;
+
+		return $this;
+		}
+
+	/**
+	 * @return int|null
+	 */
+	public function getAppointedSeller()
+		{
+		return $this->appointedSeller;
+		}
+
+	/**
+	 * @param int|null $id
+	 * @return self
+	 */
+	public function setAppointedSeller($id)
+		{
+		$this->appointedSeller = $id;
+
+		return $this;
+		}
+
+	/**
+	 * @return bool|null
+	 */
+	public function getInvoiceImmediately()
+		{
+		return $this->invoiceImmediately;
+		}
+
+	/**
+	 * @param bool|null $value
+	 * @return self
+	 */
+	public function setInvoiceImmediately($value)
+		{
+		$this->invoiceImmediately = $value;
 
 		return $this;
 		}

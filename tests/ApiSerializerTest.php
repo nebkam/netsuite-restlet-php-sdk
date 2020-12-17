@@ -158,6 +158,9 @@ class ApiSerializerTest extends TestCase
 			->setLocation(3)
 			->setClassification(4)
 			->setCustomer(5)
+			->setAppointedSeller(6)
+			->setCreatedBy(7)
+			->setInvoiceImmediately(false)
 			->addItem(
 				(new SalesOrderItem())
 					->setId(8723)
@@ -182,6 +185,9 @@ class ApiSerializerTest extends TestCase
 			'02.05.2020',
 			$normalized['trandate']
 		);
+		self::assertEquals(6, $normalized['custbody_rsm_infs_representative']);
+		self::assertEquals(7, $normalized['custbody_rsm_infs_fakturista']);
+		self::assertFalse($normalized['custbody_rsm_force_invoice']);
 		}
 
 	/**
