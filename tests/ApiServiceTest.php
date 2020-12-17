@@ -160,10 +160,11 @@ class ApiServiceTest extends TestCase
 					->setRate(5000000.00)
 					->setTaxCode(8)
 			)
-			->setTransactionDate('02.05.2020');
+			->setTransactionDate('02.05.2020')
+			->setInvoiceImmediately(false);
+			// TODO test createdBy and appointedSeller
 		$salesOrderId = $apiService->createSalesOrder($form);
 		self::assertNotEmpty($salesOrderId);
-		// TODO delete test sales order
 		return [
 			$apiService,
 			$salesOrderId

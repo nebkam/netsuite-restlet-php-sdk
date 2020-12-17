@@ -37,6 +37,21 @@ class SalesOrderForm
 	 * @var string
 	 */
 	private $transactionDate;
+	/**
+	 * @SerializedName("custbody_rsm_infs_fakturista")
+	 * @var int|null
+	 */
+	private $createdBy;
+	/**
+	 * @SerializedName("custbody_rsm_infs_representative")
+	 * @var int|null
+	 */
+	private $appointedSeller;
+	/**
+	 * @SerializedName("custbody_rsm_force_invoice")
+	 * @var bool|null
+	 */
+	private $invoiceImmediately;
 
 	public function __construct()
 		{
@@ -188,17 +203,74 @@ class SalesOrderForm
 
 	/**
 	 * Transaction date in "d.m.Y" format
+	 * @param string $transactionDate
+	 * @return self
 	 * @example "02.05.2020"
 	 *
 	 * Unfortunately, PHP doesn't have a native `Date` type
 	 * so we're passing string "as-is" to the API
 	 *
-	 * @param string $transactionDate
-	 * @return self
 	 */
 	public function setTransactionDate(string $transactionDate): self
 		{
 		$this->transactionDate = $transactionDate;
+
+		return $this;
+		}
+
+	/**
+	 * @return int|null
+	 */
+	public function getCreatedBy(): ?int
+		{
+		return $this->createdBy;
+		}
+
+	/**
+	 * @param int|null $id
+	 * @return self
+	 */
+	public function setCreatedBy(?int $id): self
+		{
+		$this->createdBy = $id;
+
+		return $this;
+		}
+
+	/**
+	 * @return int|null
+	 */
+	public function getAppointedSeller(): ?int
+		{
+		return $this->appointedSeller;
+		}
+
+	/**
+	 * @param int|null $id
+	 * @return self
+	 */
+	public function setAppointedSeller(?int $id): self
+		{
+		$this->appointedSeller = $id;
+
+		return $this;
+		}
+
+	/**
+	 * @return bool|null
+	 */
+	public function getInvoiceImmediately(): ?bool
+		{
+		return $this->invoiceImmediately;
+		}
+
+	/**
+	 * @param bool|null $value
+	 * @return self
+	 */
+	public function setInvoiceImmediately(?bool $value): self
+		{
+		$this->invoiceImmediately = $value;
 
 		return $this;
 		}
