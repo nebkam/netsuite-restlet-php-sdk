@@ -17,7 +17,7 @@ class ApiConfig
 	 */
 	public $consumerSecret;
 	/**
-	 * @var
+	 * @var string
 	 */
 	public $accessTokenKey;
 	/**
