@@ -17,12 +17,12 @@ class CustomerFormAddress
 	private $city;
 	/**
 	 * @SerializedName("addr1")
-	 * @var string
+	 * @var string|null
 	 */
 	private $addressLine1;
 	/**
 	 * @SerializedName("addr2")
-	 * @var string
+	 * @var string|null
 	 */
 	private $addressLine2;
 	/**
@@ -74,18 +74,18 @@ class CustomerFormAddress
 		}
 
 	/**
-	 * @return string
+	 * @return string|null
 	 */
-	public function getAddressLine1(): string
+	public function getAddressLine1(): ?string
 		{
 		return $this->addressLine1;
 		}
 
 	/**
-	 * @param string $addressLine1
+	 * @param string|null $addressLine1
 	 * @return self
 	 */
-	public function setAddressLine1(string $addressLine1): self
+	public function setAddressLine1(?string $addressLine1): self
 		{
 		$this->addressLine1 = $addressLine1;
 
@@ -93,18 +93,18 @@ class CustomerFormAddress
 		}
 
 	/**
-	 * @return string
+	 * @return string|null
 	 */
-	public function getAddressLine2(): string
+	public function getAddressLine2(): ?string
 		{
 		return $this->addressLine2;
 		}
 
 	/**
-	 * @param string $addressLine2
+	 * @param string|null $addressLine2
 	 * @return self
 	 */
-	public function setAddressLine2(string $addressLine2): self
+	public function setAddressLine2(?string $addressLine2): self
 		{
 		$this->addressLine2 = $addressLine2;
 
