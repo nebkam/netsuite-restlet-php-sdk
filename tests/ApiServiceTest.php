@@ -43,7 +43,7 @@ class ApiServiceTest extends TestCase
 			->setExternalId('PIB-123456')
 			->setCompanyName('Foo test customer')
 			->setSubsidiary(getenv('SUBSIDIARY_ID'))
-			->setVatIdentifier('101696893')
+			->setPib('101696893')
 			->setRegistryIdentifier('01234567')
 			->addAddress(
 				(new CustomerFormAddress())

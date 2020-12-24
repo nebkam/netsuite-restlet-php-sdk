@@ -23,7 +23,7 @@ class CustomerForm
 	 * @SerializedName("custentity_pib")
 	 * @var string
 	 */
-	private $vatIdentifier;
+	private $pib;
 	/**
 	 * @SerializedName("custentity_matbrpred")
 	 * @var string
@@ -112,18 +112,18 @@ class CustomerForm
 	/**
 	 * @return string
 	 */
-	public function getVatIdentifier(): string
+	public function getPib(): string
 		{
-		return $this->vatIdentifier;
+		return $this->pib;
 		}
 
 	/**
-	 * @param string $vatIdentifier
+	 * @param string $pib
 	 * @return self
 	 */
-	public function setVatIdentifier(string $vatIdentifier): self
+	public function setPib(string $pib): self
 		{
-		$this->vatIdentifier = $vatIdentifier;
+		$this->pib = $pib;
 
 		return $this;
 		}
