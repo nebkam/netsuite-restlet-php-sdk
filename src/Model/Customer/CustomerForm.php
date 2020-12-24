@@ -23,7 +23,7 @@ class CustomerForm
 	 * @Groups("custentity_pib")
 	 * @var string
 	 */
-	private $vatIdentifier;
+	private $pib;
 	/**
 	 * @Groups("custentity_matbrpred")
 	 * @var string
@@ -129,18 +129,18 @@ class CustomerForm
 	/**
 	 * @return string
 	 */
-	public function getVatIdentifier()
+	public function getPib()
 		{
-		return $this->vatIdentifier;
+		return $this->pib;
 		}
 
 	/**
-	 * @param string $vatIdentifier
+	 * @param string $pib
 	 * @return self
 	 */
-	public function setVatIdentifier($vatIdentifier)
+	public function setPib($pib)
 		{
-		$this->vatIdentifier = $vatIdentifier;
+		$this->pib = $pib;
 
 		return $this;
 		}

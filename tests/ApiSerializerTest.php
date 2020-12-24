@@ -43,7 +43,7 @@ class ApiSerializerTest extends TestCase
 			->setExternalId('PIB-123456')
 			->setCompanyName('Test item')
 			->setSubsidiary(9)
-			->setVatIdentifier('101696893')
+			->setPib('101696893')
 			->setRegistryIdentifier('01234567')
 			->setPhone('065/871-71-69')
 			->setAlternativePhone('024/843-839')
