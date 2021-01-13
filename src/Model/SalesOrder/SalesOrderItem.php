@@ -21,7 +21,7 @@ class SalesOrderItem
 	private $rate;
 	/**
 	 * @SerializedName("taxcode")
-	 * @var int
+	 * @var int|null
 	 */
 	private $taxCode;
 
@@ -83,18 +83,18 @@ class SalesOrderItem
 		}
 
 	/**
-	 * @return int
+	 * @return int|null
 	 */
-	public function getTaxCode(): int
+	public function getTaxCode(): ?int
 		{
 		return $this->taxCode;
 		}
 
 	/**
-	 * @param int $taxCode
+	 * @param int|null $taxCode
 	 * @return self
 	 */
-	public function setTaxCode(int $taxCode): self
+	public function setTaxCode(?int $taxCode): self
 		{
 		$this->taxCode = $taxCode;
 
