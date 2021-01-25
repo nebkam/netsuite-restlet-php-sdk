@@ -2,7 +2,6 @@
 
 namespace Infostud\NetSuiteSdk\Model\NotificationRecipient;
 
-use Infostud\NetSuiteSdk\Exception\ApiLogicException;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 class NotificationRecipientForm
@@ -12,10 +11,12 @@ class NotificationRecipientForm
 	 */
 	private $description;
 	/**
+	 * @Groups("email_to")
 	 * @var string
 	 */
 	private $emailTo;
 	/**
+	 * @Groups("email_cc")
 	 * @var string
 	 */
 	private $emailCc;
@@ -39,42 +40,51 @@ class NotificationRecipientForm
 
 	/**
 	 * @param string $description
+	 * @return self
 	 */
 	public function setDescription($description)
 		{
 		$this->description = $description;
+
+		return $this;
 		}
 
 	/**
-	 * @return array
+	 * @return string
 	 */
 	public function getEmailTo()
 		{
-		return explode(';',$this->emailTo);
+		return $this->emailTo;
 		}
 
 	/**
-	 * @param array $emailTo
+	 * @param string[] $emailTo
+	 * @return self
 	 */
 	public function setEmailTo($emailTo)
 		{
 		$this->emailTo = implode(';',$emailTo);
+
+		return $this;
 		}
 
 	/**
-	 * @return array
+	 * @return string
 	 */
 	public function getEmailCc()
 		{
-		return explode(';',$this->emailCc);
+		return $this->emailCc;
 		}
 
 	/**
-	 * @param array $emailCc
+	 * @param string[] $emailCc
+	 * @return self
 	 */
 	public function setEmailCc($emailCc)
 		{
 		$this->emailCc = implode(';',$emailCc);
+
+		return $this;
 		}
 
 	/**
@@ -87,18 +97,25 @@ class NotificationRecipientForm
 
 	/**
 	 * @param int[] $locations
+	 *
+	 * @return self
 	 */
 	public function setLocations($locations)
 		{
 		$this->locations = $locations;
+
+		return $this;
 		}
 
 	/**
 	 * @param int $location
+	 * @return self
 	 */
 	public function addLocation($location)
 		{
 		$this->locations[] = $location;
+
+		return $this;
 		}
 
 	/**
@@ -111,10 +128,12 @@ class NotificationRecipientForm
 
 	/**
 	 * @param int $customer
+	 * @return self
 	 */
 	public function setCustomer($customer)
 		{
 		$this->customer = $customer;
-		}
 
+		return $this;
+		}
 	}

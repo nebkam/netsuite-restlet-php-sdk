@@ -68,11 +68,11 @@ class NotificationRecipientAttributes
 		}
 
 	/**
-	 * @param array $mailTo
+	 * @param string $mailTo
 	 */
 	public function setMailTo($mailTo)
 		{
-		$this->mailTo = implode(';',$mailTo);
+		$this->mailTo = $mailTo;
 		}
 
 	/**
@@ -84,10 +84,10 @@ class NotificationRecipientAttributes
 		}
 
 	/**
-	 * @param array $mailCc
+	 * @param string $mailCc
 	 */
 	public function setMailCc($mailCc)
 		{
-		$this->mailCc = implode(';',$mailCc);
+		$this->mailCc = $mailCc;
 		}
 	}

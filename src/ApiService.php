@@ -33,6 +33,7 @@ use Infostud\NetSuiteSdk\Model\SavedSearch\CustomerSearchResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\GenericSavedSearchResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Item;
 use Infostud\NetSuiteSdk\Model\SavedSearch\ItemSearchResponse;
+use Infostud\NetSuiteSdk\Model\SavedSearch\NotificationRecipient;
 use Infostud\NetSuiteSdk\Model\SavedSearch\NotificationRecipientSearchResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\TaxItem;
 use Infostud\NetSuiteSdk\Model\SavedSearch\TaxItemSearchResponse;
@@ -217,14 +218,14 @@ class ApiService
 		}
 
 	/**
-	 * @param NotificationRecipientForm $notificationRecipientFormForm
+	 * @param NotificationRecipientForm $form
 	 * @return int
 	 * @throws ApiTransferException|ApiLogicException
 	 */
-	public function createNotificationRecipient(NotificationRecipientForm $notificationRecipientFormForm)
+	public function createNotificationRecipient(NotificationRecipientForm $form)
 		{
 		$url         = $this->getRestletUrl($this->config->restletMap->createDeleteNotify, 1);
-		$requestBody = $this->serializer->normalize($notificationRecipientFormForm);
+		$requestBody = $this->serializer->normalize($form);
 		$contents    = $this->executePostRequest($url, $requestBody);
 		/** @var CreateNotificationRecipientResponse $response */
 		$response = $this->serializer->deserialize($contents, CreateNotificationRecipientResponse::class);
@@ -245,9 +246,10 @@ class ApiService
 	public function deleteNotificationRecipient($id)
 		{
 		$url      = $this->getRestletUrl($this->config->restletMap->createDeleteNotify, 1, [
-			'id' => $id
+			'contactid' => $id
 		]);
 		$contents = $this->executeDeleteRequest($url);
+
 		/** @var DeleteNotificationRecipientResponse $apiResponse */
 		$apiResponse = $this->serializer->deserialize($contents, DeleteNotificationRecipientResponse::class);
 
@@ -428,18 +430,17 @@ class ApiService
 		}
 
 	/**
-	 * @param int $companyId
+	 * @param int $customerId
 	 * @param array $location
-	 *
-	 * @return Customer|null
+	 * @return NotificationRecipient[]
 	 * @throws ApiTransferException
 	 */
-	public function findNotificationRecipients($companyId, $location = null)
+	public function findNotificationRecipients($customerId, $location = null)
 		{
 		$filters[] = [
 			'name'     => 'custrecord_rsm_custnp_customer',
 			'operator' => 'anyof',
-			'values'   => [$companyId]
+			'values'   => [$customerId]
 			];
 		if (!empty($location))
 			{
