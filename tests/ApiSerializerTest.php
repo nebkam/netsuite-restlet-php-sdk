@@ -13,6 +13,9 @@ use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderItem;
 use Infostud\NetSuiteSdk\Model\SavedSearch\ColumnDefinition;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\SavedSearch\CustomerSearchResponse;
+use Infostud\NetSuiteSdk\Model\SavedSearch\NotificationRecipient;
+use Infostud\NetSuiteSdk\Model\SavedSearch\NotificationRecipientAttributes;
+use Infostud\NetSuiteSdk\Model\SavedSearch\NotificationRecipientSearchResponse;
 use Infostud\NetSuiteSdk\Serializer\ApiSerializer;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetDepartmentsResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\SearchDefinition;
@@ -250,6 +253,23 @@ class ApiSerializerTest extends TestCase
 			'2020-11-20',
 			$customer->getAttributes()->getLastModifiedAt()->format('Y-m-d')
 		);
+		}
+
+	/**
+	 * @depends testInitialize
+	 * @param $serializer ApiSerializer
+	 */
+	public function testNotificationRecipientSearchResponse($serializer)
+		{
+		$json     = file_get_contents(__DIR__ . '/find_notification_recipients_response.json');
+		$response = $serializer->deserialize($json, NotificationRecipientSearchResponse::class);
+		self::assertInstanceOf(NotificationRecipientSearchResponse::class, $response);
+		/** @var NotificationRecipientSearchResponse $response */
+		self::assertCount(1, $response->getRows());
+		$notificationRecipient = $response->getRows()[0];
+		self::assertInstanceOf(NotificationRecipient::class, $notificationRecipient);
+		self::assertInstanceOf(NotificationRecipientAttributes::class, $notificationRecipient->getAttributes());
+		self::assertEquals(['foobar@example.com'], $notificationRecipient->getAttributes()->getMailTo());
 		}
 
 	/**

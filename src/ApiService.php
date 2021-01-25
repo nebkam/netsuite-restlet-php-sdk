@@ -18,6 +18,9 @@ use Infostud\NetSuiteSdk\Model\Contact\DeleteContactResponse;
 use Infostud\NetSuiteSdk\Model\Customer\CreateCustomerResponse;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerForm;
 use Infostud\NetSuiteSdk\Model\Customer\DeleteCustomerResponse;
+use Infostud\NetSuiteSdk\Model\NotificationRecipient\CreateNotificationRecipientResponse;
+use Infostud\NetSuiteSdk\Model\NotificationRecipient\DeleteNotificationRecipientResponse;
+use Infostud\NetSuiteSdk\Model\NotificationRecipient\NotificationRecipientForm;
 use Infostud\NetSuiteSdk\Model\SalesOrder\CreateSalesOrderResponse;
 use Infostud\NetSuiteSdk\Model\SalesOrder\DeleteSalesOrderResponse;
 use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderForm;
@@ -30,6 +33,8 @@ use Infostud\NetSuiteSdk\Model\SavedSearch\CustomerSearchResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\GenericSavedSearchResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Item;
 use Infostud\NetSuiteSdk\Model\SavedSearch\ItemSearchResponse;
+use Infostud\NetSuiteSdk\Model\SavedSearch\NotificationRecipient;
+use Infostud\NetSuiteSdk\Model\SavedSearch\NotificationRecipientSearchResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\TaxItem;
 use Infostud\NetSuiteSdk\Model\SavedSearch\TaxItemSearchResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Department;
@@ -213,6 +218,45 @@ class ApiService
 		}
 
 	/**
+	 * @param NotificationRecipientForm $form
+	 * @return int
+	 * @throws ApiTransferException|ApiLogicException
+	 */
+	public function createNotificationRecipient(NotificationRecipientForm $form)
+		{
+		$url         = $this->getRestletUrl($this->config->restletMap->createDeleteNotify, 1);
+		$requestBody = $this->serializer->normalize($form);
+		$contents    = $this->executePostRequest($url, $requestBody);
+		/** @var CreateNotificationRecipientResponse $response */
+		$response = $this->serializer->deserialize($contents, CreateNotificationRecipientResponse::class);
+		if ($response->isSuccessful()
+			&& $response->getNotificationRecipientId())
+			{
+			return $response->getNotificationRecipientId();
+			}
+
+		throw new ApiLogicException($response->getErrorName(), $response->getErrorMessage());
+		}
+
+	/**
+	 * @param int $id
+	 * @return bool
+	 * @throws ApiTransferException
+	 */
+	public function deleteNotificationRecipient($id)
+		{
+		$url      = $this->getRestletUrl($this->config->restletMap->createDeleteNotify, 1, [
+			'contactid' => $id
+		]);
+		$contents = $this->executeDeleteRequest($url);
+
+		/** @var DeleteNotificationRecipientResponse $apiResponse */
+		$apiResponse = $this->serializer->deserialize($contents, DeleteNotificationRecipientResponse::class);
+
+		return $apiResponse->isSuccessful();
+		}
+
+	/**
 	 * @param string $pib
 	 * @return Customer|null
 	 * @throws ApiTransferException
@@ -383,6 +427,42 @@ class ApiService
 			$filters,
 			TaxItemSearchResponse::class
 		);
+		}
+
+	/**
+	 * @param int $customerId
+	 * @param array $location
+	 * @return NotificationRecipient[]
+	 * @throws ApiTransferException
+	 */
+	public function findNotificationRecipients($customerId, $location = null)
+		{
+		$filters[] = [
+			'name'     => 'custrecord_rsm_custnp_customer',
+			'operator' => 'anyof',
+			'values'   => [$customerId]
+			];
+		if (!empty($location))
+			{
+			$filters[] = [
+				'name'     => 'custrecord_rsm_custnp_location',
+				'operator' => 'anyof',
+				'values'   => is_array($location) ? $location : [$location],
+				];
+			}
+		$columnNames = [
+			'custrecord_rsm_custnp_location',
+			'custrecord_rsm_custnp_description',
+			'custrecord_rsm_custnp_mailto',
+			'custrecord_rsm_custnp_mailcc',
+			];
+
+		return $this->executeGenericSavedSearch(
+			'customrecord_rsm_cust_notif_param',
+			$columnNames,
+			$filters,
+			NotificationRecipientSearchResponse::class
+			);
 		}
 
 	/**

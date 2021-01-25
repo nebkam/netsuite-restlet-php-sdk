@@ -15,6 +15,10 @@ class RestletMap
 	/**
 	 * @var int
 	 */
+	public $createDeleteNotify;
+	/**
+	 * @var int
+	 */
 	public $createDeleteSalesOrder;
 	/**
 	 * @var int

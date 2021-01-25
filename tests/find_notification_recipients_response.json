@@ -1,0 +1,19 @@
+{
+  "rows": [
+    {
+      "recordType": "customrecord_rsm_cust_notif_param",
+      "id": "1201",
+      "values": {
+        "custrecord_rsm_custnp_location": [
+          {
+            "value": "1",
+            "text": "4 ZIDA"
+          }
+        ],
+        "custrecord_rsm_custnp_description": "",
+        "custrecord_rsm_custnp_mailto": "foobar@example.com",
+        "custrecord_rsm_custnp_mailcc": ""
+      }
+    }
+  ]
+}

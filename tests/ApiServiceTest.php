@@ -6,6 +6,7 @@ use Infostud\NetSuiteSdk\Exception\ApiTransferException;
 use Infostud\NetSuiteSdk\Model\Contact\ContactForm;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerForm;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerFormAddress;
+use Infostud\NetSuiteSdk\Model\NotificationRecipient\NotificationRecipientForm;
 use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderForm;
 use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderItem;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
@@ -133,6 +134,61 @@ class ApiServiceTest extends TestCase
 		 */
 		list($apiService, $contactId) = $params;
 		self::assertTrue($apiService->deleteContact($contactId));
+		}
+
+	/**
+	 * @depends testCreateCustomer
+	 * @param $params array
+	 * @return array
+	 * @throws ApiTransferException
+	 * @throws ApiLogicException
+	 */
+	public function testCreateNotificationRecipient($params)
+		{
+		/**
+		 * @var $apiService ApiService
+		 * @var $customerId int
+		 */
+		list($apiService, $customerId) = $params;
+		$form = (new NotificationRecipientForm())
+			->setCustomer($customerId)
+			->setEmailTo(['foobar@example.com'])
+			->setLocations([getenv('LOCATION_ID')]);
+		$recipientId = $apiService->createNotificationRecipient($form);
+		self::assertNotNull($recipientId);
+
+		return [$apiService, $recipientId];
+		}
+
+	/**
+	 * @depends testCreateCustomer
+	 * @param $params
+	 * @throws ApiTransferException
+	 */
+	public function testFindNotificationRecipient($params)
+		{
+		/**
+		 * @var $apiService ApiService
+		 * @var $customerId int
+		 */
+		list($apiService, $customerId) = $params;
+		$recipients = $apiService->findNotificationRecipients($customerId, [getenv('LOCATION_ID')]);
+		var_dump($recipients);
+		}
+
+	/**
+	 * @depends testCreateNotificationRecipient
+	 * @param $params
+	 * @throws ApiTransferException
+	 */
+	public function testDeleteNotificationRecipient($params)
+		{
+		/**
+		 * @var $apiService ApiService
+		 * @var $recipientId int
+		 */
+		list($apiService, $recipientId) = $params;
+		self::assertTrue($apiService->deleteNotificationRecipient($recipientId));
 		}
 
 	/**
