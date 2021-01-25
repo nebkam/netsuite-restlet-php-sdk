@@ -6,6 +6,7 @@ use Infostud\NetSuiteSdk\Exception\ApiLogicException;
 use Infostud\NetSuiteSdk\Model\Contact\ContactForm;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerForm;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerFormAddress;
+use Infostud\NetSuiteSdk\Model\NotificationRecipient\NotificationRecipientForm;
 use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderForm;
 use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderItem;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
@@ -131,6 +132,64 @@ class ApiServiceTest extends TestCase
 		 */
 		[$apiService, $contactId] = $params;
 		self::assertTrue($apiService->deleteContact($contactId));
+		}
+
+	/**
+	 * @depends testCreateCustomer
+	 * @param $params array
+	 * @return array
+	 * @throws ApiTransferException
+	 * @throws ApiLogicException
+	 */
+	public function testCreateNotificationRecipient(array $params): array
+		{
+		/**
+		 * @var $apiService ApiService
+		 * @var $customerId int
+		 */
+		[$apiService, $customerId] = $params;
+		$form = (new NotificationRecipientForm())
+			->setCustomer($customerId)
+			->setEmailTo(['foobar@example.com'])
+			->setLocations([getenv('LOCATION_ID')]);
+		$recipientId = $apiService->createNotificationRecipient($form);
+		self::assertNotNull($recipientId);
+
+		return [$apiService, $recipientId];
+		}
+
+	/**
+	 * @depends testCreateCustomer
+	 * @param $params
+	 * @throws ApiTransferException
+	 */
+	public function testFindNotificationRecipient(array $params): void
+		{
+		/**
+		 * @var $apiService ApiService
+		 * @var $customerId int
+		 */
+		[$apiService, $customerId] = $params;
+		$recipients = $apiService->findNotificationRecipients($customerId, [getenv('LOCATION_ID')]);
+		self::assertCount(1, $recipients);
+		$recipient = $recipients[0];
+		self::assertNotNull($recipient->getId());
+		self::assertEquals(['foobar@example.com'], $recipient->getAttributes()->getMailTo());
+		}
+
+	/**
+	 * @depends testCreateNotificationRecipient
+	 * @param $params
+	 * @throws ApiTransferException
+	 */
+	public function testDeleteNotificationRecipient(array $params): void
+		{
+		/**
+		 * @var $apiService ApiService
+		 * @var $recipientId int
+		 */
+		[$apiService, $recipientId] = $params;
+		self::assertTrue($apiService->deleteNotificationRecipient($recipientId));
 		}
 
 	/**
