@@ -16,9 +16,20 @@ class SalesOrderItem
 	 */
 	private $quantity;
 	/**
+	 * @Groups("custcol_rsm_item_rate_full")
 	 * @var float
 	 */
-	private $rate;
+	private $priceBeforeDiscount;
+	/**
+	 * @Groups("custcol_rsm_item_rate_discount")
+	 * @var int
+	 */
+	private $discount;
+	/**
+	 * @Groups("rate")
+	 * @var float
+	 */
+	private $priceAfterDiscount;
 	/**
 	 * @Groups("taxcode")
 	 * @var int
@@ -64,25 +75,6 @@ class SalesOrderItem
 		}
 
 	/**
-	 * @return float
-	 */
-	public function getRate()
-		{
-		return $this->rate;
-		}
-
-	/**
-	 * @param float $rate
-	 * @return self
-	 */
-	public function setRate($rate)
-		{
-		$this->rate = $rate;
-
-		return $this;
-		}
-
-	/**
 	 * @return int
 	 */
 	public function getTaxCode()
@@ -99,5 +91,53 @@ class SalesOrderItem
 		$this->taxCode = $taxCode;
 
 		return $this;
+		}
+
+	/**
+	 * @return float
+	 */
+	public function getPriceBeforeDiscount()
+		{
+		return $this->priceBeforeDiscount;
+		}
+
+	/**
+	 * @param float $priceBeforeDiscount
+	 */
+	public function setPriceBeforeDiscount($priceBeforeDiscount)
+		{
+		$this->priceBeforeDiscount = $priceBeforeDiscount;
+		}
+
+	/**
+	 * @return int
+	 */
+	public function getDiscount()
+		{
+		return $this->discount;
+		}
+
+	/**
+	 * @param int $discount
+	 */
+	public function setDiscount($discount)
+		{
+		$this->discount = $discount;
+		}
+
+	/**
+	 * @return float
+	 */
+	public function getPriceAfterDiscount()
+		{
+		return $this->priceAfterDiscount;
+		}
+
+	/**
+	 * @param float $priceAfterDiscount
+	 */
+	public function setPriceAfterDiscount($priceAfterDiscount)
+		{
+		$this->priceAfterDiscount = $priceAfterDiscount;
 		}
 	}
