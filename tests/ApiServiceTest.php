@@ -173,7 +173,10 @@ class ApiServiceTest extends TestCase
 		 */
 		list($apiService, $customerId) = $params;
 		$recipients = $apiService->findNotificationRecipients($customerId, [getenv('LOCATION_ID')]);
-		var_dump($recipients);
+		self::assertCount(1, $recipients);
+		$recipient = $recipients[0];
+		self::assertNotNull($recipient->getId());
+		self::assertEquals(['foobar@example.com'], $recipient->getAttributes()->getMailTo());
 		}
 
 	/**
