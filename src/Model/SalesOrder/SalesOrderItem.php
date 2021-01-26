@@ -16,9 +16,20 @@ class SalesOrderItem
 	 */
 	private $quantity;
 	/**
+	 * @SerializedName("custcol_rsm_item_rate_full")
 	 * @var float
 	 */
-	private $rate;
+	private $priceBeforeDiscount;
+	/**
+	 * @SerializedName("custcol_rsm_item_rate_discount")
+	 * @var int
+	 */
+	private $discount;
+	/**
+	 * @SerializedName("rate")
+	 * @var float
+	 */
+	private $priceAfterDiscount;
 	/**
 	 * @SerializedName("taxcode")
 	 * @var int|null
@@ -63,21 +74,38 @@ class SalesOrderItem
 		return $this;
 		}
 
-	/**
-	 * @return float
-	 */
-	public function getRate(): float
+	public function getPriceBeforeDiscount(): ?float
 		{
-		return $this->rate;
+		return $this->priceBeforeDiscount;
 		}
 
-	/**
-	 * @param float $rate
-	 * @return self
-	 */
-	public function setRate(float $rate): self
+	public function setPriceBeforeDiscount(?float $priceBeforeDiscount): self
 		{
-		$this->rate = $rate;
+		$this->priceBeforeDiscount = $priceBeforeDiscount;
+
+		return $this;
+		}
+
+	public function getDiscount(): ?int
+		{
+		return $this->discount;
+		}
+
+	public function setDiscount(?int $discount): self
+		{
+		$this->discount = $discount;
+
+		return $this;
+		}
+
+	public function getPriceAfterDiscount(): ?float
+		{
+		return $this->priceAfterDiscount;
+		}
+
+	public function setPriceAfterDiscount(?float $priceAfterDiscount): self
+		{
+		$this->priceAfterDiscount = $priceAfterDiscount;
 
 		return $this;
 		}
