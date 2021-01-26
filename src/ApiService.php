@@ -531,6 +531,25 @@ class ApiService
 		}
 
 	/**
+	 * @return false|string
+	 * @throws ApiLogicException
+	 * @throws ApiTransferException
+	 */
+	public function downloadPdf()
+		{
+		$params = []; //TODO As this uses GET method, parameters need to be passed through URL
+
+		$url = $this->getRestletUrl($this->config->restletMap->downloadPdf, 1, $params);
+		$contents = $this->executeGetPdfRequest($url);
+		if (empty($contents))
+			{
+			throw new ApiLogicException('Empty response','Server has returned empty string for given parameters');
+			}
+
+		return base64_decode($contents);
+		}
+
+	/**
 	 * @param array $filters
 	 * @return SavedSearchCustomersResponse
 	 * @throws ApiTransferException
@@ -665,6 +684,32 @@ class ApiService
 	 * @return string
 	 * @throws ApiTransferException
 	 */
+	private function executeGetPdfRequest(string $url): string
+		{
+		try
+			{
+			$clientResponse = $this->client->request('GET', $url, [
+				RequestOptions::HEADERS => $this->buildHeaders('GET', $url, 'application/pdf')
+			]);
+			}
+		catch (GuzzleException $exception)
+			{
+			throw ApiTransferException::fromGuzzleException($exception);
+			}
+
+		if ($clientResponse->getStatusCode() !== 200)
+			{
+			throw ApiTransferException::fromStatusCode($clientResponse->getStatusCode());
+			}
+
+		return $clientResponse->getBody()->getContents();
+		}
+
+	/**
+	 * @param string $url
+	 * @return string
+	 * @throws ApiTransferException
+	 */
 	private function executeDeleteRequest(string $url): string
 		{
 		try
@@ -711,10 +756,11 @@ class ApiService
 	/**
 	 * @param string $method
 	 * @param string $url
+	 * @param string $contentType
 	 * @return array
 	 * @throws ApiTransferException
 	 */
-	private function buildHeaders(string $method, string $url): array
+	private function buildHeaders(string $method, string $url, string $contentType = 'application/json'): array
 		{
 		$request   = new Request($method, $url, [
 			'oauth_nonce'            => md5(mt_rand()),
@@ -733,7 +779,7 @@ class ApiService
 			return [
 				'Authorization' => substr($request->to_header($this->config->account), 15),
 				'Host'          => $this->getRestletHost(),
-				'Content-Type'  => 'application/json'
+				'Content-Type'  => $contentType
 			];
 			}
 		catch (OAuthException $exception)

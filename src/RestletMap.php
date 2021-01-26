@@ -19,6 +19,10 @@ class RestletMap
 	/**
 	 * @var int
 	 */
+	public $downloadPdf;
+	/**
+	 * @var int
+	 */
 	public $createDeleteSalesOrder;
 	/**
 	 * @var int
