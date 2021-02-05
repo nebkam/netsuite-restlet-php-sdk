@@ -526,15 +526,17 @@ class ApiService
 		}
 
 	/**
+	 * @param $fileId
+	 *
 	 * @return false|string
 	 * @throws ApiLogicException
 	 * @throws ApiTransferException
 	 */
-	public function downloadPdf()
+	public function downloadPdf($fileId)
 		{
 		// As this uses GET method, parameters need to be passed through URL
 		$extraParameters = [
-
+			'fileId' => $fileId
 		];
 
 		$url = $this->getRestletUrl($this->config->restletMap->downloadPdf, 1, $extraParameters);
