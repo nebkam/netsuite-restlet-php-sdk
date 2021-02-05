@@ -57,6 +57,11 @@ class SalesOrderForm
 	 */
 	private $memo;
 	/**
+	 * @Groups("custbody_rsm_internal_memo")
+	 * @var string|null
+	 */
+	private $internalMemo;
+	/**
 	 * @Groups("startdate")
 	 * @var string|null
 	 */
@@ -356,5 +361,21 @@ class SalesOrderForm
 		$this->endDate = $endDate;
 
 		return $this;
+		}
+
+	/**
+	 * @return string|null
+	 */
+	public function getInternalMemo()
+		{
+		return $this->internalMemo;
+		}
+
+	/**
+	 * @param string|null $internalMemo
+	 */
+	public function setInternalMemo($internalMemo)
+		{
+		$this->internalMemo = $internalMemo;
 		}
 	}
