@@ -12,6 +12,11 @@ class SalesOrderMetaItemValue
 	 * @var IdNameTuple[]
 	 */
 	private $pdf;
+	/**
+	 * @Groups("trandate")
+	 * @var string
+	 */
+	private $transactionDate;
 
 	/**
 	 * @return IdNameTuple[]
@@ -27,5 +32,21 @@ class SalesOrderMetaItemValue
 	public function setPdf($pdf)
 		{
 		$this->pdf = $pdf;
+		}
+
+	/**
+	 * @return string
+	 */
+	public function getTransactionDate()
+		{
+		return $this->transactionDate;
+		}
+
+	/**
+	 * @param string $transactionDate
+	 */
+	public function setTransactionDate($transactionDate)
+		{
+		$this->transactionDate = $transactionDate;
 		}
 	}

@@ -11,7 +11,7 @@ class SalesOrderMetaItem
 	 */
 	private $recordType;
 	/**
-	 * @var int
+	 * @var string
 	 */
 	private $id;
 	/**
