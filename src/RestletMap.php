@@ -40,4 +40,8 @@ class RestletMap
 	 * @var int
 	 */
 	public $suiteQL;
+    /**
+     * @var int
+     */
+	public $getSalesOrder;
 	}

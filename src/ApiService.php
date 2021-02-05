@@ -24,6 +24,8 @@ use Infostud\NetSuiteSdk\Model\NotificationRecipient\CreateNotificationRecipient
 use Infostud\NetSuiteSdk\Model\NotificationRecipient\DeleteNotificationRecipientResponse;
 use Infostud\NetSuiteSdk\Model\NotificationRecipient\NotificationRecipientForm;
 use Infostud\NetSuiteSdk\Model\SalesOrder\CreateSalesOrderResponse;
+use Infostud\NetSuiteSdk\Model\SalesOrder\GetSalesOrderResponse;
+use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrder;
 use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderForm;
 use Infostud\NetSuiteSdk\Model\SalesOrder\DeleteSalesOrderResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Contact;
@@ -242,6 +244,29 @@ class ApiService
 
 		throw new ApiLogicException($apiResponse->getErrorName(), $apiResponse->getErrorMessage());
 		}
+
+    /**
+     * @param int $orderId
+     * @return SalesOrder
+     * @throws ApiLogicException
+     * @throws ApiTransferException
+     */
+	public function getSalesOrder(int $orderId): SalesOrder
+    {
+        $url      = $this->getRestletUrl($this->config->restletMap->getSalesOrder, 1, [
+            'orderid'   => $orderId
+        ]);
+        $contents = $this->executeGetRequest($url);
+
+        /** @var GetSalesOrderResponse $apiResponse */
+        $apiResponse = $this->serializer->deserialize($contents, GetSalesOrderResponse::class);
+        if ($apiResponse->isSuccessful()
+            && $apiResponse->getSalesOrder()) {
+            return $apiResponse->getSalesOrder();
+        }
+
+        throw new ApiLogicException($apiResponse->getErrorName(), $apiResponse->getErrorMessage());
+    }
 
 	/**
 	 * Used by tests only. Production usage not explicitly confirmed yet
@@ -650,6 +675,33 @@ class ApiService
 
 		return json_decode($contents, true);
 		}
+
+    /**
+     * @param string $url
+     * @param array|null $params
+     * @return string
+     * @throws ApiTransferException
+     */
+	private function executeGetRequest(string $url, ?array $params = []): string
+    {
+        try
+        {
+            $clientResponse = $this->client->request('GET', $url, [
+                RequestOptions::HEADERS => $this->buildHeaders('GET', $url),
+            ]);
+        }
+        catch (GuzzleException $exception)
+        {
+            throw ApiTransferException::fromGuzzleException($exception);
+        }
+
+        if ($clientResponse->getStatusCode() !== 200)
+        {
+            throw ApiTransferException::fromStatusCode($clientResponse->getStatusCode());
+        }
+
+        return $clientResponse->getBody()->getContents();
+    }
 
 	/**
 	 * @param string $url
