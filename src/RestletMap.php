@@ -39,5 +39,9 @@ class RestletMap
 	/**
 	 * @var int
 	 */
+	public $salesOrderMetaData;
+	/**
+	 * @var int
+	 */
 	public $suiteQL;
 	}

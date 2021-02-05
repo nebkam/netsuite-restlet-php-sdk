@@ -23,6 +23,7 @@ use Infostud\NetSuiteSdk\Model\NotificationRecipient\DeleteNotificationRecipient
 use Infostud\NetSuiteSdk\Model\NotificationRecipient\NotificationRecipientForm;
 use Infostud\NetSuiteSdk\Model\SalesOrder\CreateSalesOrderResponse;
 use Infostud\NetSuiteSdk\Model\SalesOrder\DeleteSalesOrderResponse;
+use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderDataResponse;
 use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderForm;
 use Infostud\NetSuiteSdk\Model\Contact\ContactForm;
 use Infostud\NetSuiteSdk\Model\Contact\CreateContactResponse;
@@ -254,6 +255,23 @@ class ApiService
 		$apiResponse = $this->serializer->deserialize($contents, DeleteNotificationRecipientResponse::class);
 
 		return $apiResponse->isSuccessful();
+		}
+
+	/**
+	 * @param $orderId
+	 *
+	 * @return SalesOrderDataResponse
+	 * @throws ApiTransferException
+	 */
+	public function salesOrderMetadata($orderId)
+		{
+		$url         = $this->getRestletUrl($this->config->restletMap->salesOrderMetaData, 1);
+		$requestBody = ['orderId' => $orderId];
+		$contents    = $this->executePostRequest($url, $requestBody);
+		/** @var SalesOrderDataResponse $apiResponse */
+		$apiResponse = $this->serializer->deserialize($contents, SalesOrderDataResponse::class);
+
+		return $apiResponse;
 		}
 
 	/**
