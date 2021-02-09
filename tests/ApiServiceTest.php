@@ -232,6 +232,22 @@ class ApiServiceTest extends TestCase
 
 	/**
 	 * @depends testCreateSalesOrder
+	 * @param array $params
+	 * @throws ApiTransferException
+	 */
+	public function testSalesOrderMetaData(array $params)
+		{
+		/**
+		 * @var ApiService $apiService
+		 * @var int $salesOrderId
+		 */
+		list($apiService, $salesOrderId) = $params;
+		// For now, just assert there's no exceptions
+		$apiService->salesOrderMetadata($salesOrderId);
+		}
+
+	/**
+	 * @depends testCreateSalesOrder
 	 * @param array $param
 	 * @throws ApiTransferException
 	 */
