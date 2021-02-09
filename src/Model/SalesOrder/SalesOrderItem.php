@@ -103,10 +103,13 @@ class SalesOrderItem
 
 	/**
 	 * @param float $priceBeforeDiscount
+	 * @return SalesOrderItem
 	 */
 	public function setPriceBeforeDiscount($priceBeforeDiscount)
 		{
 		$this->priceBeforeDiscount = $priceBeforeDiscount;
+
+		return $this;
 		}
 
 	/**
@@ -119,10 +122,13 @@ class SalesOrderItem
 
 	/**
 	 * @param int $discount
+	 * @return SalesOrderItem
 	 */
 	public function setDiscount($discount)
 		{
 		$this->discount = $discount;
+
+		return $this;
 		}
 
 	/**
@@ -135,9 +141,12 @@ class SalesOrderItem
 
 	/**
 	 * @param float $priceAfterDiscount
+	 * @return SalesOrderItem
 	 */
 	public function setPriceAfterDiscount($priceAfterDiscount)
 		{
 		$this->priceAfterDiscount = $priceAfterDiscount;
+
+		return $this;
 		}
 	}

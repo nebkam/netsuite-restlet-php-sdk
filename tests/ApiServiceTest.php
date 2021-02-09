@@ -218,7 +218,7 @@ class ApiServiceTest extends TestCase
 				(new SalesOrderItem())
 					->setId(getenv('ITEM_ID'))
 					->setQuantity(1)
-					->setRate(5000000.00)
+					->setPriceAfterDiscount(5000000.00)
 					->setTaxCode(8)
 			)
 			->setTransactionDate('02.05.2020');
@@ -228,6 +228,22 @@ class ApiServiceTest extends TestCase
 			$apiService,
 			$salesOrderId
 		];
+		}
+
+	/**
+	 * @depends testCreateSalesOrder
+	 * @param array $params
+	 * @throws ApiTransferException
+	 */
+	public function testSalesOrderMetaData(array $params)
+		{
+		/**
+		 * @var ApiService $apiService
+		 * @var int $salesOrderId
+		 */
+		list($apiService, $salesOrderId) = $params;
+		// For now, just assert there's no exceptions
+		$apiService->salesOrderMetadata($salesOrderId);
 		}
 
 	/**
