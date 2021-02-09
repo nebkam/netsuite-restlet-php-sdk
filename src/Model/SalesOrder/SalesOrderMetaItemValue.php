@@ -32,6 +32,8 @@ class SalesOrderMetaItemValue
 	public function setPdf($pdf)
 		{
 		$this->pdf = $pdf;
+
+		return $this;
 		}
 
 	/**
@@ -48,5 +50,7 @@ class SalesOrderMetaItemValue
 	public function setTransactionDate($transactionDate)
 		{
 		$this->transactionDate = $transactionDate;
+
+		return $this;
 		}
 	}

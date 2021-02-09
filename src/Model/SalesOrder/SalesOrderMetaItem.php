@@ -33,6 +33,8 @@ class SalesOrderMetaItem
 	public function setRecordType($recordType)
 		{
 		$this->recordType = $recordType;
+
+		return $this;
 		}
 
 	/**
@@ -49,6 +51,8 @@ class SalesOrderMetaItem
 	public function setId($id)
 		{
 		$this->id = $id;
+
+		return $this;
 		}
 
 	/**
@@ -65,5 +69,7 @@ class SalesOrderMetaItem
 	public function setValues($values)
 		{
 		$this->values = $values;
+
+		return $this;
 		}
 	}

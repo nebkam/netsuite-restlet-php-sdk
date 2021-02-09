@@ -26,5 +26,7 @@ class SalesOrderDataResponse
 	public function setRows($rows)
 		{
 		$this->rows = $rows;
+
+		return $this;
 		}
 	}
