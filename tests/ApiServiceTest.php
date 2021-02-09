@@ -230,6 +230,26 @@ class ApiServiceTest extends TestCase
 		];
 		}
 
+    /**
+     * @depends testCreateSalesOrder
+     * @param array $params
+     * @return array
+     */
+	public function testGetSalesOrder(array $params): array
+    {
+        /**
+         * @var $apiService ApiService
+         * @var $salesOrderId int
+         */
+        [$apiService, $salesOrderId] = $params;
+        $salesOrder = $apiService->getSalesOrder($salesOrderId);
+        self::assertEquals($salesOrderId, $salesOrder->getId());
+        return [
+            $apiService,
+            $salesOrderId
+        ];
+    }
+
 	/**
 	 * @depends testCreateSalesOrder
 	 * @param array $param

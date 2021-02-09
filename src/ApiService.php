@@ -24,6 +24,8 @@ use Infostud\NetSuiteSdk\Model\NotificationRecipient\CreateNotificationRecipient
 use Infostud\NetSuiteSdk\Model\NotificationRecipient\DeleteNotificationRecipientResponse;
 use Infostud\NetSuiteSdk\Model\NotificationRecipient\NotificationRecipientForm;
 use Infostud\NetSuiteSdk\Model\SalesOrder\CreateSalesOrderResponse;
+use Infostud\NetSuiteSdk\Model\SalesOrder\GetSalesOrderResponse;
+use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrder;
 use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderForm;
 use Infostud\NetSuiteSdk\Model\SalesOrder\DeleteSalesOrderResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Contact;
@@ -76,6 +78,8 @@ class ApiService
 	 * @var ApiConfig
 	 */
 	private $config;
+
+	private const DEFAULT_CONTENT_TYPE = 'application/json';
 
 	/**
 	 * @param string $configPath
@@ -242,6 +246,29 @@ class ApiService
 
 		throw new ApiLogicException($apiResponse->getErrorName(), $apiResponse->getErrorMessage());
 		}
+
+    /**
+     * @param int $orderId
+     * @return SalesOrder
+     * @throws ApiLogicException
+     * @throws ApiTransferException
+     */
+	public function getSalesOrder(int $orderId): SalesOrder
+    {
+        $url      = $this->getRestletUrl($this->config->restletMap->getSalesOrder, 1, [
+            'orderid'   => $orderId
+        ]);
+        $contents = $this->executeGetRequest($url);
+
+        /** @var GetSalesOrderResponse $apiResponse */
+        $apiResponse = $this->serializer->deserialize($contents, GetSalesOrderResponse::class);
+        if ($apiResponse->isSuccessful()
+            && $apiResponse->getSalesOrder()) {
+            return $apiResponse->getSalesOrder();
+        }
+
+        throw new ApiLogicException($apiResponse->getErrorName(), $apiResponse->getErrorMessage());
+    }
 
 	/**
 	 * Used by tests only. Production usage not explicitly confirmed yet
@@ -540,7 +567,7 @@ class ApiService
 		$params = []; //TODO As this uses GET method, parameters need to be passed through URL
 
 		$url = $this->getRestletUrl($this->config->restletMap->downloadPdf, 1, $params);
-		$contents = $this->executeGetPdfRequest($url);
+		$contents = $this->executeGetRequest($url, 'application/pdf');
 		if (empty($contents))
 			{
 			throw new ApiLogicException('Empty response','Server has returned empty string for given parameters');
@@ -651,6 +678,33 @@ class ApiService
 		return json_decode($contents, true);
 		}
 
+    /**
+     * @param string $url
+     * @param string|null $contentType
+     * @return string
+     * @throws ApiTransferException
+     */
+	private function executeGetRequest(string $url, ?string $contentType = self::DEFAULT_CONTENT_TYPE): string
+    {
+        try
+        {
+            $clientResponse = $this->client->request('GET', $url, [
+                RequestOptions::HEADERS => $this->buildHeaders('GET', $url, $contentType),
+            ]);
+        }
+        catch (GuzzleException $exception)
+        {
+            throw ApiTransferException::fromGuzzleException($exception);
+        }
+
+        if ($clientResponse->getStatusCode() !== 200)
+        {
+            throw ApiTransferException::fromStatusCode($clientResponse->getStatusCode());
+        }
+
+        return $clientResponse->getBody()->getContents();
+    }
+
 	/**
 	 * @param string $url
 	 * @param array $requestBody
@@ -664,32 +718,6 @@ class ApiService
 			$clientResponse = $this->client->request('POST', $url, [
 				RequestOptions::HEADERS => $this->buildHeaders('POST', $url),
 				RequestOptions::JSON    => $requestBody
-			]);
-			}
-		catch (GuzzleException $exception)
-			{
-			throw ApiTransferException::fromGuzzleException($exception);
-			}
-
-		if ($clientResponse->getStatusCode() !== 200)
-			{
-			throw ApiTransferException::fromStatusCode($clientResponse->getStatusCode());
-			}
-
-		return $clientResponse->getBody()->getContents();
-		}
-
-	/**
-	 * @param string $url
-	 * @return string
-	 * @throws ApiTransferException
-	 */
-	private function executeGetPdfRequest(string $url): string
-		{
-		try
-			{
-			$clientResponse = $this->client->request('GET', $url, [
-				RequestOptions::HEADERS => $this->buildHeaders('GET', $url, 'application/pdf')
 			]);
 			}
 		catch (GuzzleException $exception)
@@ -760,7 +788,7 @@ class ApiService
 	 * @return array
 	 * @throws ApiTransferException
 	 */
-	private function buildHeaders(string $method, string $url, string $contentType = 'application/json'): array
+	private function buildHeaders(string $method, string $url, string $contentType = self::DEFAULT_CONTENT_TYPE): array
 		{
 		$request   = new Request($method, $url, [
 			'oauth_nonce'            => md5(mt_rand()),
