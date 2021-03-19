@@ -37,6 +37,11 @@ class SalesOrderForm
 	 * @var string
 	 */
 	private $transactionDate;
+    /**
+     * @SerializedName("custbody_rsm_so_type")
+     * @var string
+     */
+    private $salesOrderType;
 	/**
 	 * @SerializedName("custbody_rsm_infs_fakturista")
 	 * @var int|null
@@ -232,6 +237,27 @@ class SalesOrderForm
 		return $this;
 		}
 
+    /**
+     * @return string
+     */
+    public function getSalesOrderType(): string
+        {
+        return $this->salesOrderType;
+        }
+
+    /**
+     * @param string $salesOrderType
+     * @return SalesOrderForm
+     */
+    public function setSalesOrderType(string $salesOrderType): self
+        {
+        $this->salesOrderType = $salesOrderType;
+
+        return $this;
+        }
+
+
+
 	/**
 	 * @return int|null
 	 */
@@ -355,4 +381,8 @@ class SalesOrderForm
 
 		return $this;
 		}
+
+
+
+
 	}
