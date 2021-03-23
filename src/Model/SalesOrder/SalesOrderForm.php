@@ -6,6 +6,9 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 
 class SalesOrderForm
 	{
+
+	public const TYPE_NONE = 'NONE';
+
 	/**
 	 * @var int
 	 */
@@ -41,7 +44,7 @@ class SalesOrderForm
      * @SerializedName("custbody_rsm_so_type")
      * @var string
      */
-    private $salesOrderType;
+    private $type;
 	/**
 	 * @SerializedName("custbody_rsm_infs_fakturista")
 	 * @var int|null
@@ -240,23 +243,21 @@ class SalesOrderForm
     /**
      * @return string
      */
-    public function getSalesOrderType(): string
+    public function getType(): string
         {
-        return $this->salesOrderType;
+        return $this->type;
         }
 
     /**
-     * @param string $salesOrderType
-     * @return SalesOrderForm
+     * @param string $type
+     * @return self
      */
-    public function setSalesOrderType(string $salesOrderType): self
+    public function setType(string $type): self
         {
-        $this->salesOrderType = $salesOrderType;
+        $this->type = $type;
 
         return $this;
         }
-
-
 
 	/**
 	 * @return int|null
