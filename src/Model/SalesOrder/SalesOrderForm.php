@@ -40,11 +40,11 @@ class SalesOrderForm
 	 * @var string
 	 */
 	private $transactionDate;
-    /**
-     * @SerializedName("custbody_rsm_so_type")
-     * @var string
-     */
-    private $type;
+	/**
+	 * @SerializedName("custbody_rsm_so_type")
+	 * @var string
+	 */
+	private $type;
 	/**
 	 * @SerializedName("custbody_rsm_infs_fakturista")
 	 * @var int|null
@@ -64,6 +64,11 @@ class SalesOrderForm
 	 * @var string|null
 	 */
 	private $memo;
+	/**
+	 * @SerializedName("custbody_rsm_internal_memo")
+	 * @var string|null
+	 */
+	private $internalMemo;
 	/**
 	 * @SerializedName("startdate")
 	 * @var string|null
@@ -240,24 +245,24 @@ class SalesOrderForm
 		return $this;
 		}
 
-    /**
-     * @return string
-     */
-    public function getType(): string
-        {
-        return $this->type;
-        }
+	/**
+	 * @return string
+	 */
+	public function getType(): string
+		{
+		return $this->type;
+		}
 
-    /**
-     * @param string $type
-     * @return self
-     */
-    public function setType(string $type): self
-        {
-        $this->type = $type;
+	/**
+	 * @param string $type
+	 * @return self
+	 */
+	public function setType(string $type): self
+		{
+		$this->type = $type;
 
-        return $this;
-        }
+		return $this;
+		}
 
 	/**
 	 * @return int|null
@@ -383,7 +388,23 @@ class SalesOrderForm
 		return $this;
 		}
 
+	/**
+	 * @return string|null
+	 */
+	public function getInternalMemo(): ?string
+		{
+		return $this->internalMemo;
+		}
 
+	/**
+	 * @param string|null $internalMemo
+	 * @return SalesOrderForm
+	 */
+	public function setInternalMemo(?string $internalMemo): SalesOrderForm
+		{
+		$this->internalMemo = $internalMemo;
 
+		return $this;
+		}
 
 	}
