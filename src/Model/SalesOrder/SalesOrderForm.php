@@ -79,6 +79,13 @@ class SalesOrderForm
 	 * @var string|null
 	 */
 	private $endDate;
+	/**
+	 * Payment (authorization) code
+	 *
+	 * @SerializedName("custbody_rsm_auth_payment_code")
+	 * @var string|null
+	 */
+	private $paymentCode;
 
 	public function __construct()
 		{
@@ -400,9 +407,28 @@ class SalesOrderForm
 	 * @param string|null $internalMemo
 	 * @return SalesOrderForm
 	 */
-	public function setInternalMemo(?string $internalMemo): SalesOrderForm
+	public function setInternalMemo(?string $internalMemo): self
 		{
 		$this->internalMemo = $internalMemo;
+
+		return $this;
+		}
+
+	/**
+	 * @return string|null
+	 */
+	public function getPaymentCode(): ?string
+		{
+		return $this->paymentCode;
+		}
+
+	/**
+	 * @param string|null $paymentCode
+	 * @return SalesOrderForm
+	 */
+	public function setPaymentCode(?string $paymentCode): self
+		{
+		$this->paymentCode = $paymentCode;
 
 		return $this;
 		}
