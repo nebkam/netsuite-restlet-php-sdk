@@ -42,6 +42,8 @@ use Infostud\NetSuiteSdk\Model\SuiteQL\Classification;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Employee;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetClassificationsResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetEmployeesResponse;
+use Infostud\NetSuiteSdk\Model\SuiteQL\GetItemsFilter;
+use Infostud\NetSuiteSdk\Model\SuiteQL\GetItemsResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetLocationsResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetSubsidiariesResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\SavedSearchCustomersResponse;
@@ -554,6 +556,20 @@ class ApiService
 		return $this->executeSuiteQuery(
 			GetEmployeesResponse::class,
 			'select id, entityid from employee'
+		);
+		}
+
+	/**
+	 * @param GetItemsFilter|null $filter
+	 * @return Location[]
+	 * @throws ApiTransferException
+	 */
+	public function getItems(?GetItemsFilter $filter = null): array
+		{
+		return $this->executeSuiteQuery(
+			GetItemsResponse::class,
+			'select id, custitem_item_old_erp_id, fullname from item',
+			$filter !== null ? $filter->getWhereString() : ''
 		);
 		}
 
