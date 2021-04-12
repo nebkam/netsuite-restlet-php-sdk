@@ -163,6 +163,7 @@ class ApiSerializerTest extends TestCase
 			->setDepartment(2)
 			->setLocation(3)
 			->setClassification(4)
+			->setType(SalesOrderForm::TYPE_NONE)
 			->setCustomer(5)
 			->setCreatedBy(6)
 			->setAppointedSeller(7)
