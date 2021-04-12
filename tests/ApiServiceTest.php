@@ -14,6 +14,8 @@ use Infostud\NetSuiteSdk\Model\SavedSearch\Item;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Classification;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Department;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Employee;
+use Infostud\NetSuiteSdk\Model\SuiteQL\GetItemsFilter;
+use Infostud\NetSuiteSdk\Model\SuiteQL\Item as SuiteQLItem;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Location;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Subsidiary;
 use PHPUnit\Framework\TestCase;
@@ -211,6 +213,7 @@ class ApiServiceTest extends TestCase
 			->setDepartment(getenv('DEPARTMENT_ID'))
 			->setLocation(getenv('LOCATION_ID'))
 			->setClassification(getenv('CLASSIFICATION_ID'))
+			->setType(SalesOrderForm::TYPE_NONE)
 			->setCustomer($customerId)
 			->addItem(
 				(new SalesOrderItem())
@@ -413,6 +416,52 @@ class ApiServiceTest extends TestCase
 			self::assertInstanceOf(Employee::class, $employee);
 			self::assertNotEmpty($employee->getId());
 			self::assertNotEmpty($employee->getName());
+			}
+		}
+
+	/**
+	 * @depends testParseConfig
+	 * @param ApiService $apiService
+	 * @throws ApiTransferException
+	 */
+	public function testGetItems(ApiService $apiService): void
+		{
+		$itemsToTest = 100;
+		$testedItems = 0;
+		$items = $apiService->getItems();
+		self::assertNotEmpty($items);
+		foreach ($items as $item)
+			{
+			if ($testedItems > $itemsToTest) {
+				break;
+			}
+			$testedItems++;
+			self::assertInstanceOf(SuiteQLItem::class, $item);
+			self::assertNotEmpty($item->getId());
+			self::assertNotEmpty($item->getName());
+			}
+		}
+
+	/**
+	 * @depends testParseConfig
+	 * @param ApiService $apiService
+	 * @throws ApiTransferException
+	 */
+	public function testGetItemsWithFilter(ApiService $apiService): void
+		{
+		$itemsToTest = 100;
+		$testedItems = 0;
+		$items = $apiService->getItems((new GetItemsFilter())->setLocation(getenv('LOCATION_ID')));
+		self::assertNotEmpty($items);
+		foreach ($items as $item)
+			{
+			if ($testedItems > $itemsToTest) {
+			break;
+			}
+			$testedItems++;
+			self::assertInstanceOf(SuiteQLItem::class, $item);
+			self::assertNotEmpty($item->getId());
+			self::assertNotEmpty($item->getName());
 			}
 		}
 
