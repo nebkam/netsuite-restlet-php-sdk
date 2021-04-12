@@ -18,6 +18,7 @@ use Infostud\NetSuiteSdk\Model\SavedSearch\ItemSearchResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\NotificationRecipient;
 use Infostud\NetSuiteSdk\Model\SavedSearch\NotificationRecipientSearchResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetEmployeesResponse;
+use Infostud\NetSuiteSdk\Model\SuiteQL\GetItemsResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetLocationsResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetSubsidiariesResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\SavedSearchCustomersResponse;
@@ -357,6 +358,18 @@ class ApiSerializerTest extends TestCase
 		$json       = file_get_contents(__DIR__ . '/employees_suiteql_response.json');
 		$response   = $serializer->deserialize($json, GetEmployeesResponse::class);
 		self::assertInstanceOf(GetEmployeesResponse::class, $response);
+		self::assertSuiteQLResponse($response);
+		}
+	/**
+	 * @depends testInitialize
+	 * @param ApiSerializer $serializer
+	 * @throws ApiTransferException
+	 */
+	public function testGetItemsResult(ApiSerializer $serializer): void
+		{
+		$json       = file_get_contents(__DIR__ . '/items_suiteql_response.json');
+		$response   = $serializer->deserialize($json, GetItemsResponse::class);
+		self::assertInstanceOf(GetItemsResponse::class, $response);
 		self::assertSuiteQLResponse($response);
 		}
 

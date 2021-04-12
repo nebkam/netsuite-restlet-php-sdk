@@ -1,0 +1,24 @@
+{
+  "rows": [
+    {
+      "id": 1,
+      "custitem_item_old_erp_id": "30001",
+      "fullname": "Anonymous item 1"
+    },
+    {
+      "id": 2,
+      "custitem_item_old_erp_id": "30002",
+      "fullname": "Anonymous item 2"
+    },
+    {
+      "id": 3,
+      "custitem_item_old_erp_id": "30003",
+      "fullname": "Anonymous item 3"
+    },
+    {
+      "id": 4,
+      "custitem_item_old_erp_id": "30004",
+      "fullname": "Anonymous item 4"
+    }
+  ]
+}
