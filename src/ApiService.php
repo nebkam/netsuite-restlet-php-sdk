@@ -32,6 +32,7 @@ use Infostud\NetSuiteSdk\Model\SavedSearch\ContactSearchResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\SavedSearch\CustomerSearchResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\GenericSavedSearchResponse;
+use Infostud\NetSuiteSdk\Model\SavedSearch\GetPaymentsResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Item;
 use Infostud\NetSuiteSdk\Model\SavedSearch\ItemSearchResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\NotificationRecipient;
@@ -481,6 +482,28 @@ class ApiService
 			$filters,
 			NotificationRecipientSearchResponse::class
 			);
+		}
+
+	/**
+	 * @param int      $subsidiaryId
+	 * @param DateTime $startDate
+	 * @param DateTime $endDate
+	 *
+	 * @return GetPaymentsResponse
+	 * @throws ApiTransferException
+	 */
+	public function getPayments($subsidiaryId, \DateTime $startDate, \DateTime $endDate)
+		{
+		$url         = $this->getRestletUrl($this->config->restletMap->getPayments, 1);
+		$requestBody = [
+			'subsidiaryId' => $subsidiaryId,
+			'startDate' => $startDate->format('d.m.Y H:i'),
+			'endDate' => $endDate->format('d.m.Y H:i'),
+		];
+		$contents    = $this->executePostRequest($url, $requestBody);
+
+		/** @var GetPaymentsResponse $apiResponse */
+		return $this->serializer->deserialize($contents, GetPaymentsResponse::class);
 		}
 
 	/**

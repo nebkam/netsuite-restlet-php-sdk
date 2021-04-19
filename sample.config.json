@@ -14,6 +14,7 @@
     "savedSearchItems": 0,
     "downloadPdf": 0,
     "salesOrderMetaData": 0,
-    "suiteQL": 0
+    "suiteQL": 0,
+    "getPayments": 0
   }
 }

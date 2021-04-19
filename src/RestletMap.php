@@ -44,4 +44,8 @@ class RestletMap
 	 * @var int
 	 */
 	public $suiteQL;
+	/**
+	 * @var int
+	 */
+	public $getPayments;
 	}
