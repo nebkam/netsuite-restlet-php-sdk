@@ -49,6 +49,7 @@ use Infostud\NetSuiteSdk\Model\SuiteQL\GetSubsidiariesResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\SavedSearchCustomersResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Department;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetDepartmentsResponse;
+use Infostud\NetSuiteSdk\Model\SuiteQL\Item as SuiteQLItem;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Location;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Subsidiary;
 use Infostud\NetSuiteSdk\Model\SuiteQL\SuiteQLResponse;
@@ -561,7 +562,7 @@ class ApiService
 
 	/**
 	 * @param GetItemsFilter|null $filter
-	 * @return Location[]
+	 * @return SuiteQLItem[]
 	 * @throws ApiTransferException
 	 */
 	public function getItems(?GetItemsFilter $filter = null): array
