@@ -90,12 +90,12 @@ class SalesOrderForm
 	 * @SerializedName("custbody_rsm_additional_cc_email")
 	 * @var string|null
 	 */
-	private $emailCC;
+	private $emailCc;
 	/**
 	 * @SerializedName("custbody_rsm_additional_bcc_email")
 	 * @var string|null
 	 */
-	private $emailBCC;
+	private $emailBcc;
 
 
 	public function __construct()
@@ -447,18 +447,18 @@ class SalesOrderForm
 	/**
 	 * @return string|null
 	 */
-	public function getEmailCC(): ?string
+	public function getEmailCc(): ?string
 		{
-		return $this->emailCC;
+		return $this->emailCc;
 		}
 
 	/**
-	 * @param string|null $emailCC
+	 * @param string|null $emailCc
 	 * @return SalesOrderForm
 	 */
-	public function setEmailCC(?string $emailCC): self
+	public function setEmailCc(?string $emailCc): self
 		{
-		$this->emailCC = $emailCC;
+		$this->emailCc = $emailCc;
 
 		return $this;
 		}
@@ -466,18 +466,18 @@ class SalesOrderForm
 	/**
 	 * @return string|null
 	 */
-	public function getEmailBCC(): ?string
+	public function getEmailBcc(): ?string
 		{
-		return $this->emailBCC;
+		return $this->emailBcc;
 		}
 
 	/**
-	 * @param string|null $emailBCC
+	 * @param string|null $emailBcc
 	 * @return SalesOrderForm
 	 */
-	public function setEmailBCC(?string $emailBCC): self
+	public function setEmailBcc(?string $emailBcc): self
 		{
-		$this->emailBCC = $emailBCC;
+		$this->emailBcc = $emailBcc;
 
 		return $this;
 		}
