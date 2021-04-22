@@ -36,12 +36,12 @@ class SalesOrderItem
 	 */
 	private $taxCode;
 	/**
-	 * This is only used by Poslovi
+	 * This is currentlz only used by Poslovi
 	 *
 	 * @SerializedName("custcol_rsm_package_quantity")
 	 * @var int|null
 	 */
-	private $posloviJobPackageQuantity;
+	private $packageQuantity;
 
 	/**
 	 * @return int
@@ -139,18 +139,18 @@ class SalesOrderItem
 	/**
 	 * @return int|null
 	 */
-	public function getPosloviJobPackageQuantity(): ?int
+	public function getPackageQuantity(): ?int
 		{
-		return $this->posloviJobPackageQuantity;
+		return $this->packageQuantity;
 		}
 
 	/**
-	 * @param int|null $posloviJobPackageQuantity
+	 * @param int|null $packageQuantity
 	 * @return SalesOrderItem
 	 */
-	public function setPosloviJobPackageQuantity(?int $posloviJobPackageQuantity): self
+	public function setPackageQuantity(?int $packageQuantity): self
 		{
-		$this->posloviJobPackageQuantity = $posloviJobPackageQuantity;
+		$this->packageQuantity = $packageQuantity;
 
 		return $this;
 		}
