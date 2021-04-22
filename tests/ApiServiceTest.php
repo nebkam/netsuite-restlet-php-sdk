@@ -310,6 +310,19 @@ class ApiServiceTest extends TestCase
 	 * @param ApiService $apiService
 	 * @throws ApiTransferException
 	 */
+	public function testFindCustomerByOldErpId(ApiService $apiService): void
+		{
+		// Ovo je neka test firma
+		$customer = $apiService->findCustomerByOldErpId('16114');
+		self::assertInstanceOf(Customer::class, $customer);
+		self::assertEquals('124532658', $customer->getAttributes()->getPib());
+		}
+
+	/**
+	 * @depends testParseConfig
+	 * @param ApiService $apiService
+	 * @throws ApiTransferException
+	 */
 	public function testFindRecentItems(ApiService $apiService): void
 		{
 		$items = $apiService->findRecentItems(new DateTime('-1 year'));

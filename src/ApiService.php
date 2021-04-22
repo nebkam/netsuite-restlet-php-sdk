@@ -357,6 +357,27 @@ class ApiService
 		}
 
 	/**
+	 * @param string $oldErpId
+	 * @return Customer|null
+	 * @throws ApiTransferException
+	 */
+	public function findCustomerByOldErpId(string $oldErpId): ?Customer
+		{
+		$filters = [[
+			'name'     => 'custentity_cus_crm_id',
+			'operator' => 'is',
+			'values'   => [$oldErpId]
+		]];
+		$results = $this->executeSavedSearchCustomers($filters);
+		if (!empty($results->getCustomers()))
+			{
+			return $results->getCustomers()[0];
+			}
+
+		return null;
+		}
+
+	/**
 	 * Find recently created items in specific subsidiaries, locations or classes
 	 *
 	 * @param DateTime $periodStart
