@@ -96,6 +96,13 @@ class SalesOrderForm
 	 * @var string|null
 	 */
 	private $emailBcc;
+	/**
+	 * Only shows the number of installments for sales order estimates. This does not effect the billing schedule (invoice installments).
+	 *
+	 * @SerializedName("custbody_rsm_so_brojrata")
+	 * @var int|null
+	 */
+	private $numberOfInstallments;
 
 
 	public function __construct()
@@ -478,6 +485,25 @@ class SalesOrderForm
 	public function setEmailBcc(?string $emailBcc): self
 		{
 		$this->emailBcc = $emailBcc;
+
+		return $this;
+		}
+
+	/**
+	 * @return int|null
+	 */
+	public function getNumberOfInstallments(): ?int
+		{
+		return $this->numberOfInstallments;
+		}
+
+	/**
+	 * @param int|null $numberOfInstallments
+	 * @return SalesOrderForm
+	 */
+	public function setNumberOfInstallments(?int $numberOfInstallments): self
+		{
+		$this->numberOfInstallments = $numberOfInstallments;
 
 		return $this;
 		}
