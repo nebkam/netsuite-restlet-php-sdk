@@ -102,7 +102,7 @@ class SalesOrderForm
 	 * @SerializedName("custbody_rsm_so_brojrata")
 	 * @var int|null
 	 */
-	private $numberOfInstallments;
+	private $installmentCount;
 
 
 	public function __construct()
@@ -492,21 +492,19 @@ class SalesOrderForm
 	/**
 	 * @return int|null
 	 */
-	public function getNumberOfInstallments(): ?int
+	public function getInstallmentCount(): ?int
 		{
-		return $this->numberOfInstallments;
+		return $this->installmentCount;
 		}
 
 	/**
-	 * @param int|null $numberOfInstallments
+	 * @param int|null $installmentCount
 	 * @return SalesOrderForm
 	 */
-	public function setNumberOfInstallments(?int $numberOfInstallments): self
+	public function setInstallmentCount(?int $installmentCount): self
 		{
-		$this->numberOfInstallments = $numberOfInstallments;
+		$this->installmentCount = $installmentCount;
 
 		return $this;
 		}
-
-
 	}
