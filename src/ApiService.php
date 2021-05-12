@@ -23,6 +23,7 @@ use Infostud\NetSuiteSdk\Model\Customer\DeleteCustomerResponse;
 use Infostud\NetSuiteSdk\Model\NotificationRecipient\CreateNotificationRecipientResponse;
 use Infostud\NetSuiteSdk\Model\NotificationRecipient\DeleteNotificationRecipientResponse;
 use Infostud\NetSuiteSdk\Model\NotificationRecipient\NotificationRecipientForm;
+use Infostud\NetSuiteSdk\Model\Oauth\HmacSha256;
 use Infostud\NetSuiteSdk\Model\SalesOrder\CreateSalesOrderResponse;
 use Infostud\NetSuiteSdk\Model\SalesOrder\GetSalesOrderResponse;
 use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrder;
@@ -84,6 +85,12 @@ class ApiService
 
 	private const DEFAULT_CONTENT_TYPE = 'application/json';
 
+	private const SIGNATURE_METHOD_HMAC_SHA1 = 'HMAC-SHA1';
+
+	private const SIGNATURE_METHOD_HMAC_SHA256 = 'HMAC-SHA256';
+
+	private const ALLOWED_SIGNATURE_METHODS = [self::SIGNATURE_METHOD_HMAC_SHA1, self::SIGNATURE_METHOD_HMAC_SHA256];
+
 	/**
 	 * @param string $configPath
 	 * @throws ApiTransferException
@@ -93,7 +100,19 @@ class ApiService
 		$this->client = new Client();
 		$this->serializer = new ApiSerializer();
 		$this->config = $this->readJsonConfig($configPath);
-		$this->signatureMethod = new HmacSha1();
+		switch ($this->config->signatureMethod) {
+			case self::SIGNATURE_METHOD_HMAC_SHA1:
+				$this->signatureMethod = new HmacSha1();
+				break;
+			case self::SIGNATURE_METHOD_HMAC_SHA256:
+				$this->signatureMethod = new HmacSha256();
+				break;
+			default;
+				throw new ApiTransferException(
+					'Invalid signature method: '.$this->config->signatureMethod.
+					' allowed signature methods '.implode(', ',self::ALLOWED_SIGNATURE_METHODS)
+				);
+		}
 		$this->consumer = new Consumer(
 			$this->config->consumerKey,
 			$this->config->consumerSecret

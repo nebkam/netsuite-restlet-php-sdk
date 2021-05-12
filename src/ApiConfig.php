@@ -28,4 +28,8 @@ class ApiConfig
 	 * @var RestletMap
 	 */
 	public $restletMap;
+	/**
+	 * @var string
+	 */
+	public $signatureMethod;
 	}
