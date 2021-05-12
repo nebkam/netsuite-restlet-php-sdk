@@ -1,0 +1,19 @@
+{
+  "account": "123_SB1",
+  "consumerKey": "foo",
+  "consumerSecret": "bar",
+  "accessTokenKey": "baz",
+  "accessTokenSecret": "xyz",
+  "signatureMethod": "HMAC-SHA1",
+  "restletMap": {
+    "createDeleteContact": 1,
+    "createDeleteCustomer": 2,
+    "createDeleteSalesOrder": 3,
+    "downloadPdf": 4,
+    "getSalesOrder": 5,
+    "savedSearchCustomers": 6,
+    "savedSearchGeneric": 7,
+    "savedSearchItems": 8,
+    "suiteQL": 9
+  }
+}

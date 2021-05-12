@@ -162,7 +162,7 @@ class ApiServiceTest extends TestCase
 
 	/**
 	 * @depends testCreateCustomer
-	 * @param $params
+	 * @param array $params
 	 * @throws ApiTransferException
 	 */
 	public function testFindNotificationRecipient(array $params): void
@@ -181,7 +181,7 @@ class ApiServiceTest extends TestCase
 
 	/**
 	 * @depends testCreateNotificationRecipient
-	 * @param $params
+	 * @param array $params
 	 * @throws ApiTransferException
 	 */
 	public function testDeleteNotificationRecipient(array $params): void
@@ -233,11 +233,13 @@ class ApiServiceTest extends TestCase
 		];
 		}
 
-    /**
-     * @depends testCreateSalesOrder
-     * @param array $params
-     * @return array
-     */
+	/**
+	 * @depends testCreateSalesOrder
+	 * @param array $params
+	 * @return array
+	 * @throws ApiLogicException
+	 * @throws ApiTransferException
+	 */
 	public function testGetSalesOrder(array $params): array
     {
         /**

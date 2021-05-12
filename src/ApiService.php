@@ -54,7 +54,6 @@ use Infostud\NetSuiteSdk\Model\SuiteQL\Item as SuiteQLItem;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Location;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Subsidiary;
 use Infostud\NetSuiteSdk\Model\SuiteQL\SuiteQLResponse;
-use RuntimeException;
 
 class ApiService
 	{
@@ -99,7 +98,7 @@ class ApiService
 		{
 		$this->client = new Client();
 		$this->serializer = new ApiSerializer();
-		$this->config = $this->readJsonConfig($configPath);
+		$this->config = ApiConfig::fromJsonFile($configPath, $this->serializer);
 		switch ($this->config->signatureMethod) {
 			case self::SIGNATURE_METHOD_HMAC_SHA1:
 				$this->signatureMethod = new HmacSha1();
@@ -829,13 +828,13 @@ class ApiService
 			'deploy' => $deploymentId
 		], $additionalQueryParams);
 
-		return sprintf('https://%s.restlets.api.netsuite.com/app/site/hosting/restlet.nl?', $this->config->account)
+		return sprintf('https://%s.restlets.api.netsuite.com/app/site/hosting/restlet.nl?', $this->config->getRestletUrlFragment())
 			. http_build_query($queryParams);
 		}
 
 	private function getRestletHost(): string
 		{
-		return sprintf('%s.restlets.api.netsuite.com', $this->config->account);
+		return sprintf('%s.restlets.api.netsuite.com', $this->config->getRestletUrlFragment());
 		}
 
 	/**
@@ -857,12 +856,12 @@ class ApiService
 		]);
 		$signature = $request->build_signature($this->signatureMethod, $this->consumer, $this->accessToken);
 		$request->set_parameter('oauth_signature', $signature);
-		$request->set_parameter('realm', $this->config->account);
+		$request->set_parameter('realm', $this->config->getRealm());
 
 		try
 			{
 			return [
-				'Authorization' => substr($request->to_header($this->config->account), 15),
+				'Authorization' => substr($request->to_header($this->config->getRealm()), 15),
 				'Host'          => $this->getRestletHost(),
 				'Content-Type'  => $contentType
 			];
@@ -871,25 +870,5 @@ class ApiService
 			{
 			throw ApiTransferException::fromOAuthException($exception);
 			}
-		}
-
-	/**
-	 * @param string $path
-	 * @return ApiConfig
-	 * @throws ApiTransferException
-	 */
-	private function readJsonConfig(string $path): ApiConfig
-		{
-		if (!file_exists($path)
-			|| !is_readable($path))
-			{
-			throw new RuntimeException(
-				sprintf('File at `%s` doesn\'t exist or isn\'t readable', $path)
-			);
-			}
-		$contents = file_get_contents($path);
-
-		/** @noinspection PhpIncompatibleReturnTypeInspection */
-		return $this->serializer->deserialize($contents, ApiConfig::class);
 		}
 	}

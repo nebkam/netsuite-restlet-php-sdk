@@ -9,6 +9,7 @@
     "createDeleteContact": 0,
     "createDeleteCustomer": 0,
     "createDeleteSalesOrder": 0,
+    "createDeleteNotify": 0,
     "downloadPdf": 0,
     "getSalesOrder": 0,
     "savedSearchCustomers": 0,
