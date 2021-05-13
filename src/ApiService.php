@@ -14,6 +14,8 @@ use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
 use Infostud\NetSuiteSdk\Exception\ApiLogicException;
 use Infostud\NetSuiteSdk\Exception\ApiTransferException;
+use Infostud\NetSuiteSdk\Model\Contact\ContactForm;
+use Infostud\NetSuiteSdk\Model\Contact\CreateContactResponse;
 use Infostud\NetSuiteSdk\Model\Contact\DeleteContactResponse;
 use Infostud\NetSuiteSdk\Model\Customer\CreateCustomerResponse;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerForm;
@@ -25,8 +27,6 @@ use Infostud\NetSuiteSdk\Model\SalesOrder\CreateSalesOrderResponse;
 use Infostud\NetSuiteSdk\Model\SalesOrder\DeleteSalesOrderResponse;
 use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderDataResponse;
 use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderForm;
-use Infostud\NetSuiteSdk\Model\Contact\ContactForm;
-use Infostud\NetSuiteSdk\Model\Contact\CreateContactResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Contact;
 use Infostud\NetSuiteSdk\Model\SavedSearch\ContactSearchResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
@@ -38,19 +38,18 @@ use Infostud\NetSuiteSdk\Model\SavedSearch\NotificationRecipient;
 use Infostud\NetSuiteSdk\Model\SavedSearch\NotificationRecipientSearchResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\TaxItem;
 use Infostud\NetSuiteSdk\Model\SavedSearch\TaxItemSearchResponse;
+use Infostud\NetSuiteSdk\Model\SuiteQL\Classification;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Department;
+use Infostud\NetSuiteSdk\Model\SuiteQL\Employee;
+use Infostud\NetSuiteSdk\Model\SuiteQL\GetClassificationsResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetDepartmentsResponse;
+use Infostud\NetSuiteSdk\Model\SuiteQL\GetEmployeesResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetLocationsResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\GetSubsidiariesResponse;
-use Infostud\NetSuiteSdk\Model\SuiteQL\GetClassificationsResponse;
-use Infostud\NetSuiteSdk\Model\SuiteQL\GetEmployeesResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Location;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Subsidiary;
-use Infostud\NetSuiteSdk\Model\SuiteQL\Classification;
-use Infostud\NetSuiteSdk\Model\SuiteQL\Employee;
 use Infostud\NetSuiteSdk\Model\SuiteQL\SuiteQLResponse;
 use Infostud\NetSuiteSdk\Serializer\ApiSerializer;
-use RuntimeException;
 
 class ApiService
 	{
@@ -86,7 +85,7 @@ class ApiService
 		{
 		$this->client = new Client();
 		$this->serializer = new ApiSerializer();
-		$this->config = $this->readJsonConfig($configPath);
+		$this->config = ApiConfig::fromJsonFile($configPath, $this->serializer);
 		$this->signatureMethod = new HmacSha1();
 		$this->consumer = new Consumer(
 			$this->config->consumerKey,
@@ -751,7 +750,7 @@ class ApiService
 			'deploy' => $deploymentId
 		], $additionalQueryData);
 
-		return sprintf('https://%s.restlets.api.netsuite.com/app/site/hosting/restlet.nl?', $this->config->account)
+		return sprintf('https://%s.restlets.api.netsuite.com/app/site/hosting/restlet.nl?', $this->config->getRestletUrlFragment())
 			. http_build_query($queryData);
 		}
 
@@ -760,7 +759,7 @@ class ApiService
 	 */
 	private function getRestletHost()
 		{
-		return sprintf('%s.restlets.api.netsuite.com', $this->config->account);
+		return sprintf('%s.restlets.api.netsuite.com', $this->config->getRestletUrlFragment());
 		}
 
 	/**
@@ -783,12 +782,12 @@ class ApiService
 		]);
 		$signature = $request->build_signature($this->signatureMethod, $this->consumer, $this->accessToken);
 		$request->set_parameter('oauth_signature', $signature);
-		$request->set_parameter('realm', $this->config->account);
+		$request->set_parameter('realm', $this->config->getRealm());
 
 		try
 			{
 			return [
-				'Authorization' => substr($request->to_header($this->config->account), 15),
+				'Authorization' => substr($request->to_header($this->config->getRealm()), 15),
 				'Host'          => $this->getRestletHost(),
 				'Content-Type'  => $contentType
 			];
@@ -797,25 +796,5 @@ class ApiService
 			{
 			throw ApiTransferException::fromOAuthException($exception);
 			}
-		}
-
-	/**
-	 * @param string $path
-	 * @return ApiConfig|object
-	 * @throws RuntimeException
-	 */
-	private function readJsonConfig($path)
-		{
-		if (!file_exists($path)
-			|| !is_readable($path))
-			{
-			throw new RuntimeException(
-				sprintf('File at `%s` doesn\'t exist or isn\'t readable', $path)
-			);
-			}
-
-		$contents = file_get_contents($path);
-
-		return $this->serializer->deserialize($contents, ApiConfig::class);
 		}
 	}
