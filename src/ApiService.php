@@ -86,7 +86,7 @@ class ApiService
 		$this->client = new Client();
 		$this->serializer = new ApiSerializer();
 		$this->config = ApiConfig::fromJsonFile($configPath, $this->serializer);
-		$this->signatureMethod = new HmacSha1();
+		$this->signatureMethod = $this->config->getSignatureMethodImplementation();
 		$this->consumer = new Consumer(
 			$this->config->consumerKey,
 			$this->config->consumerSecret

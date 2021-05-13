@@ -2,11 +2,21 @@
 
 namespace Infostud\NetSuiteSdk;
 
+use Eher\OAuth\HmacSha1;
+use Eher\OAuth\SignatureMethod;
+use Infostud\NetSuiteSdk\Model\Oauth\HmacSha256;
 use Infostud\NetSuiteSdk\Serializer\ApiSerializer;
 use RuntimeException;
 
 class ApiConfig
 	{
+	const SIGNATURE_METHOD_HMAC_SHA1 = 'HMAC-SHA1';
+	const SIGNATURE_METHOD_HMAC_SHA256 = 'HMAC-SHA256';
+	const ALLOWED_SIGNATURE_METHODS = [
+		self::SIGNATURE_METHOD_HMAC_SHA1,
+		self::SIGNATURE_METHOD_HMAC_SHA256
+	];
+
 	/**
 	 * @var string
 	 */
@@ -27,6 +37,10 @@ class ApiConfig
 	 * @var string
 	 */
 	public $accessTokenSecret;
+	/**
+	 * @var string
+	 */
+	public $signatureMethod;
 	/**
 	 * @var RestletMap
 	 */
@@ -65,6 +79,27 @@ class ApiConfig
 	public function getRestletUrlFragment()
 		{
 		return str_replace('_', '-', strtolower($this->account));
+		}
+
+	/**
+	 * @return SignatureMethod
+	 */
+	public function getSignatureMethodImplementation()
+		{
+		switch ($this->signatureMethod) {
+			case self::SIGNATURE_METHOD_HMAC_SHA1:
+				return new HmacSha1();
+
+			case self::SIGNATURE_METHOD_HMAC_SHA256:
+				return new HmacSha256();
+
+			default;
+				throw new RuntimeException(sprintf(
+					'Invalid signature method: %s. Allowed signature methods are: %s',
+					$this->signatureMethod,
+					implode(', ', self::ALLOWED_SIGNATURE_METHODS)
+				));
+			}
 		}
 
 	/**

@@ -4,6 +4,7 @@
   "consumerSecret": "",
   "accessTokenKey": "",
   "accessTokenSecret": "",
+  "signatureMethod": "HMAC-SHA1",
   "restletMap": {
     "createDeleteContact": 0,
     "createDeleteCustomer": 0,
