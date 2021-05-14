@@ -9,7 +9,7 @@ class ApiConfig
 	/**
 	 * @var string
 	 */
-	private $account;
+	private $accountId;
 	/**
 	 * @var string
 	 */
@@ -38,30 +38,30 @@ class ApiConfig
 	/**
 	 * @return string
 	 */
-	public function getAccount(): string
+	public function getAccountId(): string
 		{
-		return $this->account;
+		return $this->accountId;
 		}
 
 	/**
-	 * @param string $account
+	 * @param string $accountId
 	 * @return ApiConfig
 	 */
-	public function setAccount(string $account): self
+	public function setAccountId(string $accountId): self
 		{
-		$this->account = $account;
+		$this->accountId = $accountId;
 
 		return $this;
 		}
 
 	public function getRealm(): string
 		{
-		return $this->account;
+		return $this->accountId;
 		}
 
 	public function getRestletUrlFragment(): string
 		{
-		return str_replace('_', '-', strtolower($this->account));
+		return str_replace('_', '-', strtolower($this->accountId));
 		}
 
 	/**

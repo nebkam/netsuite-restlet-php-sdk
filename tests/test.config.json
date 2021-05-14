@@ -1,5 +1,5 @@
 {
-  "account": "123_SB1",
+  "accountId": "123_SB1",
   "consumerKey": "foo",
   "consumerSecret": "bar",
   "accessTokenKey": "baz",
