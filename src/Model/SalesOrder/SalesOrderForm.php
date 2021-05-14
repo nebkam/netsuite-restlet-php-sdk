@@ -71,6 +71,11 @@ class SalesOrderForm
 	 * @var string|null
 	 */
 	private $endDate;
+	/**
+	 * @Groups("custbody_rsm_so_type")
+	 * @var string|null
+	 */
+	private $type;
 
 	public function __construct()
 		{
@@ -377,5 +382,21 @@ class SalesOrderForm
 	public function setInternalMemo($internalMemo)
 		{
 		$this->internalMemo = $internalMemo;
+		}
+
+	/**
+	 * @return string|null
+	 */
+	public function getType()
+		{
+		return $this->type;
+		}
+
+	/**
+	 * @param string|null $type
+	 */
+	public function setType($type)
+		{
+		$this->type = $type;
 		}
 	}
