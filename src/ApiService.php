@@ -129,7 +129,7 @@ class ApiService
 	 */
 	public function createContact(ContactForm $contactForm): int
 		{
-		$url         = $this->getRestletUrl($this->config->restletMap->createDeleteContact, 1);
+		$url         = $this->config->getRestletUrl($this->config->restletMap->createDeleteContact);
 		$requestBody = $this->serializer->normalize($contactForm);
 		$contents    = $this->executePostRequest($url, $requestBody);
 		/** @var CreateContactResponse $response */
@@ -153,7 +153,7 @@ class ApiService
 	 */
 	public function deleteContact(int $id): bool
 		{
-		$url      = $this->getRestletUrl($this->config->restletMap->createDeleteContact, 1, [
+		$url      = $this->config->getRestletUrl($this->config->restletMap->createDeleteContact, [
 			'contactid' => $id
 		]);
 		$contents = $this->executeDeleteRequest($url);
@@ -171,7 +171,7 @@ class ApiService
 	 */
 	public function createCustomer(CustomerForm $form): int
 		{
-		$url         = $this->getRestletUrl($this->config->restletMap->createDeleteCustomer, 3);
+		$url         = $this->config->getRestletUrl($this->config->restletMap->createDeleteCustomer);
 		$requestBody = $this->serializer->normalize($form);
 		$contents    = $this->executePostRequest($url, $requestBody);
 		/** @var CreateCustomerResponse $apiResponse */
@@ -198,7 +198,7 @@ class ApiService
 	 */
 	public function deleteCustomer(int $id): bool
 		{
-		$url      = $this->getRestletUrl($this->config->restletMap->createDeleteCustomer, 3, [
+		$url      = $this->config->getRestletUrl($this->config->restletMap->createDeleteCustomer, [
 			'customerid' => $id
 		]);
 		$contents = $this->executeDeleteRequest($url);
@@ -215,7 +215,7 @@ class ApiService
 	 */
 	public function createNotificationRecipient(NotificationRecipientForm $form): int
 		{
-		$url         = $this->getRestletUrl($this->config->restletMap->createDeleteNotify, 1);
+		$url         = $this->config->getRestletUrl($this->config->restletMap->createDeleteNotify);
 		$requestBody = $this->serializer->normalize($form);
 		$contents    = $this->executePostRequest($url, $requestBody);
 		/** @var CreateNotificationRecipientResponse $response */
@@ -236,7 +236,7 @@ class ApiService
 	 */
 	public function deleteNotificationRecipient(int $id): bool
 		{
-		$url      = $this->getRestletUrl($this->config->restletMap->createDeleteNotify, 1, [
+		$url      = $this->config->getRestletUrl($this->config->restletMap->createDeleteNotify, [
 			'contactid' => $id
 		]);
 		$contents = $this->executeDeleteRequest($url);
@@ -254,7 +254,7 @@ class ApiService
 	 */
 	public function createSalesOrder(SalesOrderForm $form): int
 		{
-		$url         = $this->getRestletUrl($this->config->restletMap->createDeleteSalesOrder, 1);
+		$url         = $this->config->getRestletUrl($this->config->restletMap->createDeleteSalesOrder);
 		$requestBody = $this->serializer->normalize($form);
 		$contents    = $this->executePostRequest($url, $requestBody);
 		/** @var CreateSalesOrderResponse $apiResponse */
@@ -276,7 +276,7 @@ class ApiService
      */
 	public function getSalesOrder(int $orderId): SalesOrder
     {
-        $url      = $this->getRestletUrl($this->config->restletMap->getSalesOrder, 1, [
+        $url      = $this->config->getRestletUrl($this->config->restletMap->getSalesOrder, [
             'orderid'   => $orderId
         ]);
         $contents = $this->executeGetRequest($url);
@@ -301,7 +301,7 @@ class ApiService
 	 */
 	public function deleteSalesOrder(int $id): bool
 		{
-		$url      = $this->getRestletUrl($this->config->restletMap->createDeleteSalesOrder, 1, [
+		$url      = $this->config->getRestletUrl($this->config->restletMap->createDeleteSalesOrder, [
 			'orderid' => $id
 		]);
 		$contents = $this->executeDeleteRequest($url);
@@ -622,7 +622,7 @@ class ApiService
 		{
 		$params = []; //TODO As this uses GET method, parameters need to be passed through URL
 
-		$url = $this->getRestletUrl($this->config->restletMap->downloadPdf, 1, $params);
+		$url = $this->config->getRestletUrl($this->config->restletMap->downloadPdf, $params);
 		$contents = $this->executeGetRequest($url, 'application/pdf');
 		if (empty($contents))
 			{
@@ -639,7 +639,7 @@ class ApiService
 	 */
 	private function executeSavedSearchCustomers(array $filters): SavedSearchCustomersResponse
 		{
-		$url         = $this->getRestletUrl($this->config->restletMap->savedSearchCustomers, 1);
+		$url         = $this->config->getRestletUrl($this->config->restletMap->savedSearchCustomers);
 		$requestBody = [
 			'filters' => $filters
 		];
@@ -657,7 +657,7 @@ class ApiService
 	 */
 	private function executeSavedSearchItems(array $filters): ItemSearchResponse
 		{
-		$url         = $this->getRestletUrl($this->config->restletMap->savedSearchItems, 1);
+		$url         = $this->config->getRestletUrl($this->config->restletMap->savedSearchItems);
 		$requestBody = [
 			'filters' => $filters
 		];
@@ -683,7 +683,7 @@ class ApiService
 		string $responseClass
 	): array
 		{
-		$url = $this->getRestletUrl($this->config->restletMap->savedSearchGeneric, 1);
+		$url = $this->config->getRestletUrl($this->config->restletMap->savedSearchGeneric);
 
 		$columns = array_map(static function($columnName){
 			return ['name' => $columnName];
@@ -721,7 +721,7 @@ class ApiService
 			'sql_where' => $where,
 			'params'    => $params
 		];
-		$url         = $this->getRestletUrl($this->config->restletMap->suiteQL, 1);
+		$url         = $this->config->getRestletUrl($this->config->restletMap->suiteQL);
 		$contents    = $this->executePostRequest($url, $requestBody);
 		if ($responseClass)
 			{
@@ -816,28 +816,6 @@ class ApiService
 		}
 
 	/**
-	 * @param int $scriptId
-	 * @param int $deploymentId
-	 * @param array $additionalQueryParams
-	 * @return string
-	 */
-	private function getRestletUrl(int $scriptId, int $deploymentId, $additionalQueryParams = []): string
-		{
-		$queryParams = array_merge([
-			'script' => $scriptId,
-			'deploy' => $deploymentId
-		], $additionalQueryParams);
-
-		return sprintf('https://%s.restlets.api.netsuite.com/app/site/hosting/restlet.nl?', $this->config->getRestletUrlFragment())
-			. http_build_query($queryParams);
-		}
-
-	private function getRestletHost(): string
-		{
-		return sprintf('%s.restlets.api.netsuite.com', $this->config->getRestletUrlFragment());
-		}
-
-	/**
 	 * @param string $method
 	 * @param string $url
 	 * @param string $contentType
@@ -862,7 +840,7 @@ class ApiService
 			{
 			return [
 				'Authorization' => substr($request->to_header($this->config->getRealm()), 15),
-				'Host'          => $this->getRestletHost(),
+				'Host'          => $this->config->getRestletHost(),
 				'Content-Type'  => $contentType
 			];
 			}

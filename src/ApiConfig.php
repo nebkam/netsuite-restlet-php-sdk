@@ -65,6 +65,27 @@ class ApiConfig
 		}
 
 	/**
+	 * @param Restlet $restlet
+	 * @param array $additionalQueryParams
+	 * @return string
+	 */
+	public function getRestletUrl(Restlet $restlet, $additionalQueryParams = []): string
+		{
+		$queryParams = array_merge([
+			'script' => $restlet->script,
+			'deploy' => $restlet->deploy
+		], $additionalQueryParams);
+
+		return sprintf('https://%s.restlets.api.netsuite.com/app/site/hosting/restlet.nl?', $this->getRestletUrlFragment())
+			. http_build_query($queryParams);
+		}
+
+	public function getRestletHost(): string
+		{
+		return sprintf('%s.restlets.api.netsuite.com', $this->getRestletUrlFragment());
+		}
+
+	/**
 	 * @throws Exception\ApiTransferException
 	 */
 	public static function fromJsonFile(string $path, ApiSerializer $serializer): self

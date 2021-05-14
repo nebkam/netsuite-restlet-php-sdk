@@ -5,43 +5,43 @@ namespace Infostud\NetSuiteSdk;
 class RestletMap
 	{
 	/**
-	 * @var int
+	 * @var Restlet
 	 */
 	public $createDeleteContact;
 	/**
-	 * @var int
+	 * @var Restlet
 	 */
 	public $createDeleteCustomer;
 	/**
-	 * @var int
+	 * @var Restlet
 	 */
 	public $createDeleteNotify;
 	/**
-	 * @var int
-	 */
-	public $downloadPdf;
-	/**
-	 * @var int
+	 * @var Restlet
 	 */
 	public $createDeleteSalesOrder;
 	/**
-	 * @var int
+	 * @var Restlet
+	 */
+	public $downloadPdf;
+	/**
+	 * @var Restlet
+	 */
+	public $getSalesOrder;
+	/**
+	 * @var Restlet
 	 */
 	public $savedSearchCustomers;
 	/**
-	 * @var int
+	 * @var Restlet
 	 */
 	public $savedSearchGeneric;
 	/**
-	 * @var int
+	 * @var Restlet
 	 */
 	public $savedSearchItems;
 	/**
-	 * @var int
+	 * @var Restlet
 	 */
 	public $suiteQL;
-    /**
-     * @var int
-     */
-	public $getSalesOrder;
 	}
