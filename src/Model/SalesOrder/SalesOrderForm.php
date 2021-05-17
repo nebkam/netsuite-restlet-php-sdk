@@ -85,7 +85,7 @@ class SalesOrderForm
 	 * @SerializedName("custbody_rsm_auth_payment_code")
 	 * @var string|null
 	 */
-	private $paymentCode;
+	private $paymentAuthorizationCode;
 	/**
 	 * @SerializedName("custbody_rsm_additional_cc_email")
 	 * @var string|null
@@ -435,18 +435,18 @@ class SalesOrderForm
 	/**
 	 * @return string|null
 	 */
-	public function getPaymentCode(): ?string
+	public function getPaymentAuthorizationCode(): ?string
 		{
-		return $this->paymentCode;
+		return $this->paymentAuthorizationCode;
 		}
 
 	/**
-	 * @param string|null $paymentCode
+	 * @param string|null $paymentAuthorizationCode
 	 * @return SalesOrderForm
 	 */
-	public function setPaymentCode(?string $paymentCode): self
+	public function setPaymentAuthorizationCode(?string $paymentAuthorizationCode): self
 		{
-		$this->paymentCode = $paymentCode;
+		$this->paymentAuthorizationCode = $paymentAuthorizationCode;
 
 		return $this;
 		}
