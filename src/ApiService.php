@@ -740,7 +740,7 @@ class ApiService
 			throw ApiTransferException::fromStatusCode($clientResponse->getStatusCode());
 			}
 
-		return $clientResponse->getBody()->getContents();
+		return (string) $clientResponse->getBody();
 		}
 
 	/**
@@ -768,7 +768,7 @@ class ApiService
 			throw ApiTransferException::fromStatusCode($clientResponse->getStatusCode());
 			}
 
-		return $clientResponse->getBody()->getContents();
+		return (string) $clientResponse->getBody();
 		}
 
 	/**
@@ -794,7 +794,7 @@ class ApiService
 			throw ApiTransferException::fromStatusCode($clientResponse->getStatusCode());
 			}
 
-		return $clientResponse->getBody()->getContents();
+		return (string) $clientResponse->getBody();
 		}
 
 	/**
