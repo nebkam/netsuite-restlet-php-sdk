@@ -76,6 +76,16 @@ class SalesOrderForm
 	 * @var string|null
 	 */
 	private $type;
+	/**
+	 * @Groups("custbody_poziv_na_broj")
+	 * @var string|null
+	 */
+	private $paymentType;
+	/**
+	 * @Groups("custbody_rsm_broj_dana_uplata")
+	 * @var int|null
+	 */
+	private $dueDateDays;
 
 	public function __construct()
 		{
@@ -398,5 +408,37 @@ class SalesOrderForm
 	public function setType($type)
 		{
 		$this->type = $type;
+		}
+
+	/**
+	 * @return string|null
+	 */
+	public function getPaymentType()
+		{
+		return $this->paymentType;
+		}
+
+	/**
+	 * @param string|null $paymentType
+	 */
+	public function setPaymentType($paymentType)
+		{
+		$this->paymentType = $paymentType;
+		}
+
+	/**
+	 * @return int|null
+	 */
+	public function getDueDateDays()
+		{
+		return $this->dueDateDays;
+		}
+
+	/**
+	 * @param int|null $dueDateDays
+	 */
+	public function setDueDateDays($dueDateDays)
+		{
+		$this->dueDateDays = $dueDateDays;
 		}
 	}
