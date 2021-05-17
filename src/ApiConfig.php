@@ -2,10 +2,17 @@
 
 namespace Infostud\NetSuiteSdk;
 
+use Eher\OAuth\HmacSha1;
+use Eher\OAuth\SignatureMethod;
+use Infostud\NetSuiteSdk\Model\Oauth\HmacSha256;
 use RuntimeException;
 
 class ApiConfig
 	{
+	private const SIGNATURE_METHOD_HMAC_SHA1 = 'HMAC-SHA1';
+	private const SIGNATURE_METHOD_HMAC_SHA256 = 'HMAC-SHA256';
+	private const ALLOWED_SIGNATURE_METHODS = [self::SIGNATURE_METHOD_HMAC_SHA1, self::SIGNATURE_METHOD_HMAC_SHA256];
+
 	/**
 	 * @var string
 	 */
@@ -83,6 +90,28 @@ class ApiConfig
 	public function getRestletHost(): string
 		{
 		return sprintf('%s.restlets.api.netsuite.com', $this->getRestletUrlFragment());
+		}
+
+	/**
+	 * @return SignatureMethod
+	 * @throws RuntimeException
+	 */
+	public function getSignatureMethodImplementation()
+		{
+		switch ($this->signatureMethod) {
+			case self::SIGNATURE_METHOD_HMAC_SHA1:
+				return new HmacSha1();
+
+			case self::SIGNATURE_METHOD_HMAC_SHA256:
+				return new HmacSha256();
+
+			default;
+				throw new RuntimeException(sprintf(
+					'Invalid signature method: %s. Allowed signature methods are: %s',
+					$this->signatureMethod,
+					implode(', ', self::ALLOWED_SIGNATURE_METHODS)
+				));
+			}
 		}
 
 	/**

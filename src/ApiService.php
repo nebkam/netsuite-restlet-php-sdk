@@ -4,7 +4,6 @@ namespace Infostud\NetSuiteSdk;
 
 use DateTime;
 use Eher\OAuth\Consumer;
-use Eher\OAuth\HmacSha1;
 use Eher\OAuth\OAuthException;
 use Eher\OAuth\Request;
 use Eher\OAuth\SignatureMethod;
@@ -23,7 +22,6 @@ use Infostud\NetSuiteSdk\Model\Customer\DeleteCustomerResponse;
 use Infostud\NetSuiteSdk\Model\NotificationRecipient\CreateNotificationRecipientResponse;
 use Infostud\NetSuiteSdk\Model\NotificationRecipient\DeleteNotificationRecipientResponse;
 use Infostud\NetSuiteSdk\Model\NotificationRecipient\NotificationRecipientForm;
-use Infostud\NetSuiteSdk\Model\Oauth\HmacSha256;
 use Infostud\NetSuiteSdk\Model\SalesOrder\CreateSalesOrderResponse;
 use Infostud\NetSuiteSdk\Model\SalesOrder\GetSalesOrderResponse;
 use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrder;
@@ -84,39 +82,21 @@ class ApiService
 
 	private const DEFAULT_CONTENT_TYPE = 'application/json';
 
-	private const SIGNATURE_METHOD_HMAC_SHA1 = 'HMAC-SHA1';
-
-	private const SIGNATURE_METHOD_HMAC_SHA256 = 'HMAC-SHA256';
-
-	private const ALLOWED_SIGNATURE_METHODS = [self::SIGNATURE_METHOD_HMAC_SHA1, self::SIGNATURE_METHOD_HMAC_SHA256];
-
 	/**
 	 * @param string $configPath
 	 * @throws ApiTransferException
 	 */
 	public function __construct(string $configPath)
 		{
-		$this->client = new Client();
-		$this->serializer = new ApiSerializer();
-		$this->config = ApiConfig::fromJsonFile($configPath, $this->serializer);
-		switch ($this->config->signatureMethod) {
-			case self::SIGNATURE_METHOD_HMAC_SHA1:
-				$this->signatureMethod = new HmacSha1();
-				break;
-			case self::SIGNATURE_METHOD_HMAC_SHA256:
-				$this->signatureMethod = new HmacSha256();
-				break;
-			default;
-				throw new ApiTransferException(
-					'Invalid signature method: '.$this->config->signatureMethod.
-					' allowed signature methods '.implode(', ',self::ALLOWED_SIGNATURE_METHODS)
-				);
-		}
-		$this->consumer = new Consumer(
+		$this->client          = new Client();
+		$this->serializer      = new ApiSerializer();
+		$this->config          = ApiConfig::fromJsonFile($configPath, $this->serializer);
+		$this->signatureMethod = $this->config->getSignatureMethodImplementation();
+		$this->consumer        = new Consumer(
 			$this->config->consumerKey,
 			$this->config->consumerSecret
 		);
-		$this->accessToken              = new Token(
+		$this->accessToken     = new Token(
 			$this->config->accessTokenKey,
 			$this->config->accessTokenSecret
 		);
@@ -268,28 +248,29 @@ class ApiService
 		throw new ApiLogicException($apiResponse->getErrorName(), $apiResponse->getErrorMessage());
 		}
 
-    /**
-     * @param int $orderId
-     * @return SalesOrder
-     * @throws ApiLogicException
-     * @throws ApiTransferException
-     */
+	/**
+	 * @param int $orderId
+	 * @return SalesOrder
+	 * @throws ApiLogicException
+	 * @throws ApiTransferException
+	 */
 	public function getSalesOrder(int $orderId): SalesOrder
-    {
-        $url      = $this->config->getRestletUrl($this->config->restletMap->getSalesOrder, [
-            'orderid'   => $orderId
-        ]);
-        $contents = $this->executeGetRequest($url);
+		{
+		$url      = $this->config->getRestletUrl($this->config->restletMap->getSalesOrder, [
+			'orderid' => $orderId
+		]);
+		$contents = $this->executeGetRequest($url);
 
-        /** @var GetSalesOrderResponse $apiResponse */
-        $apiResponse = $this->serializer->deserialize($contents, GetSalesOrderResponse::class);
-        if ($apiResponse->isSuccessful()
-            && $apiResponse->getSalesOrder()) {
-            return $apiResponse->getSalesOrder();
-        }
+		/** @var GetSalesOrderResponse $apiResponse */
+		$apiResponse = $this->serializer->deserialize($contents, GetSalesOrderResponse::class);
+		if ($apiResponse->isSuccessful()
+			&& $apiResponse->getSalesOrder())
+			{
+			return $apiResponse->getSalesOrder();
+			}
 
-        throw new ApiLogicException($apiResponse->getErrorName(), $apiResponse->getErrorMessage());
-    }
+		throw new ApiLogicException($apiResponse->getErrorName(), $apiResponse->getErrorMessage());
+		}
 
 	/**
 	 * Used by tests only. Production usage not explicitly confirmed yet
@@ -531,6 +512,7 @@ class ApiService
 			'rate',
 			'country'
 		];
+
 		return $this->executeGenericSavedSearch(
 			'salestaxitem',
 			$columnNames,
@@ -622,11 +604,11 @@ class ApiService
 		{
 		$params = []; //TODO As this uses GET method, parameters need to be passed through URL
 
-		$url = $this->config->getRestletUrl($this->config->restletMap->downloadPdf, $params);
+		$url      = $this->config->getRestletUrl($this->config->restletMap->downloadPdf, $params);
 		$contents = $this->executeGetRequest($url, 'application/pdf');
 		if (empty($contents))
 			{
-			throw new ApiLogicException('Empty response','Server has returned empty string for given parameters');
+			throw new ApiLogicException('Empty response', 'Server has returned empty string for given parameters');
 			}
 
 		return base64_decode($contents);
@@ -685,7 +667,7 @@ class ApiService
 		{
 		$url = $this->config->getRestletUrl($this->config->restletMap->savedSearchGeneric);
 
-		$columns = array_map(static function($columnName){
+		$columns = array_map(static function ($columnName) {
 			return ['name' => $columnName];
 		}, $columnNames);
 
@@ -734,32 +716,32 @@ class ApiService
 		return json_decode($contents, true);
 		}
 
-    /**
-     * @param string $url
-     * @param string|null $contentType
-     * @return string
-     * @throws ApiTransferException
-     */
+	/**
+	 * @param string $url
+	 * @param string|null $contentType
+	 * @return string
+	 * @throws ApiTransferException
+	 */
 	private function executeGetRequest(string $url, ?string $contentType = self::DEFAULT_CONTENT_TYPE): string
-    {
-        try
-        {
-            $clientResponse = $this->client->request('GET', $url, [
-                RequestOptions::HEADERS => $this->buildHeaders('GET', $url, $contentType),
-            ]);
-        }
-        catch (GuzzleException $exception)
-        {
-            throw ApiTransferException::fromGuzzleException($exception);
-        }
+		{
+		try
+			{
+			$clientResponse = $this->client->request('GET', $url, [
+				RequestOptions::HEADERS => $this->buildHeaders('GET', $url, $contentType),
+			]);
+			}
+		catch (GuzzleException $exception)
+			{
+			throw ApiTransferException::fromGuzzleException($exception);
+			}
 
-        if ($clientResponse->getStatusCode() !== 200)
-        {
-            throw ApiTransferException::fromStatusCode($clientResponse->getStatusCode());
-        }
+		if ($clientResponse->getStatusCode() !== 200)
+			{
+			throw ApiTransferException::fromStatusCode($clientResponse->getStatusCode());
+			}
 
-        return $clientResponse->getBody()->getContents();
-    }
+		return $clientResponse->getBody()->getContents();
+		}
 
 	/**
 	 * @param string $url
