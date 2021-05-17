@@ -85,7 +85,7 @@ class SalesOrderForm
 	 * @Groups("custbody_rsm_broj_dana_uplata")
 	 * @var int|null
 	 */
-	private $dueDateDays;
+	private $daysToPay;
 
 	public function __construct()
 		{
@@ -429,16 +429,16 @@ class SalesOrderForm
 	/**
 	 * @return int|null
 	 */
-	public function getDueDateDays()
+	public function getDaysToPay()
 		{
-		return $this->dueDateDays;
+		return $this->daysToPay;
 		}
 
 	/**
-	 * @param int|null $dueDateDays
+	 * @param int|null $daysToPay
 	 */
-	public function setDueDateDays($dueDateDays)
+	public function setDaysToPay($daysToPay)
 		{
-		$this->dueDateDays = $dueDateDays;
+		$this->daysToPay = $daysToPay;
 		}
 	}
