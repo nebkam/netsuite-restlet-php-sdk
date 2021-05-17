@@ -80,7 +80,7 @@ class SalesOrderForm
 	 * @Groups("custbody_poziv_na_broj")
 	 * @var string|null
 	 */
-	private $paymentType;
+	private $paymentCode;
 	/**
 	 * @Groups("custbody_rsm_broj_dana_uplata")
 	 * @var int|null
@@ -413,17 +413,17 @@ class SalesOrderForm
 	/**
 	 * @return string|null
 	 */
-	public function getPaymentType()
+	public function getPaymentCode()
 		{
-		return $this->paymentType;
+		return $this->paymentCode;
 		}
 
 	/**
-	 * @param string|null $paymentType
+	 * @param string|null $paymentCode
 	 */
-	public function setPaymentType($paymentType)
+	public function setPaymentCode($paymentCode)
 		{
-		$this->paymentType = $paymentType;
+		$this->paymentCode = $paymentCode;
 		}
 
 	/**
