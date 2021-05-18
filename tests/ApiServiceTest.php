@@ -19,9 +19,15 @@ use Infostud\NetSuiteSdk\Model\SuiteQL\Item as SuiteQLItem;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Location;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Subsidiary;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\Test\TestLogger;
 
 class ApiServiceTest extends TestCase
 	{
+	/**
+	 * @var TestLogger
+	 */
+	private static $logger;
+
 	/**
 	 * Test that it doesn't throw exceptions
 	 * @return ApiService
@@ -30,8 +36,9 @@ class ApiServiceTest extends TestCase
 	public function testParseConfig(): ApiService
 		{
 		$configPath = getenv('CONFIG_PATH');
+		self::$logger = new TestLogger();
 
-		return new ApiService($configPath);
+		return new ApiService($configPath, self::$logger);
 		}
 
 	/**
@@ -64,6 +71,23 @@ class ApiServiceTest extends TestCase
 			$apiService,
 			$customerId
 		];
+		}
+
+	/**
+	 * @depends testCreateCustomer
+	 * @param array $params
+	 */
+	public function testCreateCustomerLog(array $params): void
+		{
+		/**
+		 * @var $customerId int
+		 */
+		[, $customerId] = $params;
+
+		$this->assertNotEmpty(self::$logger->records);
+		$logRecord = self::$logger->records[0];
+		$this->assertArrayHasKey('message', $logRecord);
+		$this->assertContains((string) $customerId, $logRecord['message']);
 		}
 
 	/**
