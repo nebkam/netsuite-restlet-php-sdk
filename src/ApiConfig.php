@@ -82,11 +82,36 @@ class ApiConfig
 		}
 
 	/**
+	 * @param Restlet $restlet
+	 * @param array $additionalQueryData
+	 * @return string
+	 */
+	public function getRestletUrl($restlet, $additionalQueryData = [])
+		{
+		$queryData = array_merge([
+			'script' => $restlet->script,
+			'deploy' => $restlet->deploy
+		], $additionalQueryData);
+
+		return sprintf('https://%s.restlets.api.netsuite.com/app/site/hosting/restlet.nl?', $this->getRestletUrlFragment())
+			. http_build_query($queryData);
+		}
+
+	/**
+	 * @return string
+	 */
+	public function getRestletHost()
+		{
+		return sprintf('%s.restlets.api.netsuite.com', $this->getRestletUrlFragment());
+		}
+
+	/**
 	 * @return SignatureMethod
 	 */
 	public function getSignatureMethodImplementation()
 		{
-		switch ($this->signatureMethod) {
+		switch ($this->signatureMethod)
+			{
 			case self::SIGNATURE_METHOD_HMAC_SHA1:
 				return new HmacSha1();
 

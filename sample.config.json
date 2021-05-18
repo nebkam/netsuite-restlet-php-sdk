@@ -6,16 +6,49 @@
   "accessTokenSecret": "",
   "signatureMethod": "HMAC-SHA1",
   "restletMap": {
-    "createDeleteContact": 0,
-    "createDeleteCustomer": 0,
-    "createDeleteSalesOrder": 0,
-    "createDeleteNotify": 0,
-    "savedSearchCustomers": 0,
-    "savedSearchGeneric": 0,
-    "savedSearchItems": 0,
-    "downloadPdf": 0,
-    "salesOrderMetaData": 0,
-    "suiteQL": 0,
-    "getPayments": 0
+    "createDeleteContact": {
+      "script": 0,
+      "deploy": 1
+    },
+    "createDeleteCustomer": {
+      "script": 0,
+      "deploy": 3
+    },
+    "createDeleteNotify": {
+      "script": 0,
+      "deploy": 1
+    },
+    "createDeleteSalesOrder": {
+      "script": 0,
+      "deploy": 1
+    },
+    "downloadPdf": {
+      "script": 0,
+      "deploy": 1
+    },
+    "getPayments": {
+      "script": 0,
+      "deploy": 1
+    },
+    "savedSearchCustomers": {
+      "script": 0,
+      "deploy": 1
+    },
+    "savedSearchItems": {
+      "script": 0,
+      "deploy": 1
+    },
+    "savedSearchGeneric": {
+      "script": 0,
+      "deploy": 1
+    },
+    "salesOrderMetaData": {
+      "script": 0,
+      "deploy": 1
+    },
+    "suiteQL": {
+      "script": 0,
+      "deploy": 1
+    }
   }
 }
