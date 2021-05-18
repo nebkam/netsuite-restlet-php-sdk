@@ -20,7 +20,7 @@ class ApiConfig
 	/**
 	 * @var string
 	 */
-	private $account;
+	private $accountId;
 	/**
 	 * @var string
 	 */
@@ -49,18 +49,18 @@ class ApiConfig
 	/**
 	 * @return string
 	 */
-	public function getAccount()
+	public function getAccountId()
 		{
-		return $this->account;
+		return $this->accountId;
 		}
 
 	/**
-	 * @param string $account
+	 * @param string $accountId
 	 * @return self
 	 */
-	public function setAccount($account)
+	public function setAccountId($accountId)
 		{
-		$this->account = $account;
+		$this->accountId = $accountId;
 
 		return $this;
 		}
@@ -70,7 +70,7 @@ class ApiConfig
 	 */
 	public function getRealm()
 		{
-		return $this->account;
+		return $this->accountId;
 		}
 
 	/**
@@ -78,7 +78,7 @@ class ApiConfig
 	 */
 	public function getRestletUrlFragment()
 		{
-		return str_replace('_', '-', strtolower($this->account));
+		return str_replace('_', '-', strtolower($this->accountId));
 		}
 
 	/**
