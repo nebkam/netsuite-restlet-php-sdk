@@ -9,8 +9,14 @@ use Eher\OAuth\SignatureMethod;
 use Eher\OAuth\Token;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\MessageFormatter;
+use GuzzleHttp\Middleware;
 use GuzzleHttp\RequestOptions;
 use Infostud\NetSuiteSdk\Exception\ApiTransferException;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
+use function GuzzleHttp\choose_handler;
 
 class ApiClient
 	{
@@ -37,11 +43,12 @@ class ApiClient
 
 	/**
 	 * @param ApiConfig $config
+	 * @param LoggerInterface|null $logger
 	 */
-	public function __construct($config)
+	public function __construct($config, $logger)
 		{
 		$this->config          = $config;
-		$this->client          = new Client();
+		$this->client          = $this->bootstrapGuzzle($logger);
 		$this->signatureMethod = $this->config->getSignatureMethodImplementation();
 		$this->consumer        = new Consumer(
 			$this->config->consumerKey,
@@ -78,7 +85,7 @@ class ApiClient
 			throw ApiTransferException::fromStatusCode($clientResponse->getStatusCode());
 			}
 
-		return $clientResponse->getBody()->getContents();
+		return (string) $clientResponse->getBody();
 		}
 
 	/**
@@ -104,7 +111,7 @@ class ApiClient
 			throw ApiTransferException::fromStatusCode($clientResponse->getStatusCode());
 			}
 
-		return $clientResponse->getBody()->getContents();
+		return (string) $clientResponse->getBody();
 		}
 
 	/**
@@ -130,7 +137,7 @@ class ApiClient
 			throw ApiTransferException::fromStatusCode($clientResponse->getStatusCode());
 			}
 
-		return $clientResponse->getBody()->getContents();
+		return (string) $clientResponse->getBody();
 		}
 
 	/**
@@ -167,5 +174,23 @@ class ApiClient
 			{
 			throw ApiTransferException::fromOAuthException($exception);
 			}
+		}
+
+	/**
+	 * @param LoggerInterface|null $logger
+	 * @return Client
+	 */
+	private function bootstrapGuzzle($logger)
+		{
+		$stack = new HandlerStack();
+		$stack->setHandler(choose_handler());
+		if ($logger)
+			{
+			$stack->push(Middleware::log($logger, new MessageFormatter(MessageFormatter::DEBUG), LogLevel::DEBUG));
+			}
+
+		return new Client([
+			'handler' => $stack
+		]);
 		}
 	}

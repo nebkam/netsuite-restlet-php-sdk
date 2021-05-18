@@ -42,6 +42,7 @@ use Infostud\NetSuiteSdk\Model\SuiteQL\Location;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Subsidiary;
 use Infostud\NetSuiteSdk\Model\SuiteQL\SuiteQLResponse;
 use Infostud\NetSuiteSdk\Serializer\ApiSerializer;
+use Psr\Log\LoggerInterface;
 
 class ApiService
 	{
@@ -60,12 +61,13 @@ class ApiService
 
 	/**
 	 * @param string $configPath
+	 * @param LoggerInterface|null $logger
 	 */
-	public function __construct($configPath)
+	public function __construct($configPath, $logger = null)
 		{
 		$this->serializer = new ApiSerializer();
 		$this->config     = ApiConfig::fromJsonFile($configPath, $this->serializer);
-		$this->client     = new ApiClient($this->config);
+		$this->client     = new ApiClient($this->config, $logger);
 		}
 
 	/**
