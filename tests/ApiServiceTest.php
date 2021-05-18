@@ -339,9 +339,9 @@ class ApiServiceTest extends TestCase
 	public function testFindCustomerByOldErpId(ApiService $apiService): void
 		{
 		// Ovo je neka test firma
-		$customer = $apiService->findCustomerByOldErpId('16114');
+		$customer = $apiService->findCustomerByOldErpId('04648');
 		self::assertInstanceOf(Customer::class, $customer);
-		self::assertEquals('124532658', $customer->getAttributes()->getPib());
+		self::assertEquals('106717425', $customer->getAttributes()->getPib());
 		}
 
 	/**
