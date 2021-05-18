@@ -3,14 +3,6 @@
 namespace Infostud\NetSuiteSdk;
 
 use DateTime;
-use Eher\OAuth\Consumer;
-use Eher\OAuth\OAuthException;
-use Eher\OAuth\Request;
-use Eher\OAuth\SignatureMethod;
-use Eher\OAuth\Token;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\RequestOptions;
 use Infostud\NetSuiteSdk\Exception\ApiTransferException;
 use Infostud\NetSuiteSdk\Exception\ApiLogicException;
 use Infostud\NetSuiteSdk\Model\Contact\ContactForm;
@@ -56,22 +48,6 @@ use Infostud\NetSuiteSdk\Model\SuiteQL\SuiteQLResponse;
 class ApiService
 	{
 	/**
-	 * @var Client
-	 */
-	private $client;
-	/**
-	 * @var Consumer
-	 */
-	private $consumer;
-	/**
-	 * @var Token
-	 */
-	private $accessToken;
-	/**
-	 * @var SignatureMethod
-	 */
-	private $signatureMethod;
-	/**
 	 * @var ApiSerializer
 	 */
 	private $serializer;
@@ -79,8 +55,10 @@ class ApiService
 	 * @var ApiConfig
 	 */
 	private $config;
-
-	private const DEFAULT_CONTENT_TYPE = 'application/json';
+	/**
+	 * @var ApiClient
+	 */
+	private $client;
 
 	/**
 	 * @param string $configPath
@@ -88,18 +66,9 @@ class ApiService
 	 */
 	public function __construct(string $configPath)
 		{
-		$this->client          = new Client();
-		$this->serializer      = new ApiSerializer();
-		$this->config          = ApiConfig::fromJsonFile($configPath, $this->serializer);
-		$this->signatureMethod = $this->config->getSignatureMethodImplementation();
-		$this->consumer        = new Consumer(
-			$this->config->consumerKey,
-			$this->config->consumerSecret
-		);
-		$this->accessToken     = new Token(
-			$this->config->accessTokenKey,
-			$this->config->accessTokenSecret
-		);
+		$this->serializer = new ApiSerializer();
+		$this->config     = ApiConfig::fromJsonFile($configPath, $this->serializer);
+		$this->client     = new ApiClient($this->config);
 		}
 
 	/**
@@ -111,7 +80,7 @@ class ApiService
 		{
 		$url         = $this->config->getRestletUrl($this->config->restletMap->createDeleteContact);
 		$requestBody = $this->serializer->normalize($contactForm);
-		$contents    = $this->executePostRequest($url, $requestBody);
+		$contents    = $this->client->post($url, $requestBody);
 		/** @var CreateContactResponse $response */
 		$response = $this->serializer->deserialize($contents, CreateContactResponse::class);
 		if ($response->isSuccessful()
@@ -136,7 +105,7 @@ class ApiService
 		$url      = $this->config->getRestletUrl($this->config->restletMap->createDeleteContact, [
 			'contactid' => $id
 		]);
-		$contents = $this->executeDeleteRequest($url);
+		$contents = $this->client->delete($url);
 		/** @var DeleteContactResponse $apiResponse */
 		$apiResponse = $this->serializer->deserialize($contents, DeleteContactResponse::class);
 
@@ -153,7 +122,7 @@ class ApiService
 		{
 		$url         = $this->config->getRestletUrl($this->config->restletMap->createDeleteCustomer);
 		$requestBody = $this->serializer->normalize($form);
-		$contents    = $this->executePostRequest($url, $requestBody);
+		$contents    = $this->client->post($url, $requestBody);
 		/** @var CreateCustomerResponse $apiResponse */
 		$apiResponse = $this->serializer->deserialize($contents, CreateCustomerResponse::class);
 		if ($apiResponse->isSuccessful()
@@ -181,7 +150,7 @@ class ApiService
 		$url      = $this->config->getRestletUrl($this->config->restletMap->createDeleteCustomer, [
 			'customerid' => $id
 		]);
-		$contents = $this->executeDeleteRequest($url);
+		$contents = $this->client->delete($url);
 		/** @var DeleteCustomerResponse $response */
 		$response = $this->serializer->deserialize($contents, DeleteCustomerResponse::class);
 
@@ -197,7 +166,7 @@ class ApiService
 		{
 		$url         = $this->config->getRestletUrl($this->config->restletMap->createDeleteNotify);
 		$requestBody = $this->serializer->normalize($form);
-		$contents    = $this->executePostRequest($url, $requestBody);
+		$contents    = $this->client->post($url, $requestBody);
 		/** @var CreateNotificationRecipientResponse $response */
 		$response = $this->serializer->deserialize($contents, CreateNotificationRecipientResponse::class);
 		if ($response->isSuccessful()
@@ -219,7 +188,7 @@ class ApiService
 		$url      = $this->config->getRestletUrl($this->config->restletMap->createDeleteNotify, [
 			'contactid' => $id
 		]);
-		$contents = $this->executeDeleteRequest($url);
+		$contents = $this->client->delete($url);
 
 		/** @var DeleteNotificationRecipientResponse $apiResponse */
 		$apiResponse = $this->serializer->deserialize($contents, DeleteNotificationRecipientResponse::class);
@@ -236,7 +205,7 @@ class ApiService
 		{
 		$url         = $this->config->getRestletUrl($this->config->restletMap->createDeleteSalesOrder);
 		$requestBody = $this->serializer->normalize($form);
-		$contents    = $this->executePostRequest($url, $requestBody);
+		$contents    = $this->client->post($url, $requestBody);
 		/** @var CreateSalesOrderResponse $apiResponse */
 		$apiResponse = $this->serializer->deserialize($contents, CreateSalesOrderResponse::class);
 		if ($apiResponse->isSuccessful()
@@ -259,7 +228,7 @@ class ApiService
 		$url      = $this->config->getRestletUrl($this->config->restletMap->getSalesOrder, [
 			'orderid' => $orderId
 		]);
-		$contents = $this->executeGetRequest($url);
+		$contents = $this->client->get($url);
 
 		/** @var GetSalesOrderResponse $apiResponse */
 		$apiResponse = $this->serializer->deserialize($contents, GetSalesOrderResponse::class);
@@ -285,7 +254,7 @@ class ApiService
 		$url      = $this->config->getRestletUrl($this->config->restletMap->createDeleteSalesOrder, [
 			'orderid' => $id
 		]);
-		$contents = $this->executeDeleteRequest($url);
+		$contents = $this->client->delete($url);
 		/** @var DeleteSalesOrderResponse $response */
 		$response = $this->serializer->deserialize($contents, DeleteSalesOrderResponse::class);
 
@@ -605,7 +574,7 @@ class ApiService
 		$params = []; //TODO As this uses GET method, parameters need to be passed through URL
 
 		$url      = $this->config->getRestletUrl($this->config->restletMap->downloadPdf, $params);
-		$contents = $this->executeGetRequest($url, 'application/pdf');
+		$contents = $this->client->get($url, 'application/pdf');
 		if (empty($contents))
 			{
 			throw new ApiLogicException('Empty response', 'Server has returned empty string for given parameters');
@@ -625,7 +594,7 @@ class ApiService
 		$requestBody = [
 			'filters' => $filters
 		];
-		$contents    = $this->executePostRequest($url, $requestBody);
+		$contents    = $this->client->post($url, $requestBody);
 		/** @var SavedSearchCustomersResponse $response */
 		$response = $this->serializer->deserialize($contents, SavedSearchCustomersResponse::class);
 
@@ -643,7 +612,7 @@ class ApiService
 		$requestBody = [
 			'filters' => $filters
 		];
-		$contents    = $this->executePostRequest($url, $requestBody);
+		$contents    = $this->client->post($url, $requestBody);
 		/** @var ItemSearchResponse $response */
 		$response = $this->serializer->deserialize($contents, ItemSearchResponse::class);
 
@@ -676,7 +645,7 @@ class ApiService
 			'columns' => $columns,
 			'filters' => $filters,
 		];
-		$contents    = $this->executePostRequest($url, $requestBody);
+		$contents    = $this->client->post($url, $requestBody);
 		/** @var GenericSavedSearchResponse $response */
 		$response = $this->serializer->deserialize($contents, $responseClass);
 
@@ -704,7 +673,7 @@ class ApiService
 			'params'    => $params
 		];
 		$url         = $this->config->getRestletUrl($this->config->restletMap->suiteQL);
-		$contents    = $this->executePostRequest($url, $requestBody);
+		$contents    = $this->client->post($url, $requestBody);
 		if ($responseClass)
 			{
 			/** @var SuiteQLResponse $response */
@@ -714,121 +683,5 @@ class ApiService
 			}
 
 		return json_decode($contents, true);
-		}
-
-	/**
-	 * @param string $url
-	 * @param string|null $contentType
-	 * @return string
-	 * @throws ApiTransferException
-	 */
-	private function executeGetRequest(string $url, ?string $contentType = self::DEFAULT_CONTENT_TYPE): string
-		{
-		try
-			{
-			$clientResponse = $this->client->request('GET', $url, [
-				RequestOptions::HEADERS => $this->buildHeaders('GET', $url, $contentType),
-			]);
-			}
-		catch (GuzzleException $exception)
-			{
-			throw ApiTransferException::fromGuzzleException($exception);
-			}
-
-		if ($clientResponse->getStatusCode() !== 200)
-			{
-			throw ApiTransferException::fromStatusCode($clientResponse->getStatusCode());
-			}
-
-		return (string) $clientResponse->getBody();
-		}
-
-	/**
-	 * @param string $url
-	 * @param array $requestBody
-	 * @return string
-	 * @throws ApiTransferException
-	 */
-	private function executePostRequest(string $url, array $requestBody): string
-		{
-		try
-			{
-			$clientResponse = $this->client->request('POST', $url, [
-				RequestOptions::HEADERS => $this->buildHeaders('POST', $url),
-				RequestOptions::JSON    => $requestBody
-			]);
-			}
-		catch (GuzzleException $exception)
-			{
-			throw ApiTransferException::fromGuzzleException($exception);
-			}
-
-		if ($clientResponse->getStatusCode() !== 200)
-			{
-			throw ApiTransferException::fromStatusCode($clientResponse->getStatusCode());
-			}
-
-		return (string) $clientResponse->getBody();
-		}
-
-	/**
-	 * @param string $url
-	 * @return string
-	 * @throws ApiTransferException
-	 */
-	private function executeDeleteRequest(string $url): string
-		{
-		try
-			{
-			$clientResponse = $this->client->request('DELETE', $url, [
-				RequestOptions::HEADERS => $this->buildHeaders('DELETE', $url)
-			]);
-			}
-		catch (GuzzleException $exception)
-			{
-			throw ApiTransferException::fromGuzzleException($exception);
-			}
-
-		if ($clientResponse->getStatusCode() !== 200)
-			{
-			throw ApiTransferException::fromStatusCode($clientResponse->getStatusCode());
-			}
-
-		return (string) $clientResponse->getBody();
-		}
-
-	/**
-	 * @param string $method
-	 * @param string $url
-	 * @param string $contentType
-	 * @return array
-	 * @throws ApiTransferException
-	 */
-	private function buildHeaders(string $method, string $url, string $contentType = self::DEFAULT_CONTENT_TYPE): array
-		{
-		$request   = new Request($method, $url, [
-			'oauth_nonce'            => md5(mt_rand()),
-			'oauth_timestamp'        => idate('U'),
-			'oauth_version'          => '1.0',
-			'oauth_token'            => $this->accessToken->key,
-			'oauth_consumer_key'     => $this->consumer->key,
-			'oauth_signature_method' => $this->signatureMethod->get_name(),
-		]);
-		$signature = $request->build_signature($this->signatureMethod, $this->consumer, $this->accessToken);
-		$request->set_parameter('oauth_signature', $signature);
-		$request->set_parameter('realm', $this->config->getRealm());
-
-		try
-			{
-			return [
-				'Authorization' => substr($request->to_header($this->config->getRealm()), 15),
-				'Host'          => $this->config->getRestletHost(),
-				'Content-Type'  => $contentType
-			];
-			}
-		catch (OAuthException $exception)
-			{
-			throw ApiTransferException::fromOAuthException($exception);
-			}
 		}
 	}
