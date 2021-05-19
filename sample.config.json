@@ -45,6 +45,10 @@
     "suiteQL": {
       "script": 0,
       "deploy": 1
+    },
+    "getPayments": {
+      "script": 0,
+      "deploy": 1
     }
   }
 }
