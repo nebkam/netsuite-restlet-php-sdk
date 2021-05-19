@@ -13,6 +13,7 @@ use Infostud\NetSuiteSdk\Model\SavedSearch\ColumnDefinition;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerForm;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerFormAddress;
+use Infostud\NetSuiteSdk\Model\SavedSearch\GetPaymentsResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Item;
 use Infostud\NetSuiteSdk\Model\SavedSearch\ItemSearchResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\NotificationRecipient;
@@ -371,6 +372,18 @@ class ApiSerializerTest extends TestCase
 		$response   = $serializer->deserialize($json, GetItemsResponse::class);
 		self::assertInstanceOf(GetItemsResponse::class, $response);
 		self::assertSuiteQLResponse($response);
+		}
+
+	/**
+	 * @depends testInitialize
+	 * @param ApiSerializer $serializer
+	 * @throws ApiTransferException
+	 */
+	public function testGetPaymentsResult(ApiSerializer $serializer): void
+		{
+		$json       = file_get_contents(__DIR__ . '/payments_get_response.json');
+		$response   = $serializer->deserialize($json, GetPaymentsResponse::class);
+		self::assertInstanceOf(GetPaymentsResponse::class, $response);
 		}
 
 	/**
