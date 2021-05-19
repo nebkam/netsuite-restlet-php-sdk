@@ -8,12 +8,11 @@
     <php>
         <ini name="error_reporting" value="-1"/>
         <env name="CONFIG_PATH" value=""/>
-        <env name="SUBSIDIARY_ID" value="7"/>
-        <env name="DEPARTMENT_ID" value="3"/>
-        <env name="LOCATION_ID" value="2"/>
-        <env name="CONFIG_PATH" value="./config.json"/>
-        <env name="CLASSIFICATION_ID" value="3"/>
-        <env name="ITEM_ID" value="8545"/>
+        <env name="SUBSIDIARY_ID" value=""/>
+        <env name="DEPARTMENT_ID" value=""/>
+        <env name="LOCATION_ID" value=""/>
+        <env name="CLASSIFICATION_ID" value=""/>
+        <env name="ITEM_ID" value=""/>
     </php>
 
     <testsuites>
