@@ -25,7 +25,7 @@
     "php": "^7.2",
     "ext-json": "*",
     "eher/oauth": "^1.0",
-    "guzzlehttp/guzzle": "^6.0 || ^7.0",
+    "guzzlehttp/guzzle": "^6.0",
     "doctrine/annotations": "^1.4",
     "phpdocumentor/reflection-docblock": ">=4.3",
     "symfony/property-info": "^3.4 || ^4.2 || ^5.2",

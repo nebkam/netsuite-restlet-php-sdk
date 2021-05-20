@@ -27,6 +27,10 @@ class RestletMap
 	/**
 	 * @var Restlet
 	 */
+	public $getPayments;
+	/**
+	 * @var Restlet
+	 */
 	public $getSalesOrder;
 	/**
 	 * @var Restlet
@@ -44,8 +48,4 @@ class RestletMap
 	 * @var Restlet
 	 */
 	public $suiteQL;
-	/**
-	 * @var Restlet
-	 */
-	public $getPayments;
 	}

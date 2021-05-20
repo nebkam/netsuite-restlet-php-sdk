@@ -26,6 +26,10 @@
       "script": 0,
       "deploy": 1
     },
+    "getPayments": {
+      "script": 0,
+      "deploy": 1
+    },
     "getSalesOrder": {
       "script": 0,
       "deploy": 1
@@ -43,10 +47,6 @@
       "deploy": 1
     },
     "suiteQL": {
-      "script": 0,
-      "deploy": 1
-    },
-    "getPayments": {
       "script": 0,
       "deploy": 1
     }

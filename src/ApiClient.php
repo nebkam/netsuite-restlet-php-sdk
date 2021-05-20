@@ -13,10 +13,10 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\MessageFormatter;
 use GuzzleHttp\Middleware;
 use GuzzleHttp\RequestOptions;
-use GuzzleHttp\Utils;
 use Infostud\NetSuiteSdk\Exception\ApiTransferException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+use function GuzzleHttp\choose_handler;
 
 class ApiClient
 	{
@@ -177,7 +177,7 @@ class ApiClient
 	private function bootstrapGuzzle(?LoggerInterface $logger): Client
 		{
 		$stack = new HandlerStack();
-		$stack->setHandler(Utils::chooseHandler());
+		$stack->setHandler(choose_handler());
 		if ($logger)
 			{
 			$stack->push(Middleware::log($logger, new MessageFormatter(MessageFormatter::DEBUG), LogLevel::DEBUG));
