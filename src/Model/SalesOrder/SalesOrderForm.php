@@ -103,6 +103,12 @@ class SalesOrderForm
 	 * @var int|null
 	 */
 	private $installmentCount;
+	/**
+	 *
+	 * @SerializedName("custbody_rsm_broj_dana_uplata")
+	 * @var int|null
+	 */
+	private $daysToPay;
 
 
 	public function __construct()
@@ -504,6 +510,25 @@ class SalesOrderForm
 	public function setInstallmentCount(?int $installmentCount): self
 		{
 		$this->installmentCount = $installmentCount;
+
+		return $this;
+		}
+
+	/**
+	 * @return int|null
+	 */
+	public function getDaysToPay(): ?int
+		{
+		return $this->daysToPay;
+		}
+
+	/**
+	 * @param int|null $daysToPay
+	 * @return SalesOrderForm
+	 */
+	public function setDaysToPay(?int $daysToPay): SalesOrderForm
+		{
+		$this->daysToPay = $daysToPay;
 
 		return $this;
 		}
