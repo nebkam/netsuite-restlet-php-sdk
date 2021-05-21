@@ -114,6 +114,14 @@ class SalesOrderForm
 	 * @var string|null
 	 */
 	private $orderNumber;
+	/**
+	 * In case of SO estimates when startDate and endDate are not set (we haven't activated the service yet)
+	 * this field is used to calculate start and end dates after the event of creating a customer deposit (payment) for this SO.
+	 *
+	 * @SerializedName("custbody_rsm_so_duration")
+	 * @var string|null
+	 */
+	private $serviceDuration;
 
 
 	public function __construct()
@@ -553,6 +561,25 @@ class SalesOrderForm
 	public function setOrderNumber(?string $orderNumber): SalesOrderForm
 		{
 		$this->orderNumber = $orderNumber;
+
+		return $this;
+		}
+
+	/**
+	 * @return string|null
+	 */
+	public function getServiceDuration(): ?string
+		{
+		return $this->serviceDuration;
+		}
+
+	/**
+	 * @param string|null $serviceDuration
+	 * @return SalesOrderForm
+	 */
+	public function setServiceDuration(?string $serviceDuration): SalesOrderForm
+		{
+		$this->serviceDuration = $serviceDuration;
 
 		return $this;
 		}
