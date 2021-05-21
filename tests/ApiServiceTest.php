@@ -56,6 +56,10 @@ class ApiServiceTest extends TestCase
 			->setSubsidiary(getenv('SUBSIDIARY_ID'))
 			->setPib('101696893')
 			->setRegistryIdentifier('01234567')
+			->setEmail('little.bobby2@tables.com')
+			->setPhone('065 8717169')
+			->setAlternativePhone('024 543839')
+			->setUrl('https://4z.rs')
 			->addAddress(
 				(new CustomerFormAddress())
 					->setLabel('Nazor')
@@ -296,15 +300,19 @@ class ApiServiceTest extends TestCase
 		}
 
 	/**
-	 * @depends testParseConfig
-	 * @param ApiService $apiService
+	 * @depends testCreateCustomer
+	 * @param array $params
 	 * @throws ApiTransferException
 	 */
-	public function testSearchByPib(ApiService $apiService): void
+	public function testSearchByPib(array $params): void
 		{
-		$customer = $apiService->findCustomerByPib('109121175');
-		self::assertInstanceOf(Customer::class, $customer);
-		self::assertEquals('109121175', $customer->getAttributes()->getPib());
+		/** @var ApiService $apiService */
+		/** @var int $customerId */
+		[$apiService, $customerId] = $params;
+		$customer = $apiService->findCustomerByPib('101696893');
+		$this->assertInstanceOf(Customer::class, $customer);
+		$this->assertEquals('101696893', $customer->getAttributes()->getPib());
+		$this->assertEquals($customerId, (int) $customer->getId());
 		}
 
 	/**

@@ -40,6 +40,23 @@ class CustomerForm
 	 */
 	private $individual;
 	/**
+	 * @var string|null
+	 */
+	private $email;
+	/**
+	 * @var string|null
+	 */
+	private $phone;
+	/**
+	 * @SerializedName("altphone")
+	 * @var string|null
+	 */
+	private $alternativePhone;
+	/**
+	 * @var string|null
+	 */
+	private $url;
+	/**
 	 * @SerializedName("address")
 	 * @var CustomerFormAddress[]
 	 */
@@ -181,6 +198,54 @@ class CustomerForm
 	public function setIndividual(bool $individual): self
 		{
 		$this->individual = $individual;
+
+		return $this;
+		}
+
+	public function getEmail(): ?string
+		{
+		return $this->email;
+		}
+
+	public function setEmail(?string $email): self
+		{
+		$this->email = $email;
+
+		return $this;
+		}
+
+	public function getPhone(): ?string
+		{
+		return $this->phone;
+		}
+
+	public function setPhone(?string $phone): self
+		{
+		$this->phone = $phone;
+
+		return $this;
+		}
+
+	public function getAlternativePhone(): ?string
+		{
+		return $this->alternativePhone;
+		}
+
+	public function setAlternativePhone(?string $alternativePhone): self
+		{
+		$this->alternativePhone = $alternativePhone;
+
+		return $this;
+		}
+
+	public function getUrl(): ?string
+		{
+		return $this->url;
+		}
+
+	public function setUrl(?string $url): self
+		{
+		$this->url = $url;
 
 		return $this;
 		}
