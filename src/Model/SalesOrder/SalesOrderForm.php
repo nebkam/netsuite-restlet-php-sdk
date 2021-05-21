@@ -109,6 +109,11 @@ class SalesOrderForm
 	 * @var int|null
 	 */
 	private $daysToPay;
+	/**
+	 * @SerializedName("custbody_rsm_crm_ordernum")
+	 * @var string|null
+	 */
+	private $orderNumber;
 
 
 	public function __construct()
@@ -529,6 +534,25 @@ class SalesOrderForm
 	public function setDaysToPay(?int $daysToPay): SalesOrderForm
 		{
 		$this->daysToPay = $daysToPay;
+
+		return $this;
+		}
+
+	/**
+	 * @return string|null
+	 */
+	public function getOrderNumber(): ?string
+		{
+		return $this->orderNumber;
+		}
+
+	/**
+	 * @param string|null $orderNumber
+	 * @return SalesOrderForm
+	 */
+	public function setOrderNumber(?string $orderNumber): SalesOrderForm
+		{
+		$this->orderNumber = $orderNumber;
 
 		return $this;
 		}
