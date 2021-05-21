@@ -119,7 +119,7 @@ class SalesOrderForm
 	 * this field is used to calculate start and end dates after the event of creating a customer deposit (payment) for this SO.
 	 *
 	 * @SerializedName("custbody_rsm_so_duration")
-	 * @var string|null
+	 * @var int|null
 	 */
 	private $serviceDuration;
 
@@ -566,21 +566,22 @@ class SalesOrderForm
 		}
 
 	/**
-	 * @return string|null
+	 * @return int|null
 	 */
-	public function getServiceDuration(): ?string
+	public function getServiceDuration(): ?int
 		{
 		return $this->serviceDuration;
 		}
 
 	/**
-	 * @param string|null $serviceDuration
+	 * @param int|null $serviceDuration
 	 * @return SalesOrderForm
 	 */
-	public function setServiceDuration(?string $serviceDuration): SalesOrderForm
+	public function setServiceDuration(?int $serviceDuration): SalesOrderForm
 		{
 		$this->serviceDuration = $serviceDuration;
 
 		return $this;
 		}
+
 	}
