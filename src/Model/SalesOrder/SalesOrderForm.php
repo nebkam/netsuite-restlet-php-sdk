@@ -65,11 +65,6 @@ class SalesOrderForm
 	 */
 	private $memo;
 	/**
-	 * @SerializedName("custbody_rsm_internal_memo")
-	 * @var string|null
-	 */
-	private $internalMemo;
-	/**
 	 * @SerializedName("startdate")
 	 * @var string|null
 	 */
@@ -122,6 +117,15 @@ class SalesOrderForm
 	 * @var int|null
 	 */
 	private $serviceDuration;
+	/**
+	 * @var string|null
+	 */
+	private $terms;
+	/**
+	 * @SerializedName("custbody_rsm_napomena_za_print")
+	 * @var string|null
+	 */
+	private $printNote;
 
 
 	public function __construct()
@@ -435,25 +439,6 @@ class SalesOrderForm
 	/**
 	 * @return string|null
 	 */
-	public function getInternalMemo(): ?string
-		{
-		return $this->internalMemo;
-		}
-
-	/**
-	 * @param string|null $internalMemo
-	 * @return SalesOrderForm
-	 */
-	public function setInternalMemo(?string $internalMemo): self
-		{
-		$this->internalMemo = $internalMemo;
-
-		return $this;
-		}
-
-	/**
-	 * @return string|null
-	 */
 	public function getPaymentAuthorizationCode(): ?string
 		{
 		return $this->paymentAuthorizationCode;
@@ -580,6 +565,44 @@ class SalesOrderForm
 	public function setServiceDuration(?int $serviceDuration): SalesOrderForm
 		{
 		$this->serviceDuration = $serviceDuration;
+
+		return $this;
+		}
+
+	/**
+	 * @return string|null
+	 */
+	public function getTerms(): ?string
+		{
+		return $this->terms;
+		}
+
+	/**
+	 * @param string|null $terms
+	 * @return SalesOrderForm
+	 */
+	public function setTerms(?string $terms): SalesOrderForm
+		{
+		$this->terms = $terms;
+
+		return $this;
+		}
+
+	/**
+	 * @return string|null
+	 */
+	public function getPrintNote(): ?string
+		{
+		return $this->printNote;
+		}
+
+	/**
+	 * @param string|null $printNote
+	 * @return SalesOrderForm
+	 */
+	public function setPrintNote(?string $printNote): SalesOrderForm
+		{
+		$this->printNote = $printNote;
 
 		return $this;
 		}
