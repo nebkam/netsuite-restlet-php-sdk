@@ -13,6 +13,7 @@
         <env name="LOCATION_ID" value=""/>
         <env name="CLASSIFICATION_ID" value=""/>
         <env name="ITEM_ID" value=""/>
+        <env name="TAXCODE_ID" value=""/>
     </php>
 
     <testsuites>

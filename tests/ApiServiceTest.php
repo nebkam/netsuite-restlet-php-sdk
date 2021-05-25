@@ -249,7 +249,7 @@ class ApiServiceTest extends TestCase
 					->setId(getenv('ITEM_ID'))
 					->setQuantity(1)
 					->setPriceAfterDiscount(5000000.00)
-					->setTaxCode(8)
+					->setTaxCode(getenv('TAXCODE_ID'))
 			)
 			->setTransactionDate('02.05.2020')
 			->setInvoiceImmediately(false);
