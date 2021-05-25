@@ -139,6 +139,13 @@ class ApiClient
 		return (string)$clientResponse->getBody();
 		}
 
+	public function setGuzzleClient(Client $client): self
+		{
+		$this->guzzle = $client;
+
+		return $this;
+		}
+
 	/**
 	 * @param string $method
 	 * @param string $url

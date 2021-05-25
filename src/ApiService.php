@@ -3,6 +3,7 @@
 namespace Infostud\NetSuiteSdk;
 
 use DateTime;
+use GuzzleHttp\Client;
 use Infostud\NetSuiteSdk\Exception\ApiTransferException;
 use Infostud\NetSuiteSdk\Exception\ApiLogicException;
 use Infostud\NetSuiteSdk\Model\Contact\ContactForm;
@@ -604,6 +605,18 @@ class ApiService
 			}
 
 		return base64_decode($contents);
+		}
+
+	/**
+	 * Override internally set Guzzle client
+	 * Useful for testing (mocking responses)
+	 * @see https://docs.guzzlephp.org/en/6.5/testing.html
+	 */
+	public function setGuzzleClient(Client $client): self
+		{
+		$this->client->setGuzzleClient($client);
+
+		return $this;
 		}
 
 	/**
