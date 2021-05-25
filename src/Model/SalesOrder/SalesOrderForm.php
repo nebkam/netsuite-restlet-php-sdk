@@ -118,9 +118,10 @@ class SalesOrderForm
 	 */
 	private $serviceDuration;
 	/**
+	 * @SerializedName("terms")
 	 * @var string|null
 	 */
-	private $terms;
+	private $billingTerms;
 	/**
 	 * @SerializedName("custbody_rsm_napomena_za_print")
 	 * @var string|null
@@ -572,25 +573,6 @@ class SalesOrderForm
 	/**
 	 * @return string|null
 	 */
-	public function getTerms(): ?string
-		{
-		return $this->terms;
-		}
-
-	/**
-	 * @param string|null $terms
-	 * @return SalesOrderForm
-	 */
-	public function setTerms(?string $terms): SalesOrderForm
-		{
-		$this->terms = $terms;
-
-		return $this;
-		}
-
-	/**
-	 * @return string|null
-	 */
 	public function getPrintNote(): ?string
 		{
 		return $this->printNote;
@@ -607,4 +589,22 @@ class SalesOrderForm
 		return $this;
 		}
 
+	/**
+	 * @return string|null
+	 */
+	public function getBillingTerms(): ?string
+		{
+		return $this->billingTerms;
+		}
+
+	/**
+	 * @param string|null $billingTerms
+	 * @return SalesOrderForm
+	 */
+	public function setBillingTerms(?string $billingTerms): SalesOrderForm
+		{
+		$this->billingTerms = $billingTerms;
+
+		return $this;
+		}
 	}
