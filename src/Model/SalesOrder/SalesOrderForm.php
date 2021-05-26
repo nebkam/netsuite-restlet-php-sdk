@@ -57,11 +57,6 @@ class SalesOrderForm
 	 */
 	private $memo;
 	/**
-	 * @Groups("custbody_rsm_internal_memo")
-	 * @var string|null
-	 */
-	private $internalMemo;
-	/**
 	 * @Groups("startdate")
 	 * @var string|null
 	 */
@@ -86,6 +81,29 @@ class SalesOrderForm
 	 * @var int|null
 	 */
 	private $daysToPay;
+	/**
+	 * @SerializedName("custbody_rsm_crm_ordernum")
+	 * @var string|null
+	 */
+	private $orderNumber;
+	/**
+	 * In case of SO estimates when startDate and endDate are not set (we haven't activated the service yet)
+	 * this field is used to calculate start and end dates after the event of creating a customer deposit (payment) for this SO.
+	 *
+	 * @SerializedName("custbody_rsm_so_duration")
+	 * @var int|null
+	 */
+	private $serviceDuration;
+	/**
+	 * @SerializedName("terms")
+	 * @var string|null
+	 */
+	private $paymentTerms;
+	/**
+	 * @SerializedName("custbody_rsm_napomena_za_print")
+	 * @var string|null
+	 */
+	private $printNote;
 
 	public function __construct()
 		{
@@ -381,22 +399,6 @@ class SalesOrderForm
 	/**
 	 * @return string|null
 	 */
-	public function getInternalMemo()
-		{
-		return $this->internalMemo;
-		}
-
-	/**
-	 * @param string|null $internalMemo
-	 */
-	public function setInternalMemo($internalMemo)
-		{
-		$this->internalMemo = $internalMemo;
-		}
-
-	/**
-	 * @return string|null
-	 */
 	public function getType()
 		{
 		return $this->type;
@@ -440,5 +442,69 @@ class SalesOrderForm
 	public function setDaysToPay($daysToPay)
 		{
 		$this->daysToPay = $daysToPay;
+		}
+
+	/**
+	 * @return string|null
+	 */
+	public function getOrderNumber()
+		{
+		return $this->orderNumber;
+		}
+
+	/**
+	 * @param string|null $orderNumber
+	 */
+	public function setOrderNumber($orderNumber)
+		{
+		$this->orderNumber = $orderNumber;
+		}
+
+	/**
+	 * @return int|null
+	 */
+	public function getServiceDuration()
+		{
+		return $this->serviceDuration;
+		}
+
+	/**
+	 * @param int|null $serviceDuration
+	 */
+	public function setServiceDuration($serviceDuration)
+		{
+		$this->serviceDuration = $serviceDuration;
+		}
+
+	/**
+	 * @return string|null
+	 */
+	public function getPaymentTerms()
+		{
+		return $this->paymentTerms;
+		}
+
+	/**
+	 * @param string|null $paymentTerms
+	 */
+	public function setPaymentTerms($paymentTerms)
+		{
+		$this->paymentTerms = $paymentTerms;
+		}
+
+	/**
+	 * @return string|null
+	 */
+	public function getPrintNote()
+		{
+		return $this->printNote;
+		}
+
+	/**
+	 * @param string|null $printNote
+	 */
+	public function setPrintNote($printNote)
+		{
+		$this->printNote = $printNote;
 		}
 	}
