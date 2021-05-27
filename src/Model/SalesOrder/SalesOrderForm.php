@@ -82,7 +82,7 @@ class SalesOrderForm
 	 */
 	private $daysToPay;
 	/**
-	 * @SerializedName("custbody_rsm_crm_ordernum")
+	 * @Groups("custbody_rsm_crm_ordernum")
 	 * @var string|null
 	 */
 	private $orderNumber;
@@ -90,17 +90,17 @@ class SalesOrderForm
 	 * In case of SO estimates when startDate and endDate are not set (we haven't activated the service yet)
 	 * this field is used to calculate start and end dates after the event of creating a customer deposit (payment) for this SO.
 	 *
-	 * @SerializedName("custbody_rsm_so_duration")
+	 * @Groups("custbody_rsm_so_duration")
 	 * @var int|null
 	 */
 	private $serviceDuration;
 	/**
-	 * @SerializedName("terms")
+	 * @Groups("terms")
 	 * @var string|null
 	 */
 	private $paymentTerms;
 	/**
-	 * @SerializedName("custbody_rsm_napomena_za_print")
+	 * @Groups("custbody_rsm_napomena_za_print")
 	 * @var string|null
 	 */
 	private $printNote;
