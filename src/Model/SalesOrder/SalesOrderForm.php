@@ -406,10 +406,13 @@ class SalesOrderForm
 
 	/**
 	 * @param string|null $type
+	 * @return self
 	 */
 	public function setType($type)
 		{
 		$this->type = $type;
+
+		return $this;
 		}
 
 	/**
@@ -422,10 +425,13 @@ class SalesOrderForm
 
 	/**
 	 * @param string|null $paymentCode
+	 * @return self
 	 */
 	public function setPaymentCode($paymentCode)
 		{
 		$this->paymentCode = $paymentCode;
+
+		return $this;
 		}
 
 	/**
@@ -438,10 +444,13 @@ class SalesOrderForm
 
 	/**
 	 * @param int|null $daysToPay
+	 * @return self
 	 */
 	public function setDaysToPay($daysToPay)
 		{
 		$this->daysToPay = $daysToPay;
+
+		return $this;
 		}
 
 	/**
@@ -454,10 +463,13 @@ class SalesOrderForm
 
 	/**
 	 * @param string|null $orderNumber
+	 * @return self
 	 */
 	public function setOrderNumber($orderNumber)
 		{
 		$this->orderNumber = $orderNumber;
+
+		return $this;
 		}
 
 	/**
@@ -470,10 +482,13 @@ class SalesOrderForm
 
 	/**
 	 * @param int|null $serviceDuration
+	 * @return self
 	 */
 	public function setServiceDuration($serviceDuration)
 		{
 		$this->serviceDuration = $serviceDuration;
+
+		return $this;
 		}
 
 	/**
@@ -486,10 +501,13 @@ class SalesOrderForm
 
 	/**
 	 * @param string|null $paymentTerms
+	 * @return self
 	 */
 	public function setPaymentTerms($paymentTerms)
 		{
 		$this->paymentTerms = $paymentTerms;
+
+		return $this;
 		}
 
 	/**
@@ -502,9 +520,12 @@ class SalesOrderForm
 
 	/**
 	 * @param string|null $printNote
+	 * @return self
 	 */
 	public function setPrintNote($printNote)
 		{
 		$this->printNote = $printNote;
+
+		return $this;
 		}
 	}
