@@ -7,6 +7,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class SalesOrderForm
 	{
 	const TYPE_NONE = 'NONE';
+	const EMAIL_STATUS_SKIP = 'SKIP';
+	const EMAIL_STATUS_MANUAL = 'MANUAL';
+	const EMAIL_STATUS_SCHEDULE = 'SCHEDULE';
 	/**
 	 * @var int
 	 */
@@ -105,6 +108,11 @@ class SalesOrderForm
 	 * @var string|null
 	 */
 	private $printNote;
+	/**
+	 * @Groups("email_status")
+	 * @var string|null
+	 */
+	private $emailStatus;
 
 	public function __construct()
 		{
@@ -526,6 +534,33 @@ class SalesOrderForm
 	public function setPrintNote($printNote)
 		{
 		$this->printNote = $printNote;
+
+		return $this;
+		}
+
+	/**
+	 * @return string|null
+	 */
+	public function getEmailStatus()
+		{
+		return $this->emailStatus;
+		}
+
+	/**
+	 * @param string|null $emailStatus
+	 * @return self
+	 */
+	public function setEmailStatus($emailStatus)
+		{
+		if (in_array($emailStatus, [
+			null,
+			self::EMAIL_STATUS_SKIP,
+			self::EMAIL_STATUS_MANUAL,
+			self::EMAIL_STATUS_SCHEDULE
+		], true))
+			{
+			$this->emailStatus = $emailStatus;
+			}
 
 		return $this;
 		}
