@@ -6,6 +6,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 class SalesOrderForm
 	{
+	const TYPE_NONE = 'NONE';
 	/**
 	 * @var int
 	 */
@@ -68,7 +69,7 @@ class SalesOrderForm
 	private $endDate;
 	/**
 	 * @Groups("custbody_rsm_so_type")
-	 * @var string|null
+	 * @var string
 	 */
 	private $type;
 	/**
@@ -397,7 +398,7 @@ class SalesOrderForm
 		}
 
 	/**
-	 * @return string|null
+	 * @return string
 	 */
 	public function getType()
 		{
@@ -405,7 +406,7 @@ class SalesOrderForm
 		}
 
 	/**
-	 * @param string|null $type
+	 * @param string $type
 	 * @return self
 	 */
 	public function setType($type)

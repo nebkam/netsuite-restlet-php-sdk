@@ -237,6 +237,7 @@ class ApiServiceTest extends TestCase
 			->setDepartment(getenv('DEPARTMENT_ID'))
 			->setLocation(getenv('LOCATION_ID'))
 			->setClassification(getenv('CLASSIFICATION_ID'))
+			->setType(SalesOrderForm::TYPE_NONE)
 			->setCustomer($customerId)
 			->addItem(
 				(new SalesOrderItem())
