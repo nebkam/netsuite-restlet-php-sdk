@@ -6,8 +6,10 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 
 class SalesOrderForm
 	{
-
 	public const TYPE_NONE = 'NONE';
+	public const EMAIL_STATUS_SKIP = 'SKIP';
+	public const EMAIL_STATUS_MANUAL = 'MANUAL';
+	public const EMAIL_STATUS_SCHEDULE = 'SCHEDULE';
 
 	/**
 	 * @var int
@@ -91,6 +93,11 @@ class SalesOrderForm
 	 * @var string|null
 	 */
 	private $emailBcc;
+	/**
+	 * @SerializedName("email_status")
+	 * @var string|null
+	 */
+	private $emailStatus;
 	/**
 	 * Only shows the number of installments for sales order estimates. This does not effect the billing schedule (invoice installments).
 	 *
@@ -490,6 +497,33 @@ class SalesOrderForm
 	public function setEmailBcc(?string $emailBcc): self
 		{
 		$this->emailBcc = $emailBcc;
+
+		return $this;
+		}
+
+	/**
+	 * @return string|null
+	 */
+	public function getEmailStatus(): ?string
+		{
+		return $this->emailStatus;
+		}
+
+	/**
+	 * @param string|null $emailStatus
+	 * @return self
+	 */
+	public function setEmailStatus(?string $emailStatus): self
+		{
+		if (in_array($emailStatus, [
+			null,
+			self::EMAIL_STATUS_SKIP,
+			self::EMAIL_STATUS_MANUAL,
+			self::EMAIL_STATUS_SCHEDULE
+		], true))
+			{
+			$this->emailStatus = $emailStatus;
+			}
 
 		return $this;
 		}

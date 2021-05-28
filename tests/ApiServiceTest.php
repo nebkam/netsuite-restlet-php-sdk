@@ -252,7 +252,8 @@ class ApiServiceTest extends TestCase
 					->setTaxCode(getenv('TAXCODE_ID'))
 			)
 			->setTransactionDate('02.05.2020')
-			->setInvoiceImmediately(false);
+			->setInvoiceImmediately(false)
+			->setEmailStatus(SalesOrderForm::EMAIL_STATUS_SKIP);
 			// TODO test createdBy and appointedSeller
 		$salesOrderId = $apiService->createSalesOrder($form);
 		self::assertNotEmpty($salesOrderId);
