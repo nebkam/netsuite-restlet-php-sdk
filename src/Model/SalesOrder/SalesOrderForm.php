@@ -94,6 +94,7 @@ class SalesOrderForm
 	 */
 	private $emailBcc;
 	/**
+	 * Overrides `emailStatus` set in the corresponding SalesOrderType in NetSuite
 	 * @SerializedName("email_status")
 	 * @var string|null
 	 */
