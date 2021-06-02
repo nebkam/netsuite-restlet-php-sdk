@@ -1,3 +1,5 @@
+[![Latest Stable Version](https://poser.pugx.org/infostud/netsuite-sdk/v)](//packagist.org/packages/infostud/netsuite-sdk)
+
 # Setup
 PHP ^7.2 compatible
 
