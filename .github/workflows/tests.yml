@@ -33,4 +33,12 @@ jobs:
           COMPOSER_NO_INTERACTION: 1
           
       - name: Run tests
+        env:
+          CONFIG_PATH: ./config.json
+          SUBSIDIARY_ID: 3
+          DEPARTMENT_ID: 1
+          LOCATION_ID: 1
+          CLASSIFICATION_ID: 1
+          ITEM_ID: 8984
+          TAXCODE_ID: 7
         run: ./vendor/phpunit/phpunit/phpunit
