@@ -31,3 +31,6 @@ jobs:
         run: composer install
         env:
           COMPOSER_NO_INTERACTION: 1
+          
+      - name: Run tests
+        run: ./vendor/phpunit/phpunit/phpunit
