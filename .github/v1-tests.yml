@@ -1,0 +1,49 @@
+name: Tests
+
+on:
+  push:
+    branches: [ v1 ]
+  pull_request:
+    branches: [ v1 ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Setup PHP and extensions
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '5.6'
+        
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+            
+      - name: Install dependencies
+        run: composer install
+        env:
+          COMPOSER_NO_INTERACTION: 1
+          
+      - name: Load configuration
+        run: echo "${{ secrets.NETSUITE_CONFIG_BASE64 }}" | base64 --decode > ./config.json
+      
+      - name: Run tests
+        env:
+          CONFIG_PATH: ./config.json
+          SUBSIDIARY_ID: 3
+          DEPARTMENT_ID: 1
+          LOCATION_ID: 1
+          CLASSIFICATION_ID: 1
+          ITEM_ID: 8984
+          TAXCODE_ID: 7
+        run: ./vendor/phpunit/phpunit/phpunit
