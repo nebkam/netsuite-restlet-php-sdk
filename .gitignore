@@ -6,5 +6,6 @@ composer.phar
 .idea/
 # Config
 config.json
+sandbox.config.json
 # PHPUnit
 phpunit.xml
