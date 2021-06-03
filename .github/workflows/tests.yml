@@ -32,6 +32,9 @@ jobs:
         env:
           COMPOSER_NO_INTERACTION: 1
           
+      - name: Load configuration
+        run: echo "${{ secrets.NETSUITE_CONFIG_BASE64 }}" | base64 --decode > ./config.json
+      
       - name: Run tests
         env:
           CONFIG_PATH: ./config.json
