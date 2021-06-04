@@ -10,6 +10,7 @@ class SalesOrderForm
 	const EMAIL_STATUS_SKIP = 'SKIP';
 	const EMAIL_STATUS_MANUAL = 'MANUAL';
 	const EMAIL_STATUS_SCHEDULE = 'SCHEDULE';
+	const EMAIL_STATUS_SENT = 'SENT';
 	/**
 	 * @var int
 	 */
@@ -556,7 +557,8 @@ class SalesOrderForm
 			null,
 			self::EMAIL_STATUS_SKIP,
 			self::EMAIL_STATUS_MANUAL,
-			self::EMAIL_STATUS_SCHEDULE
+			self::EMAIL_STATUS_SCHEDULE,
+			self::EMAIL_STATUS_SENT
 		], true))
 			{
 			$this->emailStatus = $emailStatus;
