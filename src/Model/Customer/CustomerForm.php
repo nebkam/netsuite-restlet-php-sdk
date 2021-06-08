@@ -35,6 +35,10 @@ class CustomerForm
 	 */
 	private $foreigner;
 	/**
+	 * @var string|null
+	 */
+	private $currency;
+	/**
 	 * @Groups("isindividual")
 	 * @var bool
 	 */
@@ -179,6 +183,30 @@ class CustomerForm
 	public function setForeigner($foreigner)
 		{
 		$this->foreigner = $foreigner;
+
+		return $this;
+		}
+
+	/**
+	 * @return string|null
+	 */
+	public function getCurrency()
+		{
+		return $this->currency;
+		}
+
+	/**
+	 * Three letter currency code (ISO 4217)
+	 *
+	 * If $this->foreigner is TRUE, this field is mandatory.
+	 * Otherwise, it's optional and when omitted, backend assumes it's "RSD"
+	 *
+	 * @param string|null $currency
+	 * @return self
+	 */
+	public function setCurrency($currency)
+		{
+		$this->currency = $currency;
 
 		return $this;
 		}
