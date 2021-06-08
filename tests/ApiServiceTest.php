@@ -60,6 +60,7 @@ class ApiServiceTest extends TestCase
 			->setPhone('065 8717169')
 			->setAlternativePhone('024 543839')
 			->setUrl('https://4z.rs')
+			->setCurrency('RSD')
 			->addAddress(
 				(new CustomerFormAddress())
 					->setLabel('Nazor')
