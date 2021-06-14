@@ -60,6 +60,7 @@ class ApiServiceTest extends TestCase
 			->setPhone('065 8717169')
 			->setAlternativePhone('024 543839')
 			->setUrl('https://4z.rs')
+			->setCurrency('RSD')
 			->addAddress(
 				(new CustomerFormAddress())
 					->setLabel('Nazor')
@@ -252,7 +253,8 @@ class ApiServiceTest extends TestCase
 					->setTaxCode(getenv('TAXCODE_ID'))
 			)
 			->setTransactionDate('02.05.2020')
-			->setInvoiceImmediately(false);
+			->setInvoiceImmediately(false)
+			->setEmailStatus(SalesOrderForm::EMAIL_STATUS_SKIP);
 			// TODO test createdBy and appointedSeller
 		$salesOrderId = $apiService->createSalesOrder($form);
 		self::assertNotEmpty($salesOrderId);

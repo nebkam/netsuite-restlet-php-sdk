@@ -6,8 +6,11 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 
 class SalesOrderForm
 	{
-
 	public const TYPE_NONE = 'NONE';
+	public const EMAIL_STATUS_SKIP = 'SKIP';
+	public const EMAIL_STATUS_MANUAL = 'MANUAL';
+	public const EMAIL_STATUS_SCHEDULE = 'SCHEDULE';
+	public const EMAIL_STATUS_SENT = 'SENT';
 
 	/**
 	 * @var int
@@ -92,6 +95,12 @@ class SalesOrderForm
 	 */
 	private $emailBcc;
 	/**
+	 * Overrides `emailStatus` set in the corresponding SalesOrderType in NetSuite
+	 * @SerializedName("email_status")
+	 * @var string|null
+	 */
+	private $emailStatus;
+	/**
 	 * Only shows the number of installments for sales order estimates. This does not effect the billing schedule (invoice installments).
 	 *
 	 * @SerializedName("custbody_rsm_so_brojrata")
@@ -121,7 +130,7 @@ class SalesOrderForm
 	 * @SerializedName("terms")
 	 * @var string|null
 	 */
-	private $billingTerms;
+	private $paymentTerms;
 	/**
 	 * @SerializedName("custbody_rsm_napomena_za_print")
 	 * @var string|null
@@ -446,12 +455,12 @@ class SalesOrderForm
 		}
 
 	/**
-	 * @param string|null $paymentAuthorizationCode
-	 * @return SalesOrderForm
+	 * @param string|null $code
+	 * @return self
 	 */
-	public function setPaymentAuthorizationCode(?string $paymentAuthorizationCode): self
+	public function setPaymentAuthorizationCode(?string $code): self
 		{
-		$this->paymentAuthorizationCode = $paymentAuthorizationCode;
+		$this->paymentAuthorizationCode = $code;
 
 		return $this;
 		}
@@ -495,6 +504,34 @@ class SalesOrderForm
 		}
 
 	/**
+	 * @return string|null
+	 */
+	public function getEmailStatus(): ?string
+		{
+		return $this->emailStatus;
+		}
+
+	/**
+	 * @param string|null $emailStatus
+	 * @return self
+	 */
+	public function setEmailStatus(?string $emailStatus): self
+		{
+		if (in_array($emailStatus, [
+			null,
+			self::EMAIL_STATUS_SKIP,
+			self::EMAIL_STATUS_MANUAL,
+			self::EMAIL_STATUS_SCHEDULE,
+			self::EMAIL_STATUS_SENT
+		], true))
+			{
+			$this->emailStatus = $emailStatus;
+			}
+
+		return $this;
+		}
+
+	/**
 	 * @return int|null
 	 */
 	public function getInstallmentCount(): ?int
@@ -523,9 +560,9 @@ class SalesOrderForm
 
 	/**
 	 * @param int|null $daysToPay
-	 * @return SalesOrderForm
+	 * @return self
 	 */
-	public function setDaysToPay(?int $daysToPay): SalesOrderForm
+	public function setDaysToPay(?int $daysToPay): self
 		{
 		$this->daysToPay = $daysToPay;
 
@@ -542,9 +579,9 @@ class SalesOrderForm
 
 	/**
 	 * @param string|null $orderNumber
-	 * @return SalesOrderForm
+	 * @return self
 	 */
-	public function setOrderNumber(?string $orderNumber): SalesOrderForm
+	public function setOrderNumber(?string $orderNumber): self
 		{
 		$this->orderNumber = $orderNumber;
 
@@ -561,9 +598,9 @@ class SalesOrderForm
 
 	/**
 	 * @param int|null $serviceDuration
-	 * @return SalesOrderForm
+	 * @return self
 	 */
-	public function setServiceDuration(?int $serviceDuration): SalesOrderForm
+	public function setServiceDuration(?int $serviceDuration): self
 		{
 		$this->serviceDuration = $serviceDuration;
 
@@ -580,9 +617,9 @@ class SalesOrderForm
 
 	/**
 	 * @param string|null $printNote
-	 * @return SalesOrderForm
+	 * @return self
 	 */
-	public function setPrintNote(?string $printNote): SalesOrderForm
+	public function setPrintNote(?string $printNote): self
 		{
 		$this->printNote = $printNote;
 
@@ -592,18 +629,18 @@ class SalesOrderForm
 	/**
 	 * @return string|null
 	 */
-	public function getBillingTerms(): ?string
+	public function getPaymentTerms(): ?string
 		{
-		return $this->billingTerms;
+		return $this->paymentTerms;
 		}
 
 	/**
-	 * @param string|null $billingTerms
-	 * @return SalesOrderForm
+	 * @param string|null $paymentTerms
+	 * @return self
 	 */
-	public function setBillingTerms(?string $billingTerms): SalesOrderForm
+	public function setPaymentTerms(?string $paymentTerms): self
 		{
-		$this->billingTerms = $billingTerms;
+		$this->paymentTerms = $paymentTerms;
 
 		return $this;
 		}
