@@ -11,6 +11,7 @@ use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderForm;
 use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderItem;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Item;
+use Infostud\NetSuiteSdk\Model\SavedSearch\OldCrmPaymentItem;
 use Infostud\NetSuiteSdk\Model\SavedSearch\PaymentItem;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Classification;
 use Infostud\NetSuiteSdk\Model\SuiteQL\Department;
@@ -543,8 +544,28 @@ class ApiServiceTest extends TestCase
 			new DateTime('2021-05-18')
 		);
 		self::assertNotEmpty($payments);
-		foreach($payments->getItems() as $item) {
+		foreach($payments->getItems() as $item)
+			{
 			self::assertInstanceOf(PaymentItem::class,$item);
+			}
 		}
+
+	/**
+	 * @depends testParseConfig
+	 * @param ApiService $apiService
+	 * @throws ApiTransferException
+	 */
+	public function testGetOldCrmPayments(ApiService $apiService): void
+		{
+		$payments = $apiService->getOldCrmPayments(
+			getenv('SUBSIDIARY_ID'),
+			new DateTime('2021-06-14'),
+			new DateTime('2021-06-14')
+		);
+		self::assertNotEmpty($payments);
+		foreach($payments->getItems() as $item)
+			{
+			self::assertInstanceOf(OldCrmPaymentItem::class,$item);
+			}
 		}
 	}
