@@ -13,6 +13,7 @@ use Infostud\NetSuiteSdk\Model\SavedSearch\ColumnDefinition;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerForm;
 use Infostud\NetSuiteSdk\Model\Customer\CustomerFormAddress;
+use Infostud\NetSuiteSdk\Model\SavedSearch\GetOldCrmPaymentsResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\GetPaymentsResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Item;
 use Infostud\NetSuiteSdk\Model\SavedSearch\ItemSearchResponse;
@@ -48,7 +49,7 @@ class ApiSerializerTest extends TestCase
 	public function testNormalizeContactFormResult(ApiSerializer $serializer): void
 		{
 		$form       = (new ContactForm())
-			->setSubsidiary(getenv('SUBSIDIARY_ID'))
+			->setSubsidiary((int) getenv('SUBSIDIARY_ID'))
 			->setFirstName('Little Bobby')
 			->setLastName('Tables')
 			->setCompany(123)
@@ -384,6 +385,25 @@ class ApiSerializerTest extends TestCase
 		$json       = file_get_contents(__DIR__ . '/payments_get_response.json');
 		$response   = $serializer->deserialize($json, GetPaymentsResponse::class);
 		self::assertInstanceOf(GetPaymentsResponse::class, $response);
+		}
+
+	/**
+	 * @depends testInitialize
+	 * @param ApiSerializer $serializer
+	 * @throws ApiTransferException
+	 */
+	public function testGetOldCrmPaymentsResult(ApiSerializer $serializer): void
+		{
+		$json       = file_get_contents(__DIR__ . '/old_crm_payments_get_response.json');
+		/**
+		 * @var GetOldCrmPaymentsResponse $response
+		 */
+		$response   = $serializer->deserialize($json, GetOldCrmPaymentsResponse::class);
+		self::assertInstanceOf(GetOldCrmPaymentsResponse::class, $response);
+		self::assertNotEmpty($response->getItems());
+		self::assertSame(count($response->getItems()), 1);
+		$item = $response->getItems()[0];
+		self::assertSame($item->getOldCrmId(),'PO-123');
 		}
 
 	/**

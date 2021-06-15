@@ -31,6 +31,10 @@ class RestletMap
 	/**
 	 * @var Restlet
 	 */
+	public $getOldCrmPayments;
+	/**
+	 * @var Restlet
+	 */
 	public $getSalesOrder;
 	/**
 	 * @var Restlet

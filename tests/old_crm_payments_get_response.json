@@ -1,0 +1,15 @@
+{
+  "paymentdata": [
+    {
+      "recordType": "customerdeposit",
+      "lastmodifieddate": "16.05.2021 15:04",
+      "trandate": "16.05.2021",
+      "customer": "123",
+      "line": "0",
+      "tranid": "123",
+      "amount": "123",
+      "invoice_old_crm_id": "PO-123",
+      "appliedtotransaction": "Invoice #123"
+    }
+  ]
+}
