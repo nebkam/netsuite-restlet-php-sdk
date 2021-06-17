@@ -23,6 +23,7 @@ use Infostud\NetSuiteSdk\Model\SavedSearch\ContactSearchResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\SavedSearch\CustomerSearchResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\GenericSavedSearchResponse;
+use Infostud\NetSuiteSdk\Model\SavedSearch\GetOldCrmPaymentsResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\GetPaymentsResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Item;
 use Infostud\NetSuiteSdk\Model\SavedSearch\ItemSearchResponse;
@@ -476,6 +477,27 @@ class ApiService
 
 		/** @var GetPaymentsResponse $apiResponse */
 		return $this->serializer->deserialize($contents, GetPaymentsResponse::class);
+		}
+
+	/**
+	 * @param int $subsidiaryId
+	 * @param DateTime $startDate
+	 * @param DateTime $endDate
+	 * @return GetOldCrmPaymentsResponse
+	 * @throws ApiTransferException
+	 */
+	public function getOldCrmPayments($subsidiaryId, $startDate, $endDate)
+		{
+		$url = $this->config->getRestletUrl($this->config->restletMap->getOldCrmPayments);
+		$contents = $this->client->post($url,[
+			'subsidiaryId' => $subsidiaryId,
+			'startDate'    => $startDate->format('d.m.Y H:i'),
+			'endDate'      => $endDate->format('d.m.Y H:i'),
+		]);
+
+		/** @var GetOldCrmPaymentsResponse $response */
+		$response = $this->serializer->deserialize($contents, GetOldCrmPaymentsResponse::class);
+		return $response;
 		}
 
 	/**

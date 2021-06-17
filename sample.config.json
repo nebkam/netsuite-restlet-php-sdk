@@ -30,6 +30,10 @@
       "script": 0,
       "deploy": 1
     },
+    "getOldCrmPayments": {
+      "script": 0,
+      "deploy": 1
+    },
     "savedSearchCustomers": {
       "script": 0,
       "deploy": 1

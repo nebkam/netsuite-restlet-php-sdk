@@ -13,6 +13,7 @@ use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderItem;
 use Infostud\NetSuiteSdk\Model\SavedSearch\ColumnDefinition;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\SavedSearch\CustomerSearchResponse;
+use Infostud\NetSuiteSdk\Model\SavedSearch\GetOldCrmPaymentsResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\NotificationRecipient;
 use Infostud\NetSuiteSdk\Model\SavedSearch\NotificationRecipientAttributes;
 use Infostud\NetSuiteSdk\Model\SavedSearch\NotificationRecipientSearchResponse;
@@ -309,6 +310,24 @@ class ApiSerializerTest extends TestCase
 		self::assertInstanceOf(GetLocationsResponse::class, $response);
 		/** @var $response GetLocationsResponse */
 		self::assertSuiteQLResponse($response);
+		}
+
+	/**
+	 * @depends testInitialize
+	 * @param ApiSerializer $serializer
+	 */
+	public function testGetOldCrmPaymentsResult(ApiSerializer $serializer)
+		{
+		$json       = file_get_contents(__DIR__ . '/get_old_crm_payments_response.json');
+		/**
+		 * @var GetOldCrmPaymentsResponse $response
+		 */
+		$response   = $serializer->deserialize($json, GetOldCrmPaymentsResponse::class);
+		self::assertInstanceOf(GetOldCrmPaymentsResponse::class, $response);
+		self::assertNotEmpty($response->getItems());
+		self::assertSame(count($response->getItems()), 1);
+		$item = $response->getItems()[0];
+		self::assertSame($item->getOldCrmId(),'PO-123');
 		}
 
 	/**
