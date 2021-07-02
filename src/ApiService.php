@@ -313,6 +313,29 @@ class ApiService
 		}
 
 	/**
+	 * Find a company by ID from MIS2Open
+	 *
+	 * @param string $identifier
+	 * @return Customer|null
+	 * @throws ApiTransferException
+	 */
+	public function findCustomerByMis2OpenIdentifier($identifier)
+		{
+		$filters = [[
+			'name'     => 'custentity_cus_crm_id',
+			'operator' => 'is',
+			'values'   => [$identifier]
+		]];
+		$results = $this->executeSavedSearchCustomers($filters);
+		if (!empty($results->getCustomers()))
+			{
+			return $results->getCustomers()[0];
+			}
+
+		return null;
+		}
+
+	/**
 	 * Find recently created items in specific subsidiaries, locations or classes
 	 *
 	 * @param DateTime $periodStart
