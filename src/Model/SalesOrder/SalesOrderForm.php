@@ -12,6 +12,25 @@ class SalesOrderForm
 	public const EMAIL_STATUS_SCHEDULE = 'SCHEDULE';
 	public const EMAIL_STATUS_SENT = 'SENT';
 
+	public const PAYMENT_TYPE_ADMINISTRATIVE_BAN = 'Administrativna zabrana';
+	public const PAYMENT_TYPE_CASH = 'Gotovina';
+	public const PAYMENT_TYPE_IPS_QR_CODE = 'Ips qr kod';
+	public const PAYMENT_TYPE_CARD = 'Kartica';
+	public const PAYMENT_TYPE_CASH_ON_DELIVERY = 'Pouzece';
+	public const PAYMENT_TYPE_BANK_TRANSFER = 'Virman';
+	public const PAYMENT_TYPE_WEB_CREDIT = 'Web krediti';
+
+	public const VALID_PAYMENT_TYPES = [
+		null,
+		self::PAYMENT_TYPE_ADMINISTRATIVE_BAN,
+		self::PAYMENT_TYPE_CASH,
+		self::PAYMENT_TYPE_IPS_QR_CODE,
+		self::PAYMENT_TYPE_CARD,
+		self::PAYMENT_TYPE_CASH_ON_DELIVERY,
+		self::PAYMENT_TYPE_BANK_TRANSFER,
+		self::PAYMENT_TYPE_WEB_CREDIT
+	];
+
 	/**
 	 * @var int
 	 */
@@ -136,6 +155,11 @@ class SalesOrderForm
 	 * @var string|null
 	 */
 	private $printNote;
+	/**
+	 * @SerializedName("custbody_rsm_sales_payment_type")
+	 * @var string|null
+	 */
+	private $paymentType;
 
 
 	public function __construct()
@@ -641,6 +665,27 @@ class SalesOrderForm
 	public function setPaymentTerms(?string $paymentTerms): self
 		{
 		$this->paymentTerms = $paymentTerms;
+
+		return $this;
+		}
+
+	/**
+	 * @return string|null
+	 */
+	public function getPaymentType(): ?string
+		{
+		return $this->paymentType;
+		}
+
+	/**
+	 * @param string|null $paymentType
+	 * @return self
+	 */
+	public function setPaymentType(?string $paymentType): self
+		{
+		if (in_array($paymentType, self::VALID_PAYMENT_TYPES, true)) {
+			$this->paymentType = $paymentType;
+		}
 
 		return $this;
 		}
