@@ -52,4 +52,8 @@ class RestletMap
 	 * @var Restlet
 	 */
 	public $suiteQL;
+	/**
+	 * @var Restlet
+	 */
+	public $updateSalesOrder;
 	}

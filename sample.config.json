@@ -53,6 +53,10 @@
     "suiteQL": {
       "script": 0,
       "deploy": 1
+    },
+    "updateSalesOrder": {
+      "script": 0,
+      "deploy": 1
     }
   }
 }

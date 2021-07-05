@@ -20,6 +20,8 @@ use Infostud\NetSuiteSdk\Model\SalesOrder\GetSalesOrderResponse;
 use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrder;
 use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderForm;
 use Infostud\NetSuiteSdk\Model\SalesOrder\DeleteSalesOrderResponse;
+use Infostud\NetSuiteSdk\Model\SalesOrder\UpdateSalesOrderForm;
+use Infostud\NetSuiteSdk\Model\SalesOrder\UpdateSalesOrderResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Contact;
 use Infostud\NetSuiteSdk\Model\SavedSearch\ContactSearchResponse;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
@@ -220,6 +222,27 @@ class ApiService
 			}
 
 		throw new ApiLogicException($apiResponse->getErrorName(), $apiResponse->getErrorMessage());
+		}
+
+	/**
+	 * @param int $id
+	 * @param UpdateSalesOrderForm $form
+	 * @return bool
+	 * @throws ApiLogicException
+	 * @throws ApiTransferException
+	 */
+	public function updateSalesOrder(int $id, UpdateSalesOrderForm $form): bool
+		{
+		$url         = $this->config->getRestletUrl($this->config->restletMap->updateSalesOrder);
+		$requestBody = $this->serializer->normalize($form);
+		$contents    = $this->client->post($url, ['internalid' => $id] + $requestBody);
+		/** @var UpdateSalesOrderResponse $apiResponse */
+		$apiResponse = $this->serializer->deserialize($contents, UpdateSalesOrderResponse::class);
+		if ($apiResponse->isSuccessful())
+			{
+			return true;
+			}
+		throw new ApiLogicException('Update Sales Order Error',$apiResponse->getErrorMessage());
 		}
 
 	/**
