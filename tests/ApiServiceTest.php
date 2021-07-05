@@ -9,6 +9,7 @@ use Infostud\NetSuiteSdk\Model\Customer\CustomerFormAddress;
 use Infostud\NetSuiteSdk\Model\NotificationRecipient\NotificationRecipientForm;
 use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderForm;
 use Infostud\NetSuiteSdk\Model\SalesOrder\SalesOrderItem;
+use Infostud\NetSuiteSdk\Model\SalesOrder\UpdateSalesOrderForm;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Customer;
 use Infostud\NetSuiteSdk\Model\SavedSearch\Item;
 use Infostud\NetSuiteSdk\Model\SavedSearch\OldCrmPaymentItem;
@@ -54,7 +55,7 @@ class ApiServiceTest extends TestCase
 		$customerForm = (new CustomerForm())
 			->setExternalId('PIB-123456')
 			->setCompanyName('Foo test customer')
-			->setSubsidiary(getenv('SUBSIDIARY_ID'))
+			->setSubsidiary((int) getenv('SUBSIDIARY_ID'))
 			->setPib('101696893')
 			->setRegistryIdentifier('01234567')
 			->setEmail('little.bobby2@tables.com')
@@ -112,7 +113,7 @@ class ApiServiceTest extends TestCase
 		 */
 		[$apiService, $customerId] = $params;
 		$form = (new ContactForm())
-			->setSubsidiary(getenv('SUBSIDIARY_ID'))
+			->setSubsidiary((int) getenv('SUBSIDIARY_ID'))
 			->setCompany($customerId)
 			->setFirstName('Little Bobby')
 			->setLastName('Tables')
@@ -184,7 +185,7 @@ class ApiServiceTest extends TestCase
 		$form = (new NotificationRecipientForm())
 			->setCustomer($customerId)
 			->setEmailTo(['foobar@example.com'])
-			->setLocations([getenv('LOCATION_ID')]);
+			->setLocations([(int) getenv('LOCATION_ID')]);
 		$recipientId = $apiService->createNotificationRecipient($form);
 		self::assertNotNull($recipientId);
 
@@ -203,7 +204,7 @@ class ApiServiceTest extends TestCase
 		 * @var $customerId int
 		 */
 		[$apiService, $customerId] = $params;
-		$recipients = $apiService->findNotificationRecipients($customerId, [getenv('LOCATION_ID')]);
+		$recipients = $apiService->findNotificationRecipients($customerId, [(int) getenv('LOCATION_ID')]);
 		self::assertCount(1, $recipients);
 		$recipient = $recipients[0];
 		self::assertNotNull($recipient->getId());
@@ -240,18 +241,18 @@ class ApiServiceTest extends TestCase
 		 */
 		[$apiService, $customerId] = $params;
 		$form = (new SalesOrderForm())
-			->setSubsidiary(getenv('SUBSIDIARY_ID'))
-			->setDepartment(getenv('DEPARTMENT_ID'))
-			->setLocation(getenv('LOCATION_ID'))
-			->setClassification(getenv('CLASSIFICATION_ID'))
+			->setSubsidiary((int) getenv('SUBSIDIARY_ID'))
+			->setDepartment((int) getenv('DEPARTMENT_ID'))
+			->setLocation((int) getenv('LOCATION_ID'))
+			->setClassification((int) getenv('CLASSIFICATION_ID'))
 			->setType(SalesOrderForm::TYPE_NONE)
 			->setCustomer($customerId)
 			->addItem(
 				(new SalesOrderItem())
-					->setId(getenv('ITEM_ID'))
+					->setId((int) getenv('ITEM_ID'))
 					->setQuantity(1)
 					->setPriceAfterDiscount(5000000.00)
-					->setTaxCode(getenv('TAXCODE_ID'))
+					->setTaxCode((int) getenv('TAXCODE_ID'))
 			)
 			->setTransactionDate('02.05.2020')
 			->setInvoiceImmediately(false)
@@ -289,6 +290,28 @@ class ApiServiceTest extends TestCase
 
 	/**
 	 * @depends testCreateSalesOrder
+	 * @param array $params
+	 * @return void
+	 * @throws ApiLogicException
+	 * @throws ApiTransferException
+	 */
+	public function testUpdateSalesOrder(array $params): void
+		{
+		/**
+		 * @var $apiService ApiService
+		 * @var $salesOrderId int
+		 */
+		[$apiService, $salesOrderId] = $params;
+		$updateForm = new UpdateSalesOrderForm();
+		$updateForm
+			->setStartDate('25.07.2021')
+			->setEndDate('30.07.2021');
+		$updateRes = $apiService->updateSalesOrder($salesOrderId,$updateForm);
+		self::assertTrue($updateRes);
+		}
+
+	/**
+	 * @depends testCreateSalesOrder
 	 * @param array $param
 	 * @throws ApiTransferException
 	 */
@@ -313,9 +336,8 @@ class ApiServiceTest extends TestCase
 		/** @var int $customerId */
 		[$apiService, $customerId] = $params;
 		$customer = $apiService->findCustomerByPib('101696893');
-		$this->assertInstanceOf(Customer::class, $customer);
-		$this->assertEquals('101696893', $customer->getAttributes()->getPib());
-		$this->assertEquals($customerId, (int) $customer->getId());
+		self::assertInstanceOf(Customer::class, $customer);
+		self::assertEquals('101696893', $customer->getAttributes()->getPib());
 		}
 
 	/**
@@ -502,7 +524,7 @@ class ApiServiceTest extends TestCase
 		{
 		$itemsToTest = 100;
 		$testedItems = 0;
-		$items = $apiService->getItems((new GetItemsFilter())->setLocation(getenv('LOCATION_ID')));
+		$items = $apiService->getItems((new GetItemsFilter())->setLocation((int) getenv('LOCATION_ID')));
 		self::assertNotEmpty($items);
 		foreach ($items as $item)
 			{
@@ -539,7 +561,7 @@ class ApiServiceTest extends TestCase
 	public function testGetPayments(ApiService $apiService): void
 		{
 		$payments = $apiService->getPayments(
-			getenv('SUBSIDIARY_ID'),
+			(int) getenv('SUBSIDIARY_ID'),
 			new DateTime('2021-05-14'),
 			new DateTime('2021-05-18')
 		);
@@ -558,7 +580,7 @@ class ApiServiceTest extends TestCase
 	public function testGetOldCrmPayments(ApiService $apiService): void
 		{
 		$payments = $apiService->getOldCrmPayments(
-			getenv('SUBSIDIARY_ID'),
+			(int) getenv('SUBSIDIARY_ID'),
 			new DateTime('2021-06-14'),
 			new DateTime('2021-06-14')
 		);
