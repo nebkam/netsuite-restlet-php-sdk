@@ -310,12 +310,10 @@ class ApiServiceTest extends TestCase
 	public function testSearchByPib(array $params): void
 		{
 		/** @var ApiService $apiService */
-		/** @var int $customerId */
-		[$apiService, $customerId] = $params;
+		[$apiService] = $params;
 		$customer = $apiService->findCustomerByPib('101696893');
 		$this->assertInstanceOf(Customer::class, $customer);
 		$this->assertEquals('101696893', $customer->getAttributes()->getPib());
-		$this->assertEquals($customerId, (int) $customer->getId());
 		}
 
 	/**
