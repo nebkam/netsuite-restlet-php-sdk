@@ -87,7 +87,7 @@ class ApiSerializerTest extends TestCase
 			->setExternalId('PIB-123456')
 			->setCompanyName('Test item')
 			->setSubsidiary(9)
-			->setPib('101696893')
+			->setPib('101696894')
 			->setRegistryIdentifier('01234567')
 			->addAddress(
 				(new CustomerFormAddress())
@@ -102,7 +102,7 @@ class ApiSerializerTest extends TestCase
 		self::assertEquals('PIB-123456', $normalized['externalId']);
 		self::assertEquals('Test item', $normalized['companyname']);
 		self::assertEquals(9, $normalized['subsidiary']);
-		self::assertEquals('101696893', $normalized['custentity_pib']);
+		self::assertEquals('101696894', $normalized['custentity_pib']);
 		self::assertEquals('01234567', $normalized['custentity_matbrpred']);
 		self::assertCount(1, $normalized['address']);
 		$address = $normalized['address'][0];

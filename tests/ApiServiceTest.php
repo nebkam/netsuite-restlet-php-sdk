@@ -56,7 +56,7 @@ class ApiServiceTest extends TestCase
 			->setExternalId('PIB-123456')
 			->setCompanyName('Foo test customer')
 			->setSubsidiary((int) getenv('SUBSIDIARY_ID'))
-			->setPib('101696893')
+			->setPib('101696894')
 			->setRegistryIdentifier('01234567')
 			->setEmail('little.bobby2@tables.com')
 			->setPhone('065 8717169')
@@ -334,9 +334,9 @@ class ApiServiceTest extends TestCase
 		{
 		/** @var ApiService $apiService */
 		[$apiService] = $params;
-		$customer = $apiService->findCustomerByPib('101696893');
+		$customer = $apiService->findCustomerByPib('101696894');
 		self::assertInstanceOf(Customer::class, $customer);
-		self::assertEquals('101696893', $customer->getAttributes()->getPib());
+		self::assertEquals('101696894', $customer->getAttributes()->getPib());
 		}
 
 	/**
