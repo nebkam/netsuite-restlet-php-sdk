@@ -80,7 +80,7 @@ class ApiClient
 
 		if ($clientResponse->getStatusCode() !== 200)
 			{
-			throw ApiTransferException::fromStatusCode($clientResponse->getStatusCode());
+			throw ApiTransferException::fromStatusCode($clientResponse->getStatusCode(), (string)$clientResponse->getBody());
 			}
 
 		return (string)$clientResponse->getBody();
@@ -107,7 +107,7 @@ class ApiClient
 
 		if ($clientResponse->getStatusCode() !== 200)
 			{
-			throw ApiTransferException::fromStatusCode($clientResponse->getStatusCode());
+			throw ApiTransferException::fromStatusCode($clientResponse->getStatusCode(), (string)$clientResponse->getBody());
 			}
 
 		return (string)$clientResponse->getBody();
@@ -133,7 +133,7 @@ class ApiClient
 
 		if ($clientResponse->getStatusCode() !== 200)
 			{
-			throw ApiTransferException::fromStatusCode($clientResponse->getStatusCode());
+			throw ApiTransferException::fromStatusCode($clientResponse->getStatusCode(), (string)$clientResponse->getBody());
 			}
 
 		return (string)$clientResponse->getBody();
