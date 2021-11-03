@@ -29,6 +29,9 @@ use Infostud\NetSuiteSdk\Model\SuiteQL\GetDepartmentsResponse;
 use Infostud\NetSuiteSdk\Model\SuiteQL\SuiteQLResponse;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @group production
+ */
 class ApiSerializerTest extends TestCase
 	{
 	/**

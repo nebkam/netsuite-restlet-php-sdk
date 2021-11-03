@@ -33,6 +33,8 @@ class ApiServiceTest extends TestCase
 
 	/**
 	 * Test that it doesn't throw exceptions
+	 *
+	 * @group production
 	 * @return ApiService
 	 * @throws ApiTransferException
 	 */
@@ -341,6 +343,7 @@ class ApiServiceTest extends TestCase
 
 	/**
 	 * TODO Add real foreign PIB
+	 * @group production
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
 	 * @throws ApiTransferException
@@ -353,6 +356,7 @@ class ApiServiceTest extends TestCase
 		}
 
 	/**
+	 * @group production
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
 	 * @throws ApiTransferException
@@ -365,6 +369,7 @@ class ApiServiceTest extends TestCase
 		}
 
 	/**
+	 * @group production
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
 	 * @throws ApiTransferException
@@ -378,6 +383,7 @@ class ApiServiceTest extends TestCase
 		}
 
 	/**
+	 * @group production
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
 	 * @throws ApiTransferException
@@ -390,6 +396,7 @@ class ApiServiceTest extends TestCase
 		}
 
 	/**
+	 * @group production
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
 	 * @throws ApiTransferException
@@ -407,6 +414,7 @@ class ApiServiceTest extends TestCase
 		}
 
 	/**
+	 * @group production
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
 	 * @throws ApiTransferException
@@ -424,6 +432,7 @@ class ApiServiceTest extends TestCase
 		}
 
 	/**
+	 * @group production
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
 	 * @throws ApiTransferException
@@ -441,6 +450,7 @@ class ApiServiceTest extends TestCase
 		}
 
 	/**
+	 * @group production
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
 	 * @throws ApiTransferException
@@ -458,6 +468,7 @@ class ApiServiceTest extends TestCase
 		}
 
 	/**
+	 * @group production
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
 	 * @throws ApiTransferException
@@ -475,6 +486,7 @@ class ApiServiceTest extends TestCase
 		}
 
 	/**
+	 * @group production
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
 	 * @throws ApiTransferException
@@ -553,6 +565,7 @@ class ApiServiceTest extends TestCase
 		}
 
 	/**
+	 * @group production
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
 	 * @throws ApiTransferException
@@ -572,6 +585,7 @@ class ApiServiceTest extends TestCase
 		}
 
 	/**
+	 * @group production
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
 	 * @throws ApiTransferException

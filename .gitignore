@@ -10,3 +10,4 @@ sandbox.config.json
 production.config.json
 # PHPUnit
 phpunit.xml
+production.phpunit.xml

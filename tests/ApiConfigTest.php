@@ -6,6 +6,9 @@ use Infostud\NetSuiteSdk\Exception\ApiTransferException;
 use Infostud\NetSuiteSdk\Restlet;
 use Infostud\NetSuiteSdk\RestletMap;
 
+/**
+ * @group production
+ */
 class ApiConfigTest extends PHPUnit_Framework_TestCase
 	{
 	/**
