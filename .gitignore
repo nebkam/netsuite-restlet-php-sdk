@@ -7,5 +7,6 @@ composer.phar
 # Config
 config.json
 sandbox.config.json
+production.config.json
 # PHPUnit
 phpunit.xml
