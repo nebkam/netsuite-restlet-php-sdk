@@ -46,4 +46,4 @@ jobs:
           CLASSIFICATION_ID: 1
           ITEM_ID: 8984
           TAXCODE_ID: 7
-        run: ./vendor/phpunit/phpunit/phpunit
+        run: ./vendor/phpunit/phpunit/phpunit --group production
