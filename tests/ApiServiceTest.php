@@ -47,6 +47,7 @@ class ApiServiceTest extends TestCase
 		}
 
 	/**
+	 * @group production
 	 * @depends testParseConfig
 	 * @param ApiService $apiService
 	 * @return array
@@ -84,6 +85,7 @@ class ApiServiceTest extends TestCase
 		}
 
 	/**
+	 * @group production
 	 * @depends testCreateCustomer
 	 * @param array $params
 	 */
@@ -101,6 +103,7 @@ class ApiServiceTest extends TestCase
 		}
 
 	/**
+	 * @group production
 	 * @depends testCreateCustomer
 	 * @param $params array
 	 * @return array
@@ -133,6 +136,7 @@ class ApiServiceTest extends TestCase
 		}
 
 	/**
+	 * @group production
 	 * @depends testCreateContact
 	 * @param array $params
 	 * @throws ApiTransferException
@@ -156,6 +160,7 @@ class ApiServiceTest extends TestCase
 		}
 
 	/**
+	 * @group production
 	 * @depends testCreateContact
 	 * @param array $params
 	 * @throws ApiTransferException
@@ -171,6 +176,7 @@ class ApiServiceTest extends TestCase
 		}
 
 	/**
+	 * @group production
 	 * @depends testCreateCustomer
 	 * @param $params array
 	 * @return array
@@ -195,6 +201,7 @@ class ApiServiceTest extends TestCase
 		}
 
 	/**
+	 * @group production
 	 * @depends testCreateCustomer
 	 * @param array $params
 	 * @throws ApiTransferException
@@ -214,6 +221,7 @@ class ApiServiceTest extends TestCase
 		}
 
 	/**
+	 * @group production
 	 * @depends testCreateNotificationRecipient
 	 * @param array $params
 	 * @throws ApiTransferException
@@ -328,6 +336,7 @@ class ApiServiceTest extends TestCase
 		}
 
 	/**
+	 * @group production
 	 * @depends testCreateCustomer
 	 * @param array $params
 	 * @throws ApiTransferException
@@ -550,6 +559,7 @@ class ApiServiceTest extends TestCase
 		}
 
 	/**
+	 * @group production
 	 * @depends testCreateCustomer
 	 * @param array $param
 	 * @throws ApiTransferException
